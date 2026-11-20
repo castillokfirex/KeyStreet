@@ -9,8 +9,8 @@
 |---|---|---|---|
 | 0 | Prerrequisitos del entorno | — | ✅ Completa |
 | 1 | Infraestructura Docker + BD + Seeds | 0 | ✅ Completa |
-| 2 | Backend Spring Boot + Seguridad Multi-Tenant + Ciclo Efímero de PDF | 1 | 🟨 En curso |
-| 3 | FastAPI + LangChain Gemini + OCR + Búsqueda Híbrida con Citas | 1 (2 para el ciclo completo) | ⬜ Pendiente |
+| 2 | Backend Spring Boot + Seguridad Multi-Tenant + Ciclo Efímero de PDF | 1 | ✅ Completa |
+| 3 | FastAPI + LangChain Gemini + OCR + Búsqueda Híbrida con Citas | 1 (2 para el ciclo completo) | 🟨 En curso |
 | 4 | Frontend Editorial + Identidad Kast + Catálogo + WhatsApp + Chat RAG | 2, 3 | ⬜ Pendiente |
 | 5 | Módulos 3D Lazy + Probador Anatómico con Foto Efímera + E2E | 4 | ⬜ Pendiente |
 
@@ -113,51 +113,51 @@ Reinicializar la BD (⚠️ borra datos): `docker compose down -v; docker compos
 ## Fase 2 — Backend Spring Boot + Seguridad Multi-Tenant + Ciclo Efímero de PDF
 
 ### 2.A Fundaciones
-- [ ] **2.01** `pom.xml`: web, security, oauth2-resource-server, data-jpa, validation, actuator, postgresql, springdoc-openapi, pdfbox 3, tika-core, bucket4j; test: spring-boot-test, testcontainers (postgresql, junit-jupiter), wiremock, assertj.
-- [ ] **2.02** `application.yml`: datasource `keystreet_app`, `ddl-auto=validate`, `open-in-view=false`, multipart `${MAX_PDF_MB}MB`, propiedades `keystreet.*` tipadas con `@ConfigurationProperties` + validación de arranque (`JWT_SECRET` ≥ 64 bytes, `INTERNAL_API_TOKEN` no vacío).
-- [ ] **2.03** `common/GlobalExceptionHandler` con `ProblemDetail` (400/401/403/404/409/413/415/422/426/429).
-- [ ] **2.04** Base de tests IT: `AbstractIT` con Testcontainers `pgvector/pgvector:pg16` aplicando `00-roles.sh`, `schema.sql`, `seed.sql` + segundo tenant de prueba `tenant-b`.
+- [x] **2.01** `pom.xml`: web, security, oauth2-resource-server, data-jpa, validation, actuator, postgresql, springdoc-openapi, pdfbox 3, tika-core, bucket4j; test: spring-boot-test, testcontainers (postgresql, junit-jupiter), wiremock, assertj.
+- [x] **2.02** `application.yml`: datasource `keystreet_app`, `ddl-auto=validate`, `open-in-view=false`, multipart `${MAX_PDF_MB}MB`, propiedades `keystreet.*` tipadas con `@ConfigurationProperties` + validación de arranque (`JWT_SECRET` ≥ 64 bytes, `INTERNAL_API_TOKEN` no vacío).
+- [x] **2.03** `common/GlobalExceptionHandler` con `ProblemDetail` (400/401/403/404/409/413/415/422/426/429).
+- [x] **2.04** Base de tests IT: `AbstractIT` con Testcontainers `pgvector/pgvector:pg16` aplicando roles, `schema.sql`, `seed.sql` + segundo tenant de prueba `tenant-b`.
 
 ### 2.B Multi-tenancy estricta
-- [ ] **2.05** Entidad `Tenant` + `TenantRepository.findBySlug`.
-- [ ] **2.06** `TenantContext` (ThreadLocal) + `TenantResolverFilter` (JWT `tid` > `X-Tenant-Slug`; conflicto → 403; suspendido → 403; ausente en ruta que lo requiere → 400).
-- [ ] **2.07** `HibernateTenantResolver` (`CurrentTenantIdentifierResolver<UUID>`) + `@TenantId` en todas las entidades tenant-scoped.
-- [ ] **2.08** `RlsTenantAspect`: `SELECT set_config('app.tenant_id', ?, true)` dentro de cada transacción (orden interior al `TransactionInterceptor`).
-- [ ] **2.09** `TaskDecorator` que propaga `TenantContext` a hilos `@Async`.
-- [ ] **2.10** `TenantBootstrapRunner`: sincroniza `whatsapp_phone` del tenant `DEFAULT_TENANT_SLUG` con `WHATSAPP_PHONE`.
-- [ ] **2.11** Test `TenantIsolationIT`: token de `tenant-b` → 404 en producto/documento de Key Street; listado público con slug B no devuelve productos de A; sin tenant en repositorio → 0 filas (RLS).
+- [x] **2.05** Entidad `Tenant` + `TenantRepository.findBySlug`.
+- [x] **2.06** `TenantContext` (ThreadLocal) + `TenantResolverFilter` (JWT `tid` > `X-Tenant-Slug`; conflicto → 403; suspendido → 403; ausente en ruta que lo requiere → 400).
+- [x] **2.07** `HibernateTenantResolver` (`CurrentTenantIdentifierResolver<UUID>`) + `@TenantId` en todas las entidades tenant-scoped.
+- [x] **2.08** `RlsTenantAspect`: `SELECT set_config('app.tenant_id', ?, true)` dentro de cada transacción (orden interior al `TransactionInterceptor`).
+- [x] **2.09** `TaskDecorator` que propaga `TenantContext` a hilos `@Async`.
+- [x] **2.10** `TenantBootstrapRunner`: sincroniza `whatsapp_phone` del tenant `DEFAULT_TENANT_SLUG` con `WHATSAPP_PHONE`.
+- [x] **2.11** Test `TenantIsolationIT`: token de `tenant-b` → 404 en producto/documento de Key Street; listado público con slug B no devuelve productos de A; sin tenant en repositorio → 0 filas (RLS).
 
 ### 2.C Autenticación JWT
-- [ ] **2.12** Entidades `User`, `RefreshToken` + repositorios.
-- [ ] **2.13** `JwtService` (Nimbus HS256, claims `sub`, `tid`, `role`, `jti`, `iss`, TTL 15 min) + `JwtAuthenticationConverter` (`role` → `ROLE_*`).
-- [ ] **2.14** `AuthController`: `register`, `login`, `refresh` (rotación + detección de reutilización), `logout`; `MeController`.
-- [ ] **2.15** `SecurityConfig`: reglas de PLAN §6.1, CORS, stateless, `InternalTokenFilter` para `/internal/**`.
-- [ ] **2.16** `RateLimitFilter` (Bucket4j): login 5/min/IP, asistente 20/min/IP+tenant → 429.
-- [ ] **2.17** Tests `AuthIT`: login OK/KO, 401 anónimo en admin, 403 CUSTOMER en admin, refresh rotado, refresh reutilizado revoca la familia, 429 en abuso.
+- [x] **2.12** Entidades `User`, `RefreshToken` + repositorios.
+- [x] **2.13** `JwtService` (Nimbus HS256, claims `sub`, `tid`, `role`, `jti`, `iss`, TTL 15 min) + `JwtAuthenticationConverter` (`role` → `ROLE_*`).
+- [x] **2.14** `AuthController`: `register`, `login`, `refresh` (rotación + detección de reutilización), `logout`; `MeController`.
+- [x] **2.15** `SecurityConfig`: reglas de PLAN §6.1, CORS, stateless, `InternalTokenFilter` para `/internal/**`.
+- [x] **2.16** `RateLimitFilter` (Bucket4j): login 5/min/IP, asistente 20/min/IP+tenant → 429.
+- [x] **2.17** Tests `AuthIT`: login OK/KO, 401 anónimo en admin, 403 CUSTOMER en admin, refresh rotado, refresh reutilizado revoca la familia, 429 en abuso.
 
 ### 2.D Catálogo
-- [ ] **2.18** Entidades `Brand`, `Product` (JSONB/arrays/generadas como solo lectura), `ProductVariant`.
-- [ ] **2.19** `PublicCatalogController`: listado con filtros/orden/paginación (`ProductSpecifications`), facetas, detalle por slug, relacionados.
-- [ ] **2.20** `AdminCatalogController`: CRUD, `PATCH /discount`, `PUT /variants/{id}/stock`.
-- [ ] **2.21** `orders/WhatsappMessageBuilder` + `POST /public/orders/whatsapp-intent` (precio desde BD, persiste intent, URL `wa.me` codificada).
-- [ ] **2.22** Tests `CatalogIT`: 10 productos, `discounted=true` → 4, orden `price_asc` empieza en 144.500, filtro `size=44`, mensaje WhatsApp contiene modelo, talla, SKU y `$166.500 COP`.
+- [x] **2.18** Entidades `Brand`, `Product` (JSONB/arrays/generadas como solo lectura), `ProductVariant`.
+- [x] **2.19** `PublicCatalogController`: listado con filtros/orden/paginación (`ProductSpecifications`), facetas, detalle por slug, relacionados.
+- [x] **2.20** `AdminCatalogController`: CRUD, `PATCH /discount`, `PUT /variants/{id}/stock`.
+- [x] **2.21** `orders/WhatsappMessageBuilder` + `POST /public/orders/whatsapp-intent` (precio desde BD, persiste intent, URL `wa.me` codificada).
+- [x] **2.22** Tests `CatalogIT`: 10 productos, `discounted=true` → 4, orden `price_asc` empieza en 144.500, filtro `size=44`, mensaje WhatsApp contiene modelo, talla, SKU y `$166.500 COP`.
 
 ### 2.E Ciclo efímero del PDF
-- [ ] **2.23** Entidad `Document` + `DocumentStatus` (`PROCESSING|INDEXED|FAILED`).
-- [ ] **2.24** `PdfValidator`: Content-Type + Tika + magic `%PDF-` + extensión; PDFBox: cifrado, `/JavaScript`, `/JS`, `/Launch`, `/EmbeddedFiles`, `/RichMedia`, `MAX_PDF_PAGES`; ClamAV opcional (`CLAMAV_ENABLED`).
-- [ ] **2.25** `TempPdfStore`: escritura en streaming a `pdf_tmp/{tenantId}/{documentId}.pdf` con `DigestInputStream` (SHA-256), permisos `0640`, `deleteVerified()` (`deleteIfExists` + `notExists` + reintento).
-- [ ] **2.26** `DocumentService.upload`: validar → guardar temporal → deduplicar por hash (409 / reutilizar `FAILED`) → `INSERT PROCESSING` → publicar evento.
-- [ ] **2.27** `IngestionOrchestrator` (`@TransactionalEventListener(AFTER_COMMIT)` + `@Async`) → `RagClient.ingest` con 3 reintentos; agotados → `FAILED (RAG_UNAVAILABLE)` + borrado verificado.
-- [ ] **2.28** `IngestionCallbackController` (`/internal/v1/documents/{id}/ingestion-result`): verifica conteo de chunks y modelo → `INDEXED` o `FAILED (VERIFICATION_MISMATCH)`; **siempre** borra el temporal y registra `temp_file_deleted_at` + `temp_file_deletion_verified`.
-- [ ] **2.29** `TempFileJanitor` (`@Scheduled` 5 min): huérfanos > TTL y `PROCESSING` vencidos → `FAILED (TIMEOUT)`.
-- [ ] **2.30** `DocumentController`: `POST` (202), `GET` lista/detalle, `DELETE` (chunks + metadatos); guard `REQUIRE_HTTPS` → 426.
-- [ ] **2.31** Fixtures de test: `valid.pdf`, `fake.pdf` (texto renombrado), `encrypted.pdf`, `with-js.pdf`, `big.pdf` (> límite, generado en el test).
-- [ ] **2.32** Tests `DocumentUploadIT` (WireMock como rag-service): 202, 413, 415, 422 ×2, 409; tras callback `INDEXED` el archivo no existe y `temp_file_deletion_verified = true`; callback con conteo falso → `FAILED` y archivo borrado; janitor limpia huérfano.
+- [x] **2.23** Entidad `Document` + `DocumentStatus` (`PROCESSING|INDEXED|FAILED`).
+- [x] **2.24** `PdfValidator`: Content-Type + Tika + magic `%PDF-` + extensión; PDFBox: cifrado, `/JavaScript`, `/JS`, `/Launch`, `/EmbeddedFiles`, `/RichMedia`, `MAX_PDF_PAGES`; ClamAV opcional (`CLAMAV_ENABLED`).
+- [x] **2.25** `TempPdfStore`: escritura en streaming a `pdf_tmp/{tenantId}/{documentId}.pdf` con `DigestInputStream` (SHA-256), permisos `0640`, `deleteVerified()` (`deleteIfExists` + `notExists` + reintento).
+- [x] **2.26** `DocumentService.upload`: validar → guardar temporal → deduplicar por hash (409 / reutilizar `FAILED`) → `INSERT PROCESSING` → publicar evento.
+- [x] **2.27** `IngestionOrchestrator` (`@TransactionalEventListener(AFTER_COMMIT)` + `@Async`) → `RagClient.ingest` con 3 reintentos; agotados → `FAILED (RAG_UNAVAILABLE)` + borrado verificado.
+- [x] **2.28** `IngestionCallbackController` (`/internal/v1/documents/{id}/ingestion-result`): verifica conteo de chunks y modelo → `INDEXED` o `FAILED (VERIFICATION_MISMATCH)`; **siempre** borra el temporal y registra `temp_file_deleted_at` + `temp_file_deletion_verified`.
+- [x] **2.29** `TempFileJanitor` (`@Scheduled` 5 min): huérfanos > TTL y `PROCESSING` vencidos → `FAILED (TIMEOUT)`.
+- [x] **2.30** `DocumentController`: `POST` (202), `GET` lista/detalle, `DELETE` (chunks + metadatos); guard `REQUIRE_HTTPS` → 426.
+- [x] **2.31** Fixtures de test: `valid.pdf`, `fake.pdf` (texto renombrado), `encrypted.pdf`, `with-js.pdf`, `big.pdf` (> límite, generado en el test).
+- [x] **2.32** Tests `DocumentUploadIT` (WireMock como rag-service): 202, 413, 415, 422 ×2, 409; tras callback `INDEXED` el archivo no existe y `temp_file_deletion_verified = true`; callback con conteo falso → `FAILED` y archivo borrado; janitor limpia huérfano.
 
 ### 2.F Asistente (proxy)
-- [ ] **2.33** `RagClient.query` + `AssistantController` `POST /assistant/query` (tenant del servidor, `userId` si hay JWT, hash de IP, timeout 30 s → `ERROR` controlado).
-- [ ] **2.34** `RagAuditController` (`GET /admin/rag-audit`).
-- [ ] **2.35** Test `AssistantIT` (WireMock): el `tenantId` enviado al RAG es siempre el del contexto aunque el cliente envíe otro campo.
+- [x] **2.33** `RagClient.query` + `AssistantController` `POST /assistant/query` (tenant del servidor, `userId` si hay JWT, hash de IP, timeout 30 s → `ERROR` controlado).
+- [x] **2.34** `RagAuditController` (`GET /admin/rag-audit`).
+- [x] **2.35** Test `AssistantIT` (WireMock): el `tenantId` enviado al RAG es siempre el del contexto aunque el cliente envíe otro campo.
 
 **Verificación Fase 2**
 ```powershell
@@ -369,3 +369,4 @@ docker compose down                       # volver al stack normal: docker compo
 | 2026-11-20 | Plan | PLAN.md y PROGRESS.md creados; referencias Stitch copiadas a `docs/design/stitch/`. |
 | 2026-11-20 | Fase 0 | Entorno verificado (`C:\dev\KeyStreet`): Docker Desktop 29.5.2, JDK 21, Node 26, uv 0.13.9, Python 3.11 vía uv, mkcert 1.4.4. |
 | 2026-11-20 | Fase 1 | Stack Docker (4 servicios healthy), `db/schema.sql`, `db/seed.sql` (10 productos, 4 descuentos, 90 variantes), `verify_seed.sql`, `verify_rls.sql`, healthchecks y TLS dev verificados. |
+| 2026-11-20 | Fase 2 | Backend Spring Boot 3 completo: multi-tenancy (JWT/slug + `@TenantId` + RLS), rotación refresh tokens, catálogo COP/FTS/WhatsApp, ciclo efímero PDF con validación y borrado verificado. `.\mvnw.cmd -B verify` (12/12 IT) y pruebas HTTP en Docker OK. |
