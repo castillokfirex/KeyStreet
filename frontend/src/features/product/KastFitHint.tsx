@@ -1,5 +1,6 @@
 import { KastMascot } from "@/components/brand/KastMascot";
 import { MotionScope } from "@/components/motion/MotionScope";
+import { recommendSize } from "@/lib/fitHint";
 import { useFitProfileStore } from "@/stores/fitProfile";
 
 export function KastFitHint({
@@ -11,20 +12,7 @@ export function KastFitHint({
 }) {
   const heightCm = useFitProfileStore((s) => s.heightCm);
   const usualSizeEu = useFitProfileStore((s) => s.usualSizeEu);
-
-  const recommended =
-    fit === "RUNS_SMALL"
-      ? Math.min(44, usualSizeEu + 1)
-      : fit === "RUNS_LARGE"
-        ? Math.max(36, usualSizeEu - 1)
-        : usualSizeEu;
-
-  const fitText =
-    fit === "RUNS_SMALL"
-      ? `Horma estrecha: te recomendamos talla ${recommended} (+1 EU sobre tu habitual).`
-      : fit === "RUNS_LARGE"
-        ? `Horma amplia: te recomendamos talla ${recommended}.`
-        : `Horma fiel: te recomendamos tu talla habitual ${recommended} EU.`;
+  const { reason } = recommendSize(usualSizeEu, fit);
 
   const heightMeters = (heightCm / 100).toFixed(2).replace(".", ",");
 
@@ -38,7 +26,7 @@ export function KastFitHint({
           <p className="font-semibold text-navy">
             Según tu perfil ({heightMeters} m · talla {usualSizeEu})
           </p>
-          <p className="mt-0.5 text-muted">{fitText}</p>
+          <p className="mt-0.5 text-muted">{reason}</p>
         </div>
       </div>
       <button

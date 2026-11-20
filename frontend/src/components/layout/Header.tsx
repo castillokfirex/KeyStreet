@@ -29,7 +29,7 @@ export function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-30 border-b border-line bg-canvas/95 backdrop-blur-sm">
+      <header className="sticky top-0 z-30 border-b border-line bg-canvas">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
           {/* Izquierda: menú móvil + links editoriales */}
           <div className="flex items-center gap-4 lg:gap-6">

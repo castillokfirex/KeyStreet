@@ -23,6 +23,15 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
+          if (
+            id.includes("vite/preload-helper") ||
+            id.includes("commonjsHelpers") ||
+            /node_modules[\\/](react|react-dom|scheduler|zustand|use-sync-external-store)[\\/]/.test(
+              id,
+            )
+          ) {
+            return "vendor-react";
+          }
           if (/node_modules[\\/]three[\\/]/.test(id)) {
             return "vendor-three";
           }

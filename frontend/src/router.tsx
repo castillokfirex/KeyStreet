@@ -44,7 +44,7 @@ const AuditPage = lazy(() =>
 
 function RouteSkeleton() {
   return (
-    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 space-y-6">
+    <div className="mx-auto min-h-[1500px] max-w-7xl px-4 sm:px-6 lg:px-8 py-10 space-y-6">
       <Skeleton className="h-10 w-64" />
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Skeleton className="aspect-[4/5]" />

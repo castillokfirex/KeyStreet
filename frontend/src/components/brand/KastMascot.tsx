@@ -38,7 +38,9 @@ export function KastMascot({
   const titleId = useId();
   const reduced = useReducedMotion();
 
-  const headAnimate = reduced
+  const shouldAnimate = !reduced && state !== "idle";
+
+  const headAnimate = !shouldAnimate
     ? undefined
     : state === "thinking"
       ? { rotate: [-4, 4, -4] }
@@ -48,7 +50,7 @@ export function KastMascot({
           ? { scale: [1, 1.07, 1] }
           : state === "error"
             ? { x: [-2, 2, -2, 0] }
-            : { y: [0, -0.9, 0] };
+            : undefined;
 
   const headTransition =
     state === "error"
@@ -57,9 +59,7 @@ export function KastMascot({
         ? { duration: 1.1, repeat: Infinity, ease: "easeInOut" as const }
         : state === "speaking"
           ? { duration: 0.45, repeat: Infinity, ease: "easeInOut" as const }
-          : state === "success"
-            ? { duration: 0.6, repeat: 1 }
-            : { duration: 3.2, repeat: Infinity, ease: "easeInOut" as const };
+          : { duration: 0.6, repeat: 1 };
 
   return (
     <svg
@@ -123,9 +123,9 @@ export function KastMascot({
           fill="#0F172A"
           style={{ transformOrigin: "24.1px 30px" }}
           animate={
-            reduced
-              ? undefined
-              : { scaleY: [1, 1, 0.15, 1] }
+            shouldAnimate
+              ? { scaleY: [1, 1, 0.15, 1] }
+              : undefined
           }
           transition={{
             duration: 3.6,
@@ -142,9 +142,9 @@ export function KastMascot({
           fill="#0F172A"
           style={{ transformOrigin: "39.9px 30px" }}
           animate={
-            reduced
-              ? undefined
-              : { scaleY: [1, 1, 0.15, 1] }
+            shouldAnimate
+              ? { scaleY: [1, 1, 0.15, 1] }
+              : undefined
           }
           transition={{
             duration: 3.6,

@@ -1,6 +1,7 @@
 FROM node:22-alpine AS build
 WORKDIR /app
 COPY package.json package-lock.json* ./
+COPY scripts ./scripts
 RUN if [ -f package-lock.json ]; then npm ci; else npm install; fi
 COPY . .
 ARG VITE_API_BASE_URL=/api

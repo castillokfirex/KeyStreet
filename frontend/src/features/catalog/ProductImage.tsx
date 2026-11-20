@@ -18,7 +18,7 @@ export function ProductImage({
         className={`relative aspect-[4/5] w-full overflow-hidden rounded-xl bg-surface flex items-center justify-center ${className}`.trim()}
         aria-label={`${alt} — vista previa preparada`}
       >
-        <div className="absolute inset-0 animate-pulse bg-gradient-to-br from-surface via-canvas/40 to-surface" />
+        <div className="absolute inset-0 bg-gradient-to-br from-surface via-canvas/40 to-surface" />
         <div className="relative flex flex-col items-center gap-2 text-navy/[0.08] select-none">
           <KastLogo variant="isotype" size={76} title={alt} />
           <span className="font-display text-[9px] font-bold uppercase tracking-[0.28em]">

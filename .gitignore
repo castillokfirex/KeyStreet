@@ -11,6 +11,7 @@ __pycache__/
 infra/certs/*
 !infra/certs/.gitkeep
 frontend/public/mediapipe/
+frontend/public/fonts/
 playwright-report/
 test-results/
 .lighthouseci/

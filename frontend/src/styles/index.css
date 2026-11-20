@@ -1,6 +1,20 @@
 @import "tailwindcss";
-@import "@fontsource-variable/plus-jakarta-sans";
-@import "@fontsource-variable/space-grotesk";
+
+@font-face {
+  font-family: "Plus Jakarta Sans Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 800;
+  src: url("/fonts/plus-jakarta-sans-latin.woff2") format("woff2-variations");
+}
+
+@font-face {
+  font-family: "Space Grotesk Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300 700;
+  src: url("/fonts/space-grotesk-latin.woff2") format("woff2-variations");
+}
 
 @theme {
   --color-canvas: #ffffff;

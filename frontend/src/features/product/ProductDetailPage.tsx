@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { Box, CheckCircle2, Eye, Footprints, MessageCircle, Rotate3d } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Box, CheckCircle2, MessageCircle, Rotate3d } from "lucide-react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router";
 import { KastLogo } from "@/components/brand/KastLogo";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
@@ -10,6 +10,7 @@ import { Skeleton } from "@/components/ui/Skeleton";
 import type { SizeOption } from "@/components/ui/SizeSelector";
 import { useWhatsappCheckout } from "@/features/cart/useWhatsappCheckout";
 import { ProductImage } from "@/features/catalog/ProductImage";
+import { ViewerToolbar } from "@/features/fitting/ViewerToolbar";
 import { formatCop } from "@/lib/money";
 import { publicApi, queryKeys } from "@/lib/queries";
 import { useAssistantStore } from "@/stores/assistant";
@@ -18,14 +19,29 @@ import { useToastStore } from "@/stores/toast";
 import { PurchasePanel } from "./PurchasePanel";
 import { RelatedCarousel } from "./RelatedCarousel";
 
+const LazyViewer3D = lazy(() =>
+  import("@/features/viewer3d/Viewer3D").then((m) => ({ default: m.Viewer3D })),
+);
+
+const LazyFittingRoom = lazy(() =>
+  import("@/features/fitting/FittingRoom").then((m) => ({
+    default: m.FittingRoom,
+  })),
+);
+
 type ViewerMode = "viewer3d" | "fitting";
 
 export function ProductDetailPage() {
   const { slug = "" } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
+  const initialProbador = searchParams.get("modo") === "probador";
+
   const [mode, setMode] = useState<ViewerMode>(
-    searchParams.get("modo") === "probador" ? "fitting" : "viewer3d",
+    initialProbador ? "fitting" : "viewer3d",
   );
+  const [viewerActivated, setViewerActivated] = useState(initialProbador);
+  const [cameraMode, setCameraMode] = useState<"full" | "feet">("full");
+
   const [selectionState, setSelectionState] = useState<{
     slug: string;
     variant: SizeOption | null;
@@ -64,8 +80,12 @@ export function ProductDetailPage() {
     return () => setProductContext(null, null);
   }, [product, setProductContext]);
 
-  const switchMode = (nextMode: ViewerMode) => {
+  const activateViewer = (nextMode: ViewerMode) => {
+    setViewerActivated(true);
     setMode(nextMode);
+    if (nextMode === "fitting") {
+      setCameraMode("full");
+    }
     const next = new URLSearchParams(searchParams);
     if (nextMode === "fitting") {
       next.set("modo", "probador");
@@ -176,69 +196,93 @@ export function ProductDetailPage() {
         />
 
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 items-start">
-          {/* Columna izquierda (7 cols): Visor & Probador */}
+          {/* Columna izquierda (7 cols): Visor 360° & Probador anatómico lazy */}
           <div className="lg:col-span-7 space-y-4">
             <div className="relative aspect-[3/4] w-full overflow-hidden rounded-2xl border border-line bg-surface">
               {/* Toolbar superior fiel a Stitch */}
-              <div className="absolute left-3 right-3 top-3 z-20 flex flex-wrap items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => switchMode("fitting")}
-                  className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 font-display text-[10px] font-bold uppercase tracking-wider transition-colors cursor-pointer ${
-                    mode === "fitting"
-                      ? "bg-forest text-white"
-                      : "bg-canvas/90 text-navy border border-line"
-                  }`}
-                >
-                  <Box className="h-3.5 w-3.5" aria-hidden="true" />
-                  <span>Probador 3D</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => switchMode("viewer3d")}
-                  className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 font-display text-[10px] font-bold uppercase tracking-wider transition-colors cursor-pointer ${
-                    mode === "viewer3d"
-                      ? "bg-forest text-white"
-                      : "bg-canvas/90 text-navy border border-line"
-                  }`}
-                >
-                  <Rotate3d className="h-3.5 w-3.5" aria-hidden="true" />
-                  <span>360° Zapato</span>
-                </button>
-                <span className="inline-flex items-center gap-1 rounded-full bg-canvas/90 border border-line px-3 py-1.5 font-display text-[10px] font-bold uppercase tracking-wider text-navy">
-                  <Eye className="h-3.5 w-3.5" aria-hidden="true" />
-                  <span>Vista completa</span>
-                </span>
-                <span className="inline-flex items-center gap-1 rounded-full bg-canvas/90 border border-line px-3 py-1.5 font-display text-[10px] font-bold uppercase tracking-wider text-navy">
-                  <Footprints className="h-3.5 w-3.5" aria-hidden="true" />
-                  <span>Zoom pies</span>
-                </span>
+              <div className="absolute left-3 right-3 top-3 z-20">
+                <ViewerToolbar
+                  mode={mode}
+                  cameraMode={cameraMode}
+                  onSelectMode={(m) => activateViewer(m)}
+                  onSelectCamera={(cam) => {
+                    activateViewer("fitting");
+                    setCameraMode(cam);
+                  }}
+                />
               </div>
 
-              {/* Contenido preview ligero (Fase 5 inyecta Canvas 3D + MediaPipe lazy) */}
-              {product.images.ready ? (
-                <ProductImage images={product.images} alt={product.name} priority className="h-full" />
+              {viewerActivated ? (
+                <Suspense
+                  fallback={
+                    <div className="flex h-full items-center justify-center p-8 text-center">
+                      <div className="space-y-2">
+                        <Skeleton className="mx-auto h-12 w-12 rounded-full" />
+                        <p className="font-display text-xs font-bold uppercase tracking-wider text-muted">
+                          Cargando motor 3D...
+                        </p>
+                      </div>
+                    </div>
+                  }
+                >
+                  {mode === "fitting" ? (
+                    <LazyFittingRoom product={product} cameraMode={cameraMode} />
+                  ) : (
+                    <LazyViewer3D
+                      product={product}
+                      onAskKast={(q) => openAssistant({ prefill: q })}
+                    />
+                  )}
+                </Suspense>
               ) : (
                 <div className="flex h-full flex-col items-center justify-center p-8 text-center">
-                  <div className="text-navy/15">
-                    <KastLogo variant="isotype" size={128} title={product.name} />
-                  </div>
-                  <Badge tone="mint" className="mt-4">
-                    {mode === "fitting"
-                      ? "Probador anatómico 3:4 listo"
-                      : "Visor interactivo 360° listo"}
-                  </Badge>
-                  <p className="mt-2 max-w-xs text-xs text-muted">
-                    Paleta detectada:{" "}
-                    <strong>{specs.palette?.upper || "#FFFFFF"}</strong> · Silueta{" "}
-                    <strong>{product.silhouette}</strong>
-                  </p>
+                  {product.images.ready ? (
+                    <ProductImage
+                      images={product.images}
+                      alt={product.name}
+                      priority
+                      className="h-full"
+                    />
+                  ) : (
+                    <>
+                      <div className="text-navy/15">
+                        <KastLogo variant="isotype" size={128} title={product.name} />
+                      </div>
+                      <Badge tone="mint" className="mt-4">
+                        Vista 3D & Probador Anatómico bajo demanda
+                      </Badge>
+                      <p className="mt-2 max-w-xs text-xs text-muted">
+                        Paleta: <strong>{specs.palette?.upper || "#FFFFFF"}</strong> ·
+                        Silueta <strong>{product.silhouette}</strong>
+                      </p>
+                      <div className="mt-5 flex flex-wrap justify-center gap-2.5">
+                        <Button
+                          variant="forest"
+                          size="sm"
+                          onClick={() => activateViewer("viewer3d")}
+                        >
+                          <Rotate3d className="h-4 w-4" aria-hidden="true" />
+                          <span>Activar Visor 3D 360°</span>
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => activateViewer("fitting")}
+                        >
+                          <Box className="h-4 w-4" aria-hidden="true" />
+                          <span>Abrir Probador 3D</span>
+                        </Button>
+                      </div>
+                    </>
+                  )}
                 </div>
               )}
 
-              <div className="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-canvas/90 border border-line px-4 py-1 font-display text-[10px] font-bold uppercase tracking-[0.16em] text-navy shadow-xs">
-                Arrastra para rotar {mode === "fitting" ? "maniquí" : "zapato"}
-              </div>
+              {!viewerActivated || mode === "viewer3d" ? (
+                <div className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-canvas/90 border border-line px-4 py-1 font-display text-[10px] font-bold uppercase tracking-[0.16em] text-navy shadow-xs">
+                  Arrastra para rotar {mode === "fitting" ? "maniquí" : "zapato"}
+                </div>
+              ) : null}
             </div>
 
             {/* Franja inferior de material certificado */}
@@ -271,7 +315,7 @@ export function ProductDetailPage() {
                 setWarningState({ slug, message: null });
               }}
               onOrderWhatsapp={handleOrderWhatsapp}
-              onOpenFitting={() => switchMode("fitting")}
+              onOpenFitting={() => activateViewer("fitting")}
               onAddToBag={handleAddToBag}
               onAskKast={(prefill) => openAssistant({ prefill })}
             />

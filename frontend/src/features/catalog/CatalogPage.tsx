@@ -4,7 +4,6 @@ import { useMemo, useState } from "react";
 import { useSearchParams } from "react-router";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { TrustStrip } from "@/components/layout/TrustStrip";
-import { Stagger, StaggerItem } from "@/components/motion/Stagger";
 import { Button } from "@/components/ui/Button";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { publicApi, queryKeys, type CatalogQueryParams } from "@/lib/queries";
@@ -84,7 +83,7 @@ export function CatalogPage() {
 
   return (
     <div>
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-6 pb-8">
+      <div className="mx-auto min-h-[1500px] max-w-7xl px-4 sm:px-6 lg:px-8 pt-6 pb-8">
         <Breadcrumbs
           items={[
             { label: "Inicio", to: "/" },
@@ -102,7 +101,7 @@ export function CatalogPage() {
               Curaduría en Colombia · Precios en COP · 4 referencias con descuento exclusivo del 10% al 15%
             </p>
           </div>
-          <span className="font-display text-[11px] font-bold uppercase tracking-[0.16em] text-muted">
+          <span className="min-w-[140px] text-right font-display text-[11px] font-bold uppercase tracking-[0.16em] text-muted">
             {totalItems} piezas disponibles
           </span>
         </div>
@@ -115,9 +114,9 @@ export function CatalogPage() {
         />
 
         {isLoading ? (
-          <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-            {Array.from({ length: 8 }).map((_, idx) => (
-              <div key={idx} className="space-y-3 rounded-2xl border border-line p-3">
+          <div className="mt-6 grid grid-cols-2 gap-3.5 sm:gap-5 md:grid-cols-3 lg:grid-cols-4">
+            {Array.from({ length: 10 }).map((_, idx) => (
+              <div key={idx} className="space-y-3 rounded-2xl border border-line p-2.5">
                 <Skeleton className="aspect-[4/5] w-full" />
                 <Skeleton className="h-3 w-20" />
                 <Skeleton className="h-4 w-3/4" />
@@ -158,13 +157,11 @@ export function CatalogPage() {
           </div>
         ) : (
           <>
-            <Stagger className="mt-6 grid grid-cols-2 gap-3.5 sm:gap-5 md:grid-cols-3 lg:grid-cols-4">
+            <div className="mt-6 grid grid-cols-2 gap-3.5 sm:gap-5 md:grid-cols-3 lg:grid-cols-4">
               {items.map((product) => (
-                <StaggerItem key={product.id}>
-                  <ProductCard product={product} />
-                </StaggerItem>
+                <ProductCard key={product.id} product={product} />
               ))}
-            </Stagger>
+            </div>
 
             <div className="mt-10 flex flex-col items-center gap-3">
               <p className="text-xs text-muted">

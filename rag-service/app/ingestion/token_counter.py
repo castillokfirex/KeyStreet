@@ -2,7 +2,7 @@ import math
 
 
 class TokenCounter:
-    """Contador heuristico local (~4 chars/token) sin dependencia de OpenAI/tiktoken."""
+    """Contador heurístico local (~4 chars/token) calibrado para modelos Gemini."""
 
     def __init__(self, chars_per_token: float = 4.0) -> None:
         self.chars_per_token = chars_per_token

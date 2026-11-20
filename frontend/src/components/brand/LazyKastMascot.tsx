@@ -1,6 +1,6 @@
-import { lazy, Suspense } from "react";
-import { KastLogo } from "./KastLogo";
+import { lazy, Suspense, useState } from "react";
 import type { KastMascotProps } from "./KastMascot";
+import { KastStaticIcon } from "./KastStaticIcon";
 
 const InnerAnimatedMascot = lazy(async () => {
   const [{ MotionScope }, { KastMascot }] = await Promise.all([
@@ -17,18 +17,24 @@ const InnerAnimatedMascot = lazy(async () => {
 });
 
 export function LazyKastMascot(props: KastMascotProps) {
-  const size = props.size ?? 40;
+  const [engaged, setEngaged] = useState(false);
+  const state = props.state ?? "idle";
+  const shouldLoadAnimated = engaged || state !== "idle";
+
+  if (!shouldLoadAnimated) {
+    return (
+      <span
+        onPointerEnter={() => setEngaged(true)}
+        onFocus={() => setEngaged(true)}
+        className="inline-flex shrink-0"
+      >
+        <KastStaticIcon {...props} />
+      </span>
+    );
+  }
+
   return (
-    <Suspense
-      fallback={
-        <KastLogo
-          variant="isotype"
-          size={size}
-          title={props.title || "Kast"}
-          className="text-navy"
-        />
-      }
-    >
+    <Suspense fallback={<KastStaticIcon {...props} />}>
       <InnerAnimatedMascot {...props} />
     </Suspense>
   );

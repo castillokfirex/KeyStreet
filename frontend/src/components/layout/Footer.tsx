@@ -28,7 +28,10 @@ export function Footer() {
   };
 
   return (
-    <footer className="border-t border-line bg-canvas">
+    <footer
+      className="border-t border-line bg-canvas"
+      style={{ contentVisibility: "auto", containIntrinsicSize: "auto 420px" }}
+    >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-12">
           {/* Identidad + Drop list */}
