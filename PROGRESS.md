@@ -10,8 +10,8 @@
 | 0 | Prerrequisitos del entorno | — | ✅ Completa |
 | 1 | Infraestructura Docker + BD + Seeds | 0 | ✅ Completa |
 | 2 | Backend Spring Boot + Seguridad Multi-Tenant + Ciclo Efímero de PDF | 1 | ✅ Completa |
-| 3 | FastAPI + LangChain Gemini + OCR + Búsqueda Híbrida con Citas | 1 (2 para el ciclo completo) | 🟨 En curso |
-| 4 | Frontend Editorial + Identidad Kast + Catálogo + WhatsApp + Chat RAG | 2, 3 | ⬜ Pendiente |
+| 3 | FastAPI + LangChain Gemini + OCR + Búsqueda Híbrida con Citas | 1 (2 para el ciclo completo) | ✅ Completa |
+| 4 | Frontend Editorial + Identidad Kast + Catálogo + WhatsApp + Chat RAG | 2, 3 | 🟨 En curso |
 | 5 | Módulos 3D Lazy + Probador Anatómico con Foto Efímera + E2E | 4 | ⬜ Pendiente |
 
 Leyenda: ⬜ Pendiente · 🟨 En curso · ✅ Completa · ⛔ Bloqueada
@@ -177,44 +177,44 @@ curl.exe -s -o NUL -w "%{http_code}`n" -X POST http://localhost:8080/api/v1/admi
 ## Fase 3 — Microservicio FastAPI + LangChain Gemini + OCR + Búsqueda Híbrida con Citas
 
 ### 3.A Base del servicio
-- [ ] **3.01** `pyproject.toml` (Python 3.11): fastapi, uvicorn, pydantic-settings, langchain-core, langchain-text-splitters, langchain-google-genai, pymupdf, pytesseract, pillow, psycopg[binary,pool], pgvector, numpy, tenacity, structlog, httpx; dev: pytest, pytest-asyncio, testcontainers, ruff, mypy. `uv lock` con versiones fijadas. **Sin** `openai`/`tiktoken`.
-- [ ] **3.02** `config.py` (pydantic-settings) con validación: `EMBEDDING_DIM == 768`, `AI_PROVIDER ∈ {gemini, fake}`, `GEMINI_API_KEY` obligatorio si `gemini`.
-- [ ] **3.03** `security.py`: dependencia `X-Internal-Token` con `hmac.compare_digest`.
-- [ ] **3.04** `db.py`: `AsyncConnectionPool` (psycopg 3) + registro de tipo `vector` + helper `tenant_tx(tenant_id)` que ejecuta `set_config('app.tenant_id', …, true)`.
-- [ ] **3.05** `/health` con estado de BD, proveedor y modelos.
+- [x] **3.01** `pyproject.toml` (Python 3.11): fastapi, uvicorn, pydantic-settings, langchain-core, langchain-text-splitters, langchain-google-genai, pymupdf, pytesseract, pillow, psycopg[binary,pool], pgvector, numpy, tenacity, structlog, httpx; dev: pytest, pytest-asyncio, testcontainers, ruff, mypy. `uv lock` con versiones fijadas. **Sin** `openai`/`tiktoken`.
+- [x] **3.02** `config.py` (pydantic-settings) con validación: `EMBEDDING_DIM == 768`, `AI_PROVIDER ∈ {gemini, fake}`, `GEMINI_API_KEY` obligatorio si `gemini`.
+- [x] **3.03** `security.py`: dependencia `X-Internal-Token` con `hmac.compare_digest`.
+- [x] **3.04** `db.py`: `AsyncConnectionPool` (psycopg 3) + registro de tipo `vector` + helper `tenant_tx(tenant_id)` que ejecuta `set_config('app.tenant_id', …, true)`.
+- [x] **3.05** `/health` con estado de BD, proveedor y modelos.
 
 ### 3.B Proveedores desacoplados
-- [ ] **3.06** `providers/base.py`: `EmbeddingProvider`, `ChatProvider`, `ContextBlock`, `GroundedAnswer` (Pydantic).
-- [ ] **3.07** `providers/gemini.py`: `GoogleGenerativeAIEmbeddings` (`GEMINI_EMBEDDING_MODEL`, `task_type` documento/consulta, `output_dimensionality=768`, normalización L2, lotes de 100, `tenacity`) y `ChatGoogleGenerativeAI` (`GEMINI_CHAT_MODEL`, `temperature=0.1`, `with_structured_output`).
-- [ ] **3.08** `providers/fake.py`: embeddings deterministas por hashing (768, norma 1) + respuesta extractiva con cita al top-1.
-- [ ] **3.09** `providers/factory.py` por `AI_PROVIDER`.
-- [ ] **3.10** Tests: dimensión 768 y norma ≈ 1 (fake siempre; gemini con `-m live`), determinismo del fake.
+- [x] **3.06** `providers/base.py`: `EmbeddingProvider`, `ChatProvider`, `ContextBlock`, `GroundedAnswer` (Pydantic).
+- [x] **3.07** `providers/gemini.py`: `GoogleGenerativeAIEmbeddings` (`GEMINI_EMBEDDING_MODEL`, `task_type` documento/consulta, `output_dimensionality=768`, normalización L2, lotes de 100, `tenacity`) y `ChatGoogleGenerativeAI` (`GEMINI_CHAT_MODEL`, `temperature=0.1`, `with_structured_output`).
+- [x] **3.08** `providers/fake.py`: embeddings deterministas por hashing (768, norma 1) + respuesta extractiva con cita al top-1.
+- [x] **3.09** `providers/factory.py` por `AI_PROVIDER`.
+- [x] **3.10** Tests: dimensión 768 y norma ≈ 1 (fake siempre; gemini con `-m live`), determinismo del fake.
 
 ### 3.C Ingesta
-- [ ] **3.11** `tests/fixtures/generate_fixtures.py`: `guia_tallas.pdf` (texto, 4+ páginas, secciones "Nike — Horma", "Adidas — Horma", "Materiales"…) y `ficha_escaneada.pdf` (páginas solo imagen con texto rasterizado).
-- [ ] **3.12** `ingestion/extractor.py`: PyMuPDF por página (`get_text("dict")`), bloques con tamaño de fuente y flags.
-- [ ] **3.13** `ingestion/ocr.py`: heurística de página escaneada (< 50 caracteres o > 80 % imagen) → render 300 dpi → `pytesseract` `spa+eng`; ejecución en `ProcessPoolExecutor`.
-- [ ] **3.14** `ingestion/sections.py`: detección de encabezados (percentil 85 de fuente, negrita, numeración, mayúsculas) con arrastre entre páginas.
-- [ ] **3.15** `ingestion/token_counter.py`: `TokenCounter` heurístico (≈ 4 caracteres/token) + script `scripts/calibrate_tokens.py` contra `count_tokens` de Gemini.
-- [ ] **3.16** `ingestion/chunker.py`: `RecursiveCharacterTextSplitter` (objetivo 800, mín. 500, máx. 1.000, solapamiento 120), sin cruzar secciones, `page_number`/`page_end`, `chunk_order`, metadatos.
-- [ ] **3.17** `ingestion/pipeline.py`: validar ruta (anti path-traversal) y SHA-256 → extraer → OCR → secciones → chunks → embeddings → persistir en una transacción (DELETE + COPY).
-- [ ] **3.18** `ingestion/worker.py`: `asyncio.Queue`, `INGEST_CONCURRENCY=2`, callback al backend con reintentos; errores → `FAILED` con `errorCode`.
-- [ ] **3.19** `api/ingest.py`: `POST /internal/v1/ingest` → 202 `{jobId}`.
-- [ ] **3.20** Tests: extractor, OCR (`-m ocr`, en contenedor), secciones, chunker (rangos de tokens, solapamiento, metadatos completos), path-traversal rechazado, hash incorrecto rechazado.
+- [x] **3.11** `tests/fixtures/generate_fixtures.py`: `guia_tallas.pdf` (texto, 4+ páginas, secciones "Nike — Horma", "Adidas — Horma", "Materiales"…) y `ficha_escaneada.pdf` (páginas solo imagen con texto rasterizado).
+- [x] **3.12** `ingestion/extractor.py`: PyMuPDF por página (`get_text("dict")`), bloques con tamaño de fuente y flags.
+- [x] **3.13** `ingestion/ocr.py`: heurística de página escaneada (< 50 caracteres o > 80 % imagen) → render 300 dpi → `pytesseract` `spa+eng`; ejecución en `ProcessPoolExecutor`.
+- [x] **3.14** `ingestion/sections.py`: detección de encabezados (percentil 85 de fuente, negrita, numeración, mayúsculas) con arrastre entre páginas.
+- [x] **3.15** `ingestion/token_counter.py`: `TokenCounter` heurístico (≈ 4 caracteres/token) + script `scripts/calibrate_tokens.py` contra `count_tokens` de Gemini.
+- [x] **3.16** `ingestion/chunker.py`: `RecursiveCharacterTextSplitter` (objetivo 800, mín. 500, máx. 1.000, solapamiento 120), sin cruzar secciones, `page_number`/`page_end`, `chunk_order`, metadatos.
+- [x] **3.17** `ingestion/pipeline.py`: validar ruta (anti path-traversal) y SHA-256 → extraer → OCR → secciones → chunks → embeddings → persistir en una transacción (DELETE + COPY).
+- [x] **3.18** `ingestion/worker.py`: `asyncio.Queue`, `INGEST_CONCURRENCY=2`, callback al backend con reintentos; errores → `FAILED` con `errorCode`.
+- [x] **3.19** `api/ingest.py`: `POST /internal/v1/ingest` → 202 `{jobId}`.
+- [x] **3.20** Tests: extractor, OCR (`-m ocr`, en contenedor), secciones, chunker (rangos de tokens, solapamiento, metadatos completos), path-traversal rechazado, hash incorrecto rechazado.
 
 ### 3.D Recuperación y generación
-- [ ] **3.21** `retrieval/hybrid_sql.py`: SQL de PLAN §7.3 (vector top-30 + tsvector top-30, `tenant_id` obligatorio, `embedding_model` del índice, `hnsw.iterative_scan`).
-- [ ] **3.22** `retrieval/fusion.py`: RRF k=60, deduplicación (documento, página), umbral `MIN_COS_SIM`.
-- [ ] **3.23** `retrieval/hybrid_retriever.py`: `BaseRetriever` de LangChain que devuelve `Document`s con metadatos de cita.
-- [ ] **3.24** `generation/prompts.py`: prompt del sistema de Kast (es-CO, anti-injection) + formato de bloques `[n]`.
-- [ ] **3.25** `generation/citations.py`: extracción de `[n]`, intersección con recuperados, construcción de citas desde BD, *snippets* ≤ 240.
-- [ ] **3.26** `generation/answer_chain.py`: LCEL retriever → `NO_EVIDENCE` temprano | LLM estructurado → citas validadas.
-- [ ] **3.27** `audit.py`: `INSERT rag_audit_logs` (recuperados, citas, modelos, tokens, latencia).
-- [ ] **3.28** `api/query.py`: `POST /internal/v1/query`.
-- [ ] **3.29** Tests (Testcontainers con `schema.sql`): aislamiento por tenant en SQL híbrido, búsqueda sin tildes (`guia` encuentra `guía`), citas inventadas descartadas, pregunta fuera de dominio → `NO_EVIDENCE`, fila de auditoría creada.
+- [x] **3.21** `retrieval/hybrid_sql.py`: SQL de PLAN §7.3 (vector top-30 + tsvector top-30, `tenant_id` obligatorio, `embedding_model` del índice, `hnsw.iterative_scan`).
+- [x] **3.22** `retrieval/fusion.py`: RRF k=60, deduplicación (documento, página), umbral `MIN_COS_SIM`.
+- [x] **3.23** `retrieval/hybrid_retriever.py`: `BaseRetriever` de LangChain que devuelve `Document`s con metadatos de cita.
+- [x] **3.24** `generation/prompts.py`: prompt del sistema de Kast (es-CO, anti-injection) + formato de bloques `[n]`.
+- [x] **3.25** `generation/citations.py`: extracción de `[n]`, intersección con recuperados, construcción de citas desde BD, *snippets* ≤ 240.
+- [x] **3.26** `generation/answer_chain.py`: LCEL retriever → `NO_EVIDENCE` temprano | LLM estructurado → citas validadas.
+- [x] **3.27** `audit.py`: `INSERT rag_audit_logs` (recuperados, citas, modelos, tokens, latencia).
+- [x] **3.28** `api/query.py`: `POST /internal/v1/query`.
+- [x] **3.29** Tests (Testcontainers con `schema.sql`): aislamiento por tenant en SQL híbrido, búsqueda sin tildes (`guia` encuentra `guía`), citas inventadas descartadas, pregunta fuera de dominio → `NO_EVIDENCE`, fila de auditoría creada.
 
 ### 3.E Integración con el backend
-- [ ] **3.30** `scripts/smoke.ps1`: login admin → subir `guia_tallas.pdf` y `ficha_escaneada.pdf` → polling hasta `INDEXED` → verificar `tempFile.verified` → consulta al asistente con cita.
+- [x] **3.30** `scripts/smoke.ps1`: login admin → subir `guia_tallas.pdf` y `ficha_escaneada.pdf` → polling hasta `INDEXED` → verificar `tempFile.verified` → consulta al asistente con cita.
 
 **Verificación Fase 3**
 ```powershell
@@ -370,3 +370,4 @@ docker compose down                       # volver al stack normal: docker compo
 | 2026-11-20 | Fase 0 | Entorno verificado (`C:\dev\KeyStreet`): Docker Desktop 29.5.2, JDK 21, Node 26, uv 0.13.9, Python 3.11 vía uv, mkcert 1.4.4. |
 | 2026-11-20 | Fase 1 | Stack Docker (4 servicios healthy), `db/schema.sql`, `db/seed.sql` (10 productos, 4 descuentos, 90 variantes), `verify_seed.sql`, `verify_rls.sql`, healthchecks y TLS dev verificados. |
 | 2026-11-20 | Fase 2 | Backend Spring Boot 3 completo: multi-tenancy (JWT/slug + `@TenantId` + RLS), rotación refresh tokens, catálogo COP/FTS/WhatsApp, ciclo efímero PDF con validación y borrado verificado. `.\mvnw.cmd -B verify` (12/12 IT) y pruebas HTTP en Docker OK. |
+| 2026-11-20 | Fase 3 | Microservicio `rag-service` completo (FastAPI + LangChain + Gemini/Fake + PyMuPDF + Tesseract OCR + RRF híbrido `pgvector`/`es_unaccent` + citas verificadas + auditoría). `ruff`/`mypy`/`pytest` (7/7 + OCR contenedor) y `smoke.ps1` OK (`pdf-tmp` vacío = 0). |
