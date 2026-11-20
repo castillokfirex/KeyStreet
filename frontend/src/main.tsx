@@ -1,8 +1,10 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { App } from "./App";
+import "./styles/index.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <main style={{ fontFamily: "system-ui", padding: 24 }}>KEY STREET — esqueleto Fase 1</main>
+    <App />
   </StrictMode>,
 );

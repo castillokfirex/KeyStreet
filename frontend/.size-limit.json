@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Entry JS (Home /)",
+    "path": "dist/assets/index-*.js",
+    "gzip": true,
+    "limit": "120 kB"
+  },
+  {
+    "name": "Catalog route delta",
+    "path": "dist/assets/CatalogPage-*.js",
+    "gzip": true,
+    "limit": "40 kB"
+  }
+]

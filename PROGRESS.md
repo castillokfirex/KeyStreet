@@ -11,8 +11,8 @@
 | 1 | Infraestructura Docker + BD + Seeds | 0 | ✅ Completa |
 | 2 | Backend Spring Boot + Seguridad Multi-Tenant + Ciclo Efímero de PDF | 1 | ✅ Completa |
 | 3 | FastAPI + LangChain Gemini + OCR + Búsqueda Híbrida con Citas | 1 (2 para el ciclo completo) | ✅ Completa |
-| 4 | Frontend Editorial + Identidad Kast + Catálogo + WhatsApp + Chat RAG | 2, 3 | 🟨 En curso |
-| 5 | Módulos 3D Lazy + Probador Anatómico con Foto Efímera + E2E | 4 | ⬜ Pendiente |
+| 4 | Frontend Editorial + Identidad Kast + Catálogo + WhatsApp + Chat RAG | 2, 3 | ✅ Completa |
+| 5 | Módulos 3D Lazy + Probador Anatómico con Foto Efímera + E2E | 4 | 🟨 En curso |
 
 Leyenda: ⬜ Pendiente · 🟨 En curso · ✅ Completa · ⛔ Bloqueada
 
@@ -240,51 +240,51 @@ cd rag-service; uv run pytest -m live -q; cd ..
 ## Fase 4 — Frontend Editorial + Identidad Kast + Catálogo + WhatsApp + Chat RAG
 
 ### 4.A Fundaciones
-- [ ] **4.01** Dependencias: react 19, react-router 7, @tanstack/react-query, zustand, react-hook-form, zod, motion, tailwindcss v4 + @tailwindcss/vite, @fontsource-variable/plus-jakarta-sans, @fontsource-variable/space-grotesk; dev: vitest, @testing-library/react, playwright, size-limit, openapi-typescript, eslint, prettier.
-- [ ] **4.02** `vite.config.ts`: proxy dev `/api` → `http://localhost:8080`, `manualChunks` (`vendor-three`, `vendor-r3f`, `vendor-mediapipe`), alias `@/`.
-- [ ] **4.03** `styles/index.css` con tokens `@theme` de PLAN §9.1 (`#FFFFFF`, `#F5F6F8`, `#16302B`, `#0F172A`, fuentes, radios).
-- [ ] **4.04** `lib/api.ts` (fetch con `X-Tenant-Slug`, Bearer en memoria, refresh automático en 401, errores ProblemDetail) + `npm run gen:api` → `lib/api-types.ts`.
-- [ ] **4.05** `lib/money.ts` (`$166.500 COP`) y `lib/whatsapp.ts` (fallback) con tests Vitest.
-- [ ] **4.06** `router.tsx` con todas las rutas como `React.lazy` + `Suspense` con skeletons; `stores/` (cart, auth, fitProfile).
+- [x] **4.01** Dependencias: react 19, react-router 7, @tanstack/react-query, zustand, react-hook-form, zod, motion, tailwindcss v4 + @tailwindcss/vite, @fontsource-variable/plus-jakarta-sans, @fontsource-variable/space-grotesk; dev: vitest, @testing-library/react, playwright, size-limit, openapi-typescript, eslint, prettier.
+- [x] **4.02** `vite.config.ts`: proxy dev `/api` → `http://localhost:8080`, `manualChunks` (`vendor-three`, `vendor-r3f`, `vendor-mediapipe`), alias `@/`.
+- [x] **4.03** `styles/index.css` con tokens `@theme` de PLAN §9.1 (`#FFFFFF`, `#F5F6F8`, `#16302B`, `#0F172A`, fuentes, radios).
+- [x] **4.04** `lib/api.ts` (fetch con `X-Tenant-Slug`, Bearer en memoria, refresh automático en 401, errores ProblemDetail) + `npm run gen:api` → `lib/api-types.ts`.
+- [x] **4.05** `lib/money.ts` (`$166.500 COP`) y `lib/whatsapp.ts` (fallback) con tests Vitest.
+- [x] **4.06** `router.tsx` con todas las rutas como `React.lazy` + `Suspense` con skeletons; `stores/` (cart, auth, fitProfile).
 
 ### 4.B Identidad Kast
-- [ ] **4.07** `components/brand/KastLogo.tsx` — variante `isotype` (koala geométrico de trazo único, `currentColor`).
-- [ ] **4.08** `KastLogo.tsx` — variante `wordmark` ("KEY STREET", Space Grotesk, `tracking-[0.32em]`, notch de llave).
-- [ ] **4.09** `components/brand/KastMascot.tsx` — SVG < 4 KB con estados `idle|listening|thinking|speaking|success|error`, parpadeo/orejas con `motion`, `prefers-reduced-motion`.
-- [ ] **4.10** Favicon/`apple-touch-icon` desde el isotipo; tests de render y accesibilidad (`role="img"`, `<title>`).
+- [x] **4.07** `components/brand/KastLogo.tsx` — variante `isotype` (koala geométrico de trazo único, `currentColor`).
+- [x] **4.08** `KastLogo.tsx` — variante `wordmark` ("KEY STREET", Space Grotesk, `tracking-[0.32em]`, notch de llave).
+- [x] **4.09** `components/brand/KastMascot.tsx` — SVG < 4 KB con estados `idle|listening|thinking|speaking|success|error`, parpadeo/orejas con `motion`, `prefers-reduced-motion`.
+- [x] **4.10** Favicon/`apple-touch-icon` desde el isotipo; tests de render y accesibilidad (`role="img"`, `<title>`).
 
 ### 4.C Layout y UI base (fiel a Stitch)
-- [ ] **4.11** `ui/`: `Button` (forest/navy/outline), `Badge`, `Chip`, `Skeleton`, `Accordion`, `Drawer`, `SizeSelector` (36–44, agotadas deshabilitadas), `PriceTag` (tachado + final + pill `-X% OFF`), `Toast`.
-- [ ] **4.12** `layout/`: `PromoBar` (texto desde `tenant.branding`), `Header` (HOMBRE · MUJER · STREETWEAR · SALE, isotipo centrado, búsqueda, cuenta, bolsa), `MobileNav`, `Breadcrumbs`, `TrustStrip`, `Footer`.
-- [ ] **4.13** `components/motion/presets.ts` + `FadeIn`, `Stagger`, `HoverLift` con `LazyMotion`/`domAnimation` (punto de integración para micro-animaciones de 21st.dev).
+- [x] **4.11** `ui/`: `Button` (forest/navy/outline), `Badge`, `Chip`, `Skeleton`, `Accordion`, `Drawer`, `SizeSelector` (36–44, agotadas deshabilitadas), `PriceTag` (tachado + final + pill `-X% OFF`), `Toast`.
+- [x] **4.12** `layout/`: `PromoBar` (texto desde `tenant.branding`), `Header` (HOMBRE · MUJER · STREETWEAR · SALE, isotipo centrado, búsqueda, cuenta, bolsa), `MobileNav`, `Breadcrumbs`, `TrustStrip`, `Footer`.
+- [x] **4.13** `components/motion/presets.ts` + `FadeIn`, `Stagger`, `HoverLift` con `LazyMotion`/`domAnimation` (punto de integración para micro-animaciones de 21st.dev).
 
 ### 4.D Home y Catálogo
-- [ ] **4.14** `HomePage` editorial (hero tipográfico, drops destacados, franja de confianza) **sin imports 3D**.
-- [ ] **4.15** `ProductImage`: skeleton `aspect-[4/5]` con isotipo en marca de agua si `ready=false` (cero requests); `<img loading="lazy">` con `srcset` si `ready=true`.
-- [ ] **4.16** `ProductCard` según Stitch (badge, corazón, categoría, nombre, precios, `+ AÑADIR`).
-- [ ] **4.17** `FilterBar` (talla, marca, rango de precio, solo descuentos, silueta, "Limpiar todo") + orden, sincronizados con query params.
-- [ ] **4.18** `CatalogPage`: título "COLECCIÓN SNEAKERS & STREETWEAR", contador, grid 2/3/4, "Mostrando X de Y", "Cargar más siluetas".
+- [x] **4.14** `HomePage` editorial (hero tipográfico, drops destacados, franja de confianza) **sin imports 3D**.
+- [x] **4.15** `ProductImage`: skeleton `aspect-[4/5]` con isotipo en marca de agua si `ready=false` (cero requests); `<img loading="lazy">` con `srcset` si `ready=true`.
+- [x] **4.16** `ProductCard` según Stitch (badge, corazón, categoría, nombre, precios, `+ AÑADIR`).
+- [x] **4.17** `FilterBar` (talla, marca, rango de precio, solo descuentos, silueta, "Limpiar todo") + orden, sincronizados con query params.
+- [x] **4.18** `CatalogPage`: título "COLECCIÓN SNEAKERS & STREETWEAR", contador, grid 2/3/4, "Mostrando X de Y", "Cargar más siluetas".
 
 ### 4.E Detalle, bolsa y WhatsApp
-- [ ] **4.19** `ProductDetailPage` con `KastLogo variant="wordmark"`, layout 7/5, contenedor del visor con placeholder ligero (el 3D llega en Fase 5).
-- [ ] **4.20** `PurchasePanel`: chip "Ficha técnica IA", SKU por talla, stock, precio, `KastFitHint`, `SizeSelector`, CTAs (WhatsApp VIP, Probar en mi cuerpo 3D, Añadir a la bolsa), tiles y acordeones.
-- [ ] **4.21** `useWhatsappCheckout`: exige talla → `POST /public/orders/whatsapp-intent` → `window.open(whatsappUrl)`; barra fija móvil con precio + WhatsApp.
-- [ ] **4.22** `BagDrawer` multi-ítem con pedido por WhatsApp.
-- [ ] **4.23** `RelatedCarousel` ("Esto te puede gustar") con scroll-snap.
+- [x] **4.19** `ProductDetailPage` con `KastLogo variant="wordmark"`, layout 7/5, contenedor del visor con placeholder ligero (el 3D llega en Fase 5).
+- [x] **4.20** `PurchasePanel`: chip "Ficha técnica IA", SKU por talla, stock, precio, `KastFitHint`, `SizeSelector`, CTAs (WhatsApp VIP, Probar en mi cuerpo 3D, Añadir a la bolsa), tiles y acordeones.
+- [x] **4.21** `useWhatsappCheckout`: exige talla → `POST /public/orders/whatsapp-intent` → `window.open(whatsappUrl)`; barra fija móvil con precio + WhatsApp.
+- [x] **4.22** `BagDrawer` multi-ítem con pedido por WhatsApp.
+- [x] **4.23** `RelatedCarousel` ("Esto te puede gustar") con scroll-snap.
 
 ### 4.F Chat RAG con Kast
-- [ ] **4.24** FAB `KastMascot` global → `AssistantDrawer` (lazy): drawer 420 px / bottom sheet 85 vh.
-- [ ] **4.25** `useAssistant` (TanStack mutation) sincroniza estado de la mascota; sugerencias contextuales por producto.
-- [ ] **4.26** `ChatMessage` + `CitationChip` (`[n] Documento · pág. X · Sección`, expandible al snippet); UI para `NO_EVIDENCE` y `ERROR`.
+- [x] **4.24** FAB `KastMascot` global → `AssistantDrawer` (lazy): drawer 420 px / bottom sheet 85 vh.
+- [x] **4.25** `useAssistant` (TanStack mutation) sincroniza estado de la mascota; sugerencias contextuales por producto.
+- [x] **4.26** `ChatMessage` + `CitationChip` (`[n] Documento · pág. X · Sección`, expandible al snippet); UI para `NO_EVIDENCE` y `ERROR`.
 
 ### 4.G Panel Admin
-- [ ] **4.27** `LoginPage` + guard de rol `ADMIN_TENANT`.
-- [ ] **4.28** `DocumentsPage`: `UploadDropzone` (validación cliente PDF ≤ 20 MB, progreso), tabla con estado, hash corto, páginas, OCR, fragmentos, "PDF temporal eliminado ✓ verificado HH:mm", polling 3 s, borrado de índice, aviso de limitaciones.
-- [ ] **4.29** `ProductsAdminPage` (precio, descuento, stock) y `AuditPage`.
+- [x] **4.27** `LoginPage` + guard de rol `ADMIN_TENANT`.
+- [x] **4.28** `DocumentsPage`: `UploadDropzone` (validación cliente PDF ≤ 20 MB, progreso), tabla con estado, hash corto, páginas, OCR, fragmentos, "PDF temporal eliminado ✓ verificado HH:mm", polling 3 s, borrado de índice, aviso de limitaciones.
+- [x] **4.29** `ProductsAdminPage` (precio, descuento, stock) y `AuditPage`.
 
 ### 4.H Calidad
-- [ ] **4.30** `.size-limit.json`: entrada de `/` ≤ 120 KB gzip.
-- [ ] **4.31** Revisión visual lado a lado con `docs/design/stitch/*` en 375 / 768 / 1440 px; contraste WCAG AA, foco visible, `aria-label` en botones de icono.
+- [x] **4.30** `.size-limit.json`: entrada de `/` ≤ 120 KB gzip.
+- [x] **4.31** Revisión visual lado a lado con `docs/design/stitch/*` en 375 / 768 / 1440 px; contraste WCAG AA, foco visible, `aria-label` en botones de icono.
 
 **Verificación Fase 4**
 ```powershell
@@ -371,3 +371,4 @@ docker compose down                       # volver al stack normal: docker compo
 | 2026-11-20 | Fase 1 | Stack Docker (4 servicios healthy), `db/schema.sql`, `db/seed.sql` (10 productos, 4 descuentos, 90 variantes), `verify_seed.sql`, `verify_rls.sql`, healthchecks y TLS dev verificados. |
 | 2026-11-20 | Fase 2 | Backend Spring Boot 3 completo: multi-tenancy (JWT/slug + `@TenantId` + RLS), rotación refresh tokens, catálogo COP/FTS/WhatsApp, ciclo efímero PDF con validación y borrado verificado. `.\mvnw.cmd -B verify` (12/12 IT) y pruebas HTTP en Docker OK. |
 | 2026-11-20 | Fase 3 | Microservicio `rag-service` completo (FastAPI + LangChain + Gemini/Fake + PyMuPDF + Tesseract OCR + RRF híbrido `pgvector`/`es_unaccent` + citas verificadas + auditoría). `ruff`/`mypy`/`pytest` (7/7 + OCR contenedor) y `smoke.ps1` OK (`pdf-tmp` vacío = 0). |
+| 2026-11-20 | Fase 4 | Frontend editorial minimalista (React 19, Tailwind v4, identidad dual Kast, catálogo COP con 4 ofertas 10–15% OFF, WhatsApp checkout, chat RAG lazy, panel admin PDFs/productos/auditoría). `typecheck`, `lint`, Vitest (5/5), `size-limit` (106.19 KB gzip <= 120 KB) y Nginx HTTPS 200 OK. |
