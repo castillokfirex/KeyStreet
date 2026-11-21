@@ -21,3 +21,6 @@ test-results/
 desktop.ini
 .idea/
 .vscode/
+
+# Caché de herramientas del catálogo (originales descargados, miniaturas, rembg)
+scripts/.cache/

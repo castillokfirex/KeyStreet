@@ -1,0 +1,24 @@
+{
+  "name": "keystreet-catalog-scripts",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Herramientas reproducibles del catálogo: imágenes con licencia, normalización y modelos 3D.",
+  "scripts": {
+    "images:search": "node catalog/search-commons.mjs",
+    "images:process": "node process-images/process-images.mjs",
+    "models:build": "node models/build-generic-glb.mjs",
+    "models:validate": "node models/validate-models.mjs",
+    "catalog:build": "node catalog/build-catalog.mjs"
+  },
+  "dependencies": {
+    "@gltf-transform/cli": "^4.2.0",
+    "@gltf-transform/core": "^4.2.0",
+    "@gltf-transform/extensions": "^4.2.0",
+    "@gltf-transform/functions": "^4.2.0",
+    "gltf-validator": "^2.0.0-dev.3.10",
+    "meshoptimizer": "^0.23.0",
+    "sharp": "^0.34.2",
+    "three": "^0.187.0"
+  }
+}

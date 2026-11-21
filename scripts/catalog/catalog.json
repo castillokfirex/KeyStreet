@@ -1,0 +1,695 @@
+{
+  "$comment": "Fuente única del catálogo de 15 modelos. build-catalog.mjs genera desde aquí la migración SQL, docs/catalogo-fuentes.md y los datos de verificación. Precios en COP: 'VERIFICADO' = precio de lista vigente en la tienda oficial en Colombia (URL y fecha en 'price'); 'PRUEBA' = sin precio verificable, NO es un precio real.",
+  "tenantId": "00000000-0000-4000-8000-000000000001",
+  "checkedAt": "2026-11-20",
+  "brands": [
+    {
+      "code": "NIK",
+      "name": "Nike",
+      "slug": "nike"
+    },
+    {
+      "code": "JOR",
+      "name": "Jordan",
+      "slug": "jordan"
+    },
+    {
+      "code": "ADI",
+      "name": "Adidas",
+      "slug": "adidas"
+    },
+    {
+      "code": "PUM",
+      "name": "Puma",
+      "slug": "puma"
+    },
+    {
+      "code": "NBL",
+      "name": "New Balance",
+      "slug": "new-balance"
+    },
+    {
+      "code": "CNV",
+      "name": "Converse",
+      "slug": "converse"
+    },
+    {
+      "code": "VAN",
+      "name": "Vans",
+      "slug": "vans"
+    }
+  ],
+  "retired": [
+    {
+      "slug": "adidas-forum-low",
+      "reason": "Fuera de la lista de 15 modelos."
+    },
+    {
+      "slug": "new-balance-574",
+      "reason": "Fuera de la lista de 15 modelos (sustituido por New Balance 530)."
+    },
+    {
+      "slug": "nike-air-jordan-1-retro-high-og",
+      "reason": "La lista pide Air Jordan 1 Low o Mid (sustituido por air-jordan-1-low)."
+    },
+    {
+      "slug": "adidas-campus-00s-gris-negro",
+      "reason": "Colorway sin fotos con licencia; sustituido por adidas-campus-00s (café)."
+    }
+  ],
+  "discountRule": "Exactamente 4 modelos activos con descuento automático entre 10% y 15%.",
+  "products": [
+    {
+      "slug": "nike-air-force-1-low-07-blanco",
+      "name": "Nike Air Force 1 '07 (Blanco)",
+      "brand": "NIK",
+      "modelCode": "AF1",
+      "silhouette": "LOW",
+      "colorway": "Blanco",
+      "badge": "BESTSELLER",
+      "shortDescription": "El blanco total de perfil bajo que sigue marcando la pauta en la calle: cuero liso, suela gruesa y una silueta que combina con todo.",
+      "description": "Capellada de cuero con perforaciones en la puntera, cuello ligeramente acolchado y suela de caucho con patrón de pivote. Un básico de rotación diaria que envejece bien con un cuidado sencillo.",
+      "originalPriceCop": 584950,
+      "discountPercent": 10,
+      "price": {
+        "status": "VERIFICADO",
+        "store": "Nike Colombia (nike.com.co)",
+        "reference": "CW2288-111",
+        "listPriceCop": 584950,
+        "currentPriceCop": 584950,
+        "url": "https://www.nike.com.co/nike-air-force-1-07-cw2288-111-th4/p",
+        "checkedAt": "2026-11-20"
+      },
+      "specs": {
+        "upper": "Cuero plena flor",
+        "lining": "Textil transpirable",
+        "midsole": "Espuma con unidad Air encapsulada",
+        "outsole": "Caucho con patrón pivote",
+        "closure": "Cordones planos",
+        "fit": "TRUE_TO_SIZE",
+        "weightGrams": 480
+      },
+      "palette": {
+        "upper": "#FFFFFF",
+        "accent": "#E4E4E0",
+        "sole": "#F4F4F0"
+      },
+      "styleTags": [
+        "clasico",
+        "urbano",
+        "cuero",
+        "blanco",
+        "basquet"
+      ]
+    },
+    {
+      "slug": "adidas-superstar",
+      "name": "Adidas Superstar (Blanco / Negro)",
+      "brand": "ADI",
+      "modelCode": "SST",
+      "silhouette": "LOW",
+      "colorway": "Blanco / Negro",
+      "badge": "CLÁSICO",
+      "shortDescription": "La puntera de goma en concha y las tres franjas en contraste hacen de este modelo un ícono del baloncesto que pasó a la cultura urbana.",
+      "description": "Cuero liso con franjas laterales en contraste, puntera de goma tipo concha y suela de caucho en espiga. Perfil bajo y horma cómoda para todo el día.",
+      "originalPriceCop": 549950,
+      "discountPercent": 0,
+      "price": {
+        "status": "VERIFICADO",
+        "store": "adidas Colombia (adidas.co)",
+        "reference": "KK4685 (Superstar II, versión vigente)",
+        "listPriceCop": 549950,
+        "currentPriceCop": 549950,
+        "url": "https://www.adidas.co/tenis-superstar-ii/KK4685.html",
+        "checkedAt": "2026-11-20"
+      },
+      "specs": {
+        "upper": "Cuero liso con puntera de goma tipo concha",
+        "lining": "Textil",
+        "midsole": "Caucho moldeado",
+        "outsole": "Caucho con patrón de espiga",
+        "closure": "Cordones planos",
+        "fit": "TRUE_TO_SIZE",
+        "weightGrams": 470
+      },
+      "palette": {
+        "upper": "#FFFFFF",
+        "accent": "#111111",
+        "sole": "#F1F1EF"
+      },
+      "styleTags": [
+        "clasico",
+        "retro",
+        "cuero",
+        "basquet"
+      ]
+    },
+    {
+      "slug": "nike-dunk-low-retro-panda",
+      "name": "Nike Dunk Low Retro (Panda / Blanco y Negro)",
+      "brand": "NIK",
+      "modelCode": "DNK",
+      "silhouette": "LOW",
+      "colorway": "Blanco / Negro",
+      "badge": "ALTA ROTACIÓN",
+      "shortDescription": "Bloques en blanco y negro sobre una base de baloncesto de los 80: el Dunk de perfil bajo más versátil para el día a día.",
+      "description": "Cuero con paneles superpuestos en dos tonos, cuello acolchado de perfil bajo y suela de caucho con círculo de pivote. Fácil de combinar y de limpiar.",
+      "originalPriceCop": 679950,
+      "discountPercent": 0,
+      "price": {
+        "status": "VERIFICADO",
+        "store": "Nike Colombia (nike.com.co)",
+        "reference": "HF5441-117 (Dunk Low Retro hombre; el colorway Panda DD1391-100 no está publicado hoy)",
+        "listPriceCop": 679950,
+        "currentPriceCop": 407970,
+        "url": "https://www.nike.com.co/nike-dunk-low-retro-hf5441-117-tp6/p",
+        "checkedAt": "2026-11-20"
+      },
+      "specs": {
+        "upper": "Cuero con paneles bicolor",
+        "lining": "Textil acolchado",
+        "midsole": "Espuma de poliuretano",
+        "outsole": "Caucho con patrón pivote",
+        "closure": "Cordones planos",
+        "fit": "TRUE_TO_SIZE",
+        "weightGrams": 450
+      },
+      "palette": {
+        "upper": "#FFFFFF",
+        "accent": "#111111",
+        "sole": "#F4F4F0"
+      },
+      "styleTags": [
+        "retro",
+        "basquet",
+        "urbano",
+        "bicolor",
+        "skate"
+      ]
+    },
+    {
+      "slug": "air-jordan-1-low",
+      "name": "Air Jordan 1 Low (Blanco / Azul marino)",
+      "brand": "JOR",
+      "modelCode": "AJ1L",
+      "silhouette": "LOW",
+      "colorway": "Blanco / Azul marino",
+      "badge": "PREMIUM",
+      "shortDescription": "El primer Jordan en versión de caña baja: mismas líneas de cancha de 1985, más fácil de llevar con todo.",
+      "description": "Cuero con paneles en contraste, logo Wings en el talón y unidad de amortiguación encapsulada en el talón. Suela de caucho con círculo de pivote.",
+      "originalPriceCop": 699950,
+      "discountPercent": 0,
+      "price": {
+        "status": "VERIFICADO",
+        "store": "Nike Colombia (nike.com.co)",
+        "reference": "553558-047 (Air Jordan 1 Low hombre, precio de lista del modelo)",
+        "listPriceCop": 699950,
+        "currentPriceCop": 699950,
+        "url": "https://www.nike.com.co/air-jordan-1-low-tenis-hombre-553558-047-tf6/p",
+        "checkedAt": "2026-11-20"
+      },
+      "specs": {
+        "upper": "Cuero con paneles en contraste",
+        "lining": "Textil acolchado",
+        "midsole": "Espuma con unidad Air en el talón",
+        "outsole": "Caucho con círculo de pivote",
+        "closure": "Cordones planos",
+        "fit": "TRUE_TO_SIZE",
+        "weightGrams": 430
+      },
+      "palette": {
+        "upper": "#FFFFFF",
+        "accent": "#1F2A44",
+        "sole": "#F1F1EF"
+      },
+      "styleTags": [
+        "basquet",
+        "retro",
+        "cuero",
+        "premium"
+      ]
+    },
+    {
+      "slug": "vans-old-skool",
+      "name": "Vans Old Skool (Negro / Blanco)",
+      "brand": "VAN",
+      "modelCode": "OSK",
+      "silhouette": "LOW",
+      "colorway": "Negro / Blanco",
+      "badge": "SKATE",
+      "shortDescription": "Lona y gamuza resistentes, la franja lateral en contraste y suela vulcanizada de waffle para sentir la tabla.",
+      "description": "Capellada de lona con refuerzos de gamuza, cuello acolchado y suela vulcanizada con patrón waffle. Pensado para patinar y para el uso diario.",
+      "originalPriceCop": 329900,
+      "discountPercent": 0,
+      "price": {
+        "status": "VERIFICADO",
+        "store": "Vans Colombia (vans.com.co)",
+        "reference": "VN000D3H",
+        "listPriceCop": 329900,
+        "currentPriceCop": 329900,
+        "url": "https://www.vans.com.co/products/tenis-old-skool-vn000d3h-bka",
+        "checkedAt": "2026-11-20"
+      },
+      "specs": {
+        "upper": "Lona y gamuza",
+        "lining": "Textil",
+        "midsole": "Plantilla acolchada",
+        "outsole": "Caucho vulcanizado con patrón waffle",
+        "closure": "Cordones planos",
+        "fit": "TRUE_TO_SIZE",
+        "weightGrams": 420
+      },
+      "palette": {
+        "upper": "#1B1B1B",
+        "accent": "#FFFFFF",
+        "sole": "#F4F1EA"
+      },
+      "styleTags": [
+        "skate",
+        "clasico",
+        "lona",
+        "gamuza"
+      ]
+    },
+    {
+      "slug": "adidas-samba-og-blanco-negro",
+      "name": "Adidas Samba OG (Blanco / Negro)",
+      "brand": "ADI",
+      "modelCode": "SMB",
+      "silhouette": "LOW",
+      "colorway": "Blanco / Negro / Goma",
+      "badge": "TENDENCIA",
+      "shortDescription": "Perfil bajo de inspiración indoor con puntera en T de gamuza y suela de goma natural: el retro más pedido de la temporada.",
+      "description": "Cuero liso con puntera en T de gamuza, franjas laterales en contraste y suela de goma natural de buen agarre. Horma estrecha: si tienes el pie ancho, considera media talla más.",
+      "originalPriceCop": 499950,
+      "discountPercent": 0,
+      "price": {
+        "status": "VERIFICADO",
+        "store": "adidas Colombia (adidas.co)",
+        "reference": "B75806",
+        "listPriceCop": 499950,
+        "currentPriceCop": 349965,
+        "url": "https://www.adidas.co/tenis-samba-og/B75806.html",
+        "checkedAt": "2026-11-20"
+      },
+      "specs": {
+        "upper": "Cuero con puntera de gamuza T-toe",
+        "lining": "Textil",
+        "midsole": "EVA ligera",
+        "outsole": "Goma natural de agarre",
+        "closure": "Cordones planos",
+        "fit": "RUNS_SMALL",
+        "weightGrams": 380
+      },
+      "palette": {
+        "upper": "#FFFFFF",
+        "accent": "#111111",
+        "sole": "#C9A878"
+      },
+      "styleTags": [
+        "retro",
+        "gamuza",
+        "suela-de-goma",
+        "urbano"
+      ]
+    },
+    {
+      "slug": "converse-chuck-taylor-all-star-clasico",
+      "name": "Converse Chuck Taylor All Star (Bota / Clásico)",
+      "brand": "CNV",
+      "modelCode": "CTA",
+      "silhouette": "HIGH",
+      "colorway": "Blanco",
+      "badge": "ATEMPORAL",
+      "shortDescription": "La bota de lona de siempre: puntera de goma, ojales metálicos y un perfil alto que funciona con cualquier estilo.",
+      "description": "Lona de algodón, puntera y franja de caucho vulcanizado, parche circular en el tobillo y plantilla acolchada. Talla algo grande: si dudas, elige media talla menos.",
+      "originalPriceCop": 299900,
+      "discountPercent": 15,
+      "price": {
+        "status": "PRUEBA",
+        "store": "Sin tienda oficial de Converse en Colombia accesible el 2026-11-20 (converse.com.co no responde).",
+        "reference": null,
+        "listPriceCop": null,
+        "currentPriceCop": null,
+        "url": null,
+        "checkedAt": "2026-11-20"
+      },
+      "specs": {
+        "upper": "Lona de algodón",
+        "lining": "Textil",
+        "midsole": "Plantilla acolchada",
+        "outsole": "Caucho vulcanizado",
+        "closure": "Cordones planos",
+        "fit": "RUNS_LARGE",
+        "weightGrams": 620
+      },
+      "palette": {
+        "upper": "#F7F7F5",
+        "accent": "#1B1B1B",
+        "sole": "#F4F1EA"
+      },
+      "styleTags": [
+        "lona",
+        "atemporal",
+        "cana-alta",
+        "clasico"
+      ]
+    },
+    {
+      "slug": "adidas-stan-smith",
+      "name": "Adidas Stan Smith (Blanco / Verde)",
+      "brand": "ADI",
+      "modelCode": "STS",
+      "silhouette": "LOW",
+      "colorway": "Blanco / Verde",
+      "badge": "CLÁSICO",
+      "shortDescription": "Líneas limpias de tenis, perforaciones laterales y el talón verde: el blanco minimalista que nunca pasa de moda.",
+      "description": "Capellada lisa con tres hileras de perforaciones en lugar de franjas, talón en verde y suela de caucho delgada. Pensado para uso diario.",
+      "originalPriceCop": 549950,
+      "discountPercent": 0,
+      "price": {
+        "status": "VERIFICADO",
+        "store": "adidas Colombia (adidas.co)",
+        "reference": "M20324",
+        "listPriceCop": 549950,
+        "currentPriceCop": 439960,
+        "url": "https://www.adidas.co/tenis-stan-smith-unisex/M20324.html",
+        "checkedAt": "2026-11-20"
+      },
+      "specs": {
+        "upper": "Capellada lisa con perforaciones laterales",
+        "lining": "Textil",
+        "midsole": "Plantilla acolchada",
+        "outsole": "Caucho de perfil delgado",
+        "closure": "Cordones planos",
+        "fit": "TRUE_TO_SIZE",
+        "weightGrams": 420
+      },
+      "palette": {
+        "upper": "#FFFFFF",
+        "accent": "#1F6B4A",
+        "sole": "#F1F1EF"
+      },
+      "styleTags": [
+        "clasico",
+        "tenis",
+        "blanco",
+        "minimalista"
+      ]
+    },
+    {
+      "slug": "new-balance-550",
+      "name": "New Balance 550 (Blanco / Burdeos)",
+      "brand": "NBL",
+      "modelCode": "550",
+      "silhouette": "LOW",
+      "colorway": "Blanco / Burdeos",
+      "badge": "BESTSELLER",
+      "shortDescription": "Baloncesto de finales de los 80 rescatado del archivo: cuero blanco, detalles en burdeos y una suela firme.",
+      "description": "Cuero con perforaciones en la puntera, logo N en contraste y cuello acolchado. Mediasuela de goma EVA y suela de caucho en espiga.",
+      "originalPriceCop": 649900,
+      "discountPercent": 0,
+      "price": {
+        "status": "VERIFICADO",
+        "store": "New Balance Colombia (newbalance.com.co)",
+        "reference": "M55096T (550 unisex, precio habitual)",
+        "listPriceCop": 649900,
+        "currentPriceCop": 519920,
+        "url": "https://newbalance.com.co/products/m55096t",
+        "checkedAt": "2026-11-20"
+      },
+      "specs": {
+        "upper": "Cuero con detalles perforados",
+        "lining": "Textil",
+        "midsole": "Espuma EVA",
+        "outsole": "Caucho con patrón de espiga",
+        "closure": "Cordones planos",
+        "fit": "TRUE_TO_SIZE",
+        "weightGrams": 490
+      },
+      "palette": {
+        "upper": "#FFFFFF",
+        "accent": "#7A1F2B",
+        "sole": "#F1F1EF"
+      },
+      "styleTags": [
+        "retro",
+        "basquet",
+        "cuero",
+        "limpio"
+      ]
+    },
+    {
+      "slug": "new-balance-530",
+      "name": "New Balance 530 (Blanco / Plata)",
+      "brand": "NBL",
+      "modelCode": "530",
+      "silhouette": "LOW",
+      "colorway": "Blanco / Plata",
+      "badge": "CONFORT",
+      "shortDescription": "Running de los 2000 con malla transpirable y detalles metálicos: ligero, acolchado y fácil de llevar todo el día.",
+      "description": "Malla con refuerzos sintéticos, amortiguación ABZORB en la mediasuela y suela de caucho con buen agarre. Silueta retro de running con comodidad actual.",
+      "originalPriceCop": 529900,
+      "discountPercent": 12,
+      "price": {
+        "status": "VERIFICADO",
+        "store": "New Balance Colombia (newbalance.com.co)",
+        "reference": "MR530SG",
+        "listPriceCop": 529900,
+        "currentPriceCop": 529900,
+        "url": "https://newbalance.com.co/products/mr530sg",
+        "checkedAt": "2026-11-20"
+      },
+      "specs": {
+        "upper": "Malla con refuerzos sintéticos",
+        "lining": "Textil",
+        "midsole": "Amortiguación ABZORB",
+        "outsole": "Caucho con patrón de tracción",
+        "closure": "Cordones planos",
+        "fit": "TRUE_TO_SIZE",
+        "weightGrams": 360
+      },
+      "palette": {
+        "upper": "#E9EBEE",
+        "accent": "#9AA3AD",
+        "sole": "#F4F4F2"
+      },
+      "styleTags": [
+        "retro",
+        "running",
+        "malla",
+        "confort"
+      ]
+    },
+    {
+      "slug": "adidas-campus-00s",
+      "name": "Adidas Campus 00s (Café / Blanco)",
+      "brand": "ADI",
+      "modelCode": "C00S",
+      "silhouette": "LOW",
+      "colorway": "Café / Blanco",
+      "badge": "NUEVO DROP",
+      "shortDescription": "Gamuza suave con proporciones voluminosas de los 2000: lengüeta gruesa, cordones anchos y suela de caucho.",
+      "description": "Capellada de gamuza con franjas laterales en contraste, lengüeta acolchada y suela de caucho en tono crudo. Estética skate de principios de siglo.",
+      "originalPriceCop": 499950,
+      "discountPercent": 0,
+      "price": {
+        "status": "VERIFICADO",
+        "store": "adidas Colombia (adidas.co)",
+        "reference": "Campus 00s (precio de lista del modelo, p. ej. HQ8708)",
+        "listPriceCop": 499950,
+        "currentPriceCop": 299970,
+        "url": "https://www.adidas.co/tenis-campus-00s/HQ8708.html",
+        "checkedAt": "2026-11-20"
+      },
+      "specs": {
+        "upper": "Gamuza",
+        "lining": "Textil",
+        "midsole": "EVA con suela de perfil grueso",
+        "outsole": "Caucho con patrón de ondas",
+        "closure": "Cordones anchos",
+        "fit": "TRUE_TO_SIZE",
+        "weightGrams": 520
+      },
+      "palette": {
+        "upper": "#7A4A2E",
+        "accent": "#F4F1EA",
+        "sole": "#EDE6D8"
+      },
+      "styleTags": [
+        "skate",
+        "gamuza",
+        "y2k",
+        "retro"
+      ]
+    },
+    {
+      "slug": "puma-suede-xl",
+      "name": "Puma Suede XL",
+      "brand": "PUM",
+      "modelCode": "SXL",
+      "silhouette": "LOW",
+      "colorway": "Negro / Blanco",
+      "badge": "STREETWEAR",
+      "shortDescription": "Versión robusta del Suede: gamuza, lengüeta y cuello más acolchados y cordones anchos para un volumen streetwear.",
+      "description": "Gamuza con la franja Formstrip en contraste, cuello acolchado y suela de caucho más gruesa que la versión clásica.",
+      "originalPriceCop": 449900,
+      "discountPercent": 12,
+      "price": {
+        "status": "PRUEBA",
+        "store": "Sin tienda oficial de Puma en Colombia accesible el 2026-11-20 (co.puma.com no responde; puma.com/co redirige al sitio corporativo).",
+        "reference": null,
+        "listPriceCop": null,
+        "currentPriceCop": null,
+        "url": null,
+        "checkedAt": "2026-11-20"
+      },
+      "specs": {
+        "upper": "Gamuza",
+        "lining": "Textil",
+        "midsole": "EVA moldeada de perfil voluminoso",
+        "outsole": "Caucho con patrón de espiga",
+        "closure": "Cordones anchos",
+        "fit": "TRUE_TO_SIZE",
+        "weightGrams": 540
+      },
+      "palette": {
+        "upper": "#1B1B1B",
+        "accent": "#FFFFFF",
+        "sole": "#F1F1EF"
+      },
+      "styleTags": [
+        "gamuza",
+        "streetwear",
+        "volumen",
+        "retro"
+      ]
+    },
+    {
+      "slug": "adidas-handball-spezial",
+      "name": "Adidas Handball Spezial (Negro / Goma)",
+      "brand": "ADI",
+      "modelCode": "HBS",
+      "silhouette": "LOW",
+      "colorway": "Negro / Blanco / Goma",
+      "badge": "TENDENCIA",
+      "shortDescription": "Nació en las canchas de balonmano de los 70: gamuza, franjas blancas y suela de goma para un perfil bajo y estilizado.",
+      "description": "Capellada de gamuza con franjas en contraste, lengüeta corta y suela de goma natural. Horma ajustada y perfil delgado.",
+      "originalPriceCop": 549950,
+      "discountPercent": 0,
+      "price": {
+        "status": "VERIFICADO",
+        "store": "adidas Colombia (adidas.co)",
+        "reference": "KZ6705 (Handball Spezial hombre, precio de lista)",
+        "listPriceCop": 549950,
+        "currentPriceCop": 549950,
+        "url": "https://www.adidas.co/tenis-handball-spezial/KZ6705.html",
+        "checkedAt": "2026-11-20"
+      },
+      "specs": {
+        "upper": "Gamuza",
+        "lining": "Textil",
+        "midsole": "EVA ligera",
+        "outsole": "Goma natural",
+        "closure": "Cordones planos",
+        "fit": "TRUE_TO_SIZE",
+        "weightGrams": 360
+      },
+      "palette": {
+        "upper": "#1B1B1B",
+        "accent": "#FFFFFF",
+        "sole": "#A87A4F"
+      },
+      "styleTags": [
+        "retro",
+        "gamuza",
+        "suela-de-goma",
+        "clasico"
+      ]
+    },
+    {
+      "slug": "air-jordan-4",
+      "name": "Air Jordan 4 Retro (White Cement)",
+      "brand": "JOR",
+      "modelCode": "AJ4",
+      "silhouette": "MID",
+      "colorway": "Blanco / Gris cemento",
+      "badge": "PREMIUM",
+      "shortDescription": "Alas laterales, malla en los paneles y la unidad Air visible: el Jordan de 1989 en su combinación blanco y cemento.",
+      "description": "Cuero con paneles de malla, alas de soporte para los cordones, detalles con estampado de cemento y unidad Air visible en el talón.",
+      "originalPriceCop": 1219950,
+      "discountPercent": 0,
+      "price": {
+        "status": "VERIFICADO",
+        "store": "Nike Colombia (nike.com.co)",
+        "reference": "FQ8138-600 (Air Jordan 4 Retro hombre, precio de lista del modelo)",
+        "listPriceCop": 1219950,
+        "currentPriceCop": 853965,
+        "url": "https://www.nike.com.co/air-jordan-4-retro-calzado-para-hombre-fq8138-600-tu6/p",
+        "checkedAt": "2026-11-20"
+      },
+      "specs": {
+        "upper": "Cuero con paneles de malla",
+        "lining": "Textil acolchado",
+        "midsole": "Poliuretano con unidad Air visible",
+        "outsole": "Caucho de tracción",
+        "closure": "Cordones con alas de soporte",
+        "fit": "TRUE_TO_SIZE",
+        "weightGrams": 600
+      },
+      "palette": {
+        "upper": "#F5F5F5",
+        "accent": "#8A8D91",
+        "sole": "#F1F1EF"
+      },
+      "styleTags": [
+        "basquet",
+        "retro",
+        "premium",
+        "cuero"
+      ]
+    },
+    {
+      "slug": "nike-court-vision-low",
+      "name": "Nike Court Vision Low (Blanco / Negro)",
+      "brand": "NIK",
+      "modelCode": "CVL",
+      "silhouette": "LOW",
+      "colorway": "Blanco / Negro",
+      "badge": "CLÁSICO",
+      "shortDescription": "Inspiración de cancha de los 80 en un perfil bajo y limpio, con materiales que incluyen contenido reciclado.",
+      "description": "Capellada sintética con perforaciones, swoosh en contraste y suela de caucho con círculo de pivote. Un básico blanco de precio accesible.",
+      "originalPriceCop": 459950,
+      "discountPercent": 0,
+      "price": {
+        "status": "VERIFICADO",
+        "store": "Nike Colombia (nike.com.co)",
+        "reference": "DH2987-101",
+        "listPriceCop": 459950,
+        "currentPriceCop": 459950,
+        "url": "https://www.nike.com.co/nike-court-vision-low-next-nature-dh2987-101/p",
+        "checkedAt": "2026-11-20"
+      },
+      "specs": {
+        "upper": "Sintético con perforaciones",
+        "lining": "Textil",
+        "midsole": "Espuma ligera",
+        "outsole": "Caucho con círculo de pivote",
+        "closure": "Cordones planos",
+        "fit": "TRUE_TO_SIZE",
+        "weightGrams": 420
+      },
+      "palette": {
+        "upper": "#FFFFFF",
+        "accent": "#111111",
+        "sole": "#F1F1EF"
+      },
+      "styleTags": [
+        "clasico",
+        "basquet",
+        "urbano",
+        "blanco"
+      ]
+    }
+  ]
+}
