@@ -1,94 +1,120 @@
-import { Heart, Plus } from "lucide-react";
+import { Heart } from "lucide-react";
+import { useRef, useState } from "react";
 import { Link } from "react-router";
-import { Badge } from "@/components/ui/Badge";
 import { PriceTag } from "@/components/ui/PriceTag";
 import type { ProductSummaryDto } from "@/lib/types";
 import { useCartStore } from "@/stores/cart";
 import { ProductImage } from "./ProductImage";
 
-export function ProductCard({ product }: { product: ProductSummaryDto }) {
+/**
+ * Tarjeta editorial: sin caja, sin borde y sin botón "Añadir".
+ * - Desktop: crossfade a la segunda imagen en hover (ambas en DOM = precarga).
+ * - Táctil: carrusel con scroll-snap y puntos indicadores.
+ * Estilos de interacción en index.css (.ks-card*).
+ */
+export function ProductCard({
+  product,
+  eager = false,
+}: {
+  product: ProductSummaryDto;
+  eager?: boolean;
+}) {
   const wishlist = useCartStore((s) => s.wishlist);
   const toggleWishlist = useCartStore((s) => s.toggleWishlist);
   const isFav = wishlist.includes(product.id);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [slide, setSlide] = useState(0);
 
   const badgeLabel =
     product.hasDiscount && product.discountPercent > 0
       ? `-${product.discountPercent}% OFF`
       : product.badge || null;
 
-  return (
-    <div className="h-full transition-transform duration-200 hover:-translate-y-0.5">
-      <article
-        data-testid={`product-card-${product.slug}`}
-        className="group flex h-full flex-col justify-between rounded-2xl border border-line bg-canvas p-2.5 transition-colors hover:border-navy/30"
-      >
-        <div>
-          <div className="relative">
-            <Link
-              to={`/producto/${product.slug}`}
-              aria-label={`Ver ${product.name}`}
-              className="block"
-            >
-              <ProductImage images={product.images} alt={product.name} />
-            </Link>
+  // Con fotos reales solo hay segunda vista si existe un segundo archivo
+  const hasSecondView = !product.images?.ready || product.images.files.length > 1;
+  const href = `/producto/${product.slug}`;
 
-            {badgeLabel && (
-              <div className="pointer-events-none absolute left-2.5 top-2.5">
-                <Badge tone={product.hasDiscount ? "forest" : "neutral"}>
-                  {badgeLabel}
-                </Badge>
+  const onScroll = () => {
+    const track = trackRef.current;
+    if (!track || track.clientWidth === 0) return;
+    setSlide(Math.round(track.scrollLeft / track.clientWidth));
+  };
+
+  return (
+    <article
+      data-testid={`product-card-${product.slug}`}
+      className="ks-card relative min-w-0"
+    >
+      <Link to={href} aria-label={`Ver ${product.name}`} className="block focus-visible:outline-offset-[-2px]">
+        <div className="relative aspect-[4/5] overflow-hidden bg-surface">
+          <div ref={trackRef} className="ks-card-track" onScroll={onScroll}>
+            <div className="ks-card-slide">
+              <ProductImage images={product.images} alt={product.name} priority={eager} />
+            </div>
+            {hasSecondView && (
+              <div className="ks-card-slide">
+                <ProductImage images={product.images} alt={product.name} view="secondary" />
               </div>
             )}
-
-            <button
-              type="button"
-              onClick={() => toggleWishlist(product.id)}
-              aria-label={
-                isFav
-                  ? `Quitar ${product.name} de favoritos`
-                  : `Guardar ${product.name} en favoritos`
-              }
-              aria-pressed={isFav}
-              className="absolute right-2.5 top-2.5 flex h-8 w-8 items-center justify-center rounded-full border border-line bg-canvas/90 text-navy shadow-xs hover:border-navy cursor-pointer"
-            >
-              <Heart
-                className={`h-3.5 w-3.5 ${isFav ? "fill-forest text-forest" : ""}`}
-                aria-hidden="true"
-              />
-            </button>
           </div>
 
-          <div className="mt-3 px-1">
-            <p className="font-display text-[10px] font-bold uppercase tracking-[0.16em] text-muted">
-              {product.brand} · {product.silhouette}
-            </p>
-            <Link
-              to={`/producto/${product.slug}`}
-              className="mt-1 block text-xs sm:text-sm font-bold leading-snug text-navy hover:text-forest transition-colors line-clamp-2"
+          {hasSecondView && (
+            <div
+              aria-hidden="true"
+              className="ks-card-dots pointer-events-none absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1"
             >
-              {product.name}
-            </Link>
-          </div>
+              {[0, 1].map((i) => (
+                <span
+                  key={i}
+                  className={`h-1.5 w-1.5 rounded-full transition-colors ${i === slide ? "bg-ink" : "bg-gray/50"}`}
+                />
+              ))}
+            </div>
+          )}
         </div>
+      </Link>
 
-        <div className="mt-3 flex flex-wrap items-center justify-between gap-2 px-1 pb-1">
-          <PriceTag
-            originalPriceCop={product.originalPriceCop}
-            finalPriceCop={product.finalPriceCop}
-            discountPercent={product.discountPercent}
-            hasDiscount={product.hasDiscount}
-            size="sm"
-          />
+      {badgeLabel && (
+        <span
+          className={`pointer-events-none absolute left-3 top-3 font-display text-[10px] font-semibold uppercase tracking-nav ${product.hasDiscount ? "text-sale-text" : "text-ink"}`}
+        >
+          {badgeLabel}
+        </span>
+      )}
 
-          <Link
-            to={`/producto/${product.slug}`}
-            className="inline-flex items-center gap-1 rounded-full bg-navy px-3 py-1.5 font-display text-[10px] font-bold uppercase tracking-[0.14em] text-white hover:bg-forest transition-colors"
-          >
-            <Plus className="h-3 w-3" aria-hidden="true" />
-            <span>Añadir</span>
-          </Link>
-        </div>
-      </article>
-    </div>
+      <button
+        type="button"
+        onClick={() => toggleWishlist(product.id)}
+        aria-label={
+          isFav
+            ? `Quitar ${product.name} de favoritos`
+            : `Guardar ${product.name} en favoritos`
+        }
+        aria-pressed={isFav}
+        className="ks-card-fav absolute right-1 top-1 flex h-10 w-10 items-center justify-center text-ink transition-opacity cursor-pointer"
+      >
+        <Heart
+          className={`h-4 w-4 ${isFav ? "fill-current" : ""}`}
+          strokeWidth={1.5}
+          aria-hidden="true"
+        />
+      </button>
+
+      <div className="flex flex-col gap-1 px-3 pb-6 pt-3">
+        <Link
+          to={href}
+          className="font-display text-[11px] font-semibold uppercase leading-tight tracking-label text-ink line-clamp-2 hover:underline underline-offset-2"
+        >
+          {product.name}
+        </Link>
+        <PriceTag
+          originalPriceCop={product.originalPriceCop}
+          finalPriceCop={product.finalPriceCop}
+          discountPercent={product.discountPercent}
+          hasDiscount={product.hasDiscount}
+          size="sm"
+        />
+      </div>
+    </article>
   );
 }
