@@ -139,6 +139,8 @@ export function FittingRoom({
               bottomColor={bottomColor}
               shoeSilhouette={product.silhouette}
               shoePalette={product.materialSpecs?.palette}
+              shoeModelUrl={product.model3dUrl}
+              shoeModelReady={product.model3dReady}
             />
           </Suspense>
 

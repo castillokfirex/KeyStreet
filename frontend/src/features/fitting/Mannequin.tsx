@@ -1,4 +1,10 @@
 import { ContactShadows } from "@react-three/drei";
+import { Suspense } from "react";
+import {
+  GLB_REFERENCE_LENGTH_M,
+  GltfSneaker,
+  PLACEHOLDER_LENGTH_M,
+} from "@/features/viewer3d/GltfSneaker";
 import { PlaceholderSneaker } from "@/features/viewer3d/PlaceholderSneaker";
 import type { ProductPalette } from "@/lib/types";
 import type { MannequinScale } from "./bodyParams";
@@ -12,6 +18,8 @@ export function Mannequin({
   bottomColor,
   shoeSilhouette,
   shoePalette,
+  shoeModelUrl,
+  shoeModelReady = false,
 }: {
   scale: MannequinScale;
   topGarment: TopGarment;
@@ -20,6 +28,9 @@ export function Mannequin({
   bottomColor: string;
   shoeSilhouette?: string;
   shoePalette?: ProductPalette;
+  /** GLB normalizado del producto (base y = 0, punta +X); placeholder si no hay */
+  shoeModelUrl?: string;
+  shoeModelReady?: boolean;
 }) {
   const skinMat = { color: "#CBD5E1", roughness: 0.78, metalness: 0.03 };
 
@@ -165,14 +176,35 @@ export function Mannequin({
               <meshStandardMaterial color={bottomColor} roughness={0.86} />
             </mesh>
 
-            {/* Zapatos del producto escalados a la talla del pie */}
-            <PlaceholderSneaker
-              silhouette={shoeSilhouette}
-              palette={shoePalette}
-              scale={scale.footScale}
-              position={[legX, 0.02, 0.045 * scale.footScale]}
-              rotation={[0, -Math.PI / 2, 0]}
-            />
+            {/* Zapatos del producto escalados a la talla del pie (GLB o placeholder) */}
+            {shoeModelReady && shoeModelUrl ? (
+              <Suspense
+                fallback={
+                  <PlaceholderSneaker
+                    silhouette={shoeSilhouette}
+                    palette={shoePalette}
+                    scale={scale.footScale}
+                    position={[legX, 0.02, 0.045 * scale.footScale]}
+                    rotation={[0, -Math.PI / 2, 0]}
+                  />
+                }
+              >
+                <GltfSneaker
+                  url={shoeModelUrl}
+                  scale={(scale.footScale * PLACEHOLDER_LENGTH_M) / GLB_REFERENCE_LENGTH_M}
+                  position={[legX, 0, 0.045 * scale.footScale]}
+                  rotation={[0, -Math.PI / 2, 0]}
+                />
+              </Suspense>
+            ) : (
+              <PlaceholderSneaker
+                silhouette={shoeSilhouette}
+                palette={shoePalette}
+                scale={scale.footScale}
+                position={[legX, 0.02, 0.045 * scale.footScale]}
+                rotation={[0, -Math.PI / 2, 0]}
+              />
+            )}
           </group>
         );
       })}

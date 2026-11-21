@@ -15,7 +15,11 @@ export function PlaceholderSneaker({
   position = [0, 0, 0],
   rotation = [0, 0, 0],
 }: PlaceholderSneakerProps) {
-  const isHigh = silhouette.toUpperCase() === "HIGH";
+  const sil = silhouette.toUpperCase();
+  const isHigh = sil === "HIGH";
+  /** MID: alturas intermedias (mismas que el GLB genérico de scripts/models). */
+  const pick = (low: number, mid: number, high: number) =>
+    isHigh ? high : sil === "MID" ? mid : low;
   const upperColor = palette?.upper || "#FFFFFF";
   const soleColor = palette?.sole || "#EAEAE6";
   const accentColor = palette?.accent || "#16302B";
@@ -48,12 +52,12 @@ export function PlaceholderSneaker({
 
       {/* Caña alta condicional (HIGH vs LOW) */}
       <mesh
-        position={[-0.075, isHigh ? 0.095 : 0.068, 0]}
+        position={[-0.075, pick(0.068, 0.082, 0.095), 0]}
         castShadow
         receiveShadow
       >
         <cylinderGeometry
-          args={[0.043, 0.045, isHigh ? 0.088 : 0.038, 20]}
+          args={[0.043, 0.045, pick(0.038, 0.062, 0.088), 20]}
         />
         <meshStandardMaterial color={upperColor} roughness={0.55} />
       </mesh>
@@ -69,14 +73,14 @@ export function PlaceholderSneaker({
       </mesh>
 
       {/* Contrafuerte del talón */}
-      <mesh position={[-0.116, isHigh ? 0.072 : 0.05, 0]} castShadow>
-        <boxGeometry args={[0.012, isHigh ? 0.09 : 0.055, 0.076]} />
+      <mesh position={[-0.116, pick(0.05, 0.061, 0.072), 0]} castShadow>
+        <boxGeometry args={[0.012, pick(0.055, 0.072, 0.09), 0.076]} />
         <meshStandardMaterial color={accentColor} roughness={0.45} />
       </mesh>
 
       {/* Lengüeta */}
       <mesh
-        position={[0.01, isHigh ? 0.1 : 0.072, 0]}
+        position={[0.01, pick(0.072, 0.086, 0.1), 0]}
         rotation={[0, 0, -0.42]}
         castShadow
       >
