@@ -1,11 +1,23 @@
 import { KastLogo } from "@/components/brand/KastLogo";
 import type { ProductImages } from "@/lib/types";
 
+/** Anchos generados por scripts/process-images: {slug}-{n}.{w}.{ext} */
+const WIDTHS = [480, 960, 1440] as const;
+const RESPONSIVE_FILE = /^(.+)\.(480|960|1440)\.(webp|avif)$/;
+
+const DEFAULT_SIZES = "(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw";
+
+function srcSet(basePath: string, stem: string, ext: "avif" | "webp") {
+  return WIDTHS.map((w) => `${basePath}${stem}.${w}.${ext} ${w}w`).join(", ");
+}
+
 /**
  * Imagen de producto 4:5 sobre gris claro.
  * - images.ready === false → placeholder dibujado (cero requests, cero 404).
- * - view="secondary" → segunda foto (files[1]) o una composición alterna del
- *   placeholder, para el cambio de imagen en hover / swipe.
+ * - index / view="secondary" → otra imagen de la galería (files[n]); si no
+ *   existe, el placeholder alterno (solo cuando ready === false).
+ * - Archivos normalizados ({slug}-{n}.{w}.{ext}) → <picture> AVIF + WebP con
+ *   srcset 480/960/1440; cualquier otro nombre se sirve tal cual.
  */
 export function ProductImage({
   images,
@@ -13,14 +25,19 @@ export function ProductImage({
   className = "",
   priority = false,
   view = "primary",
+  index,
+  sizes = DEFAULT_SIZES,
 }: {
   images: ProductImages;
   alt: string;
   className?: string;
   priority?: boolean;
   view?: "primary" | "secondary";
+  index?: number;
+  sizes?: string;
 }) {
-  const secondary = view === "secondary";
+  const position = index ?? (view === "secondary" ? 1 : 0);
+  const secondary = position > 0;
 
   if (!images?.ready) {
     return (
@@ -51,23 +68,33 @@ export function ProductImage({
     );
   }
 
-  const file = secondary
-    ? images.files[1] || images.files[0]
-    : images.files[0] || "01-lateral.webp";
+  const file =
+    images.files[position] ?? images.files[0] ?? "01-lateral.webp";
   const src = `${images.basePath}${file}`;
+  const responsive = RESPONSIVE_FILE.exec(file);
+  const imgAlt = secondary ? "" : alt;
+  const imgProps = {
+    alt: imgAlt,
+    loading: priority ? ("eager" as const) : ("lazy" as const),
+    decoding: "async" as const,
+    width: 960,
+    height: 1200,
+    className: "h-full w-full object-cover",
+  };
 
   return (
     <div
       className={`relative aspect-[4/5] w-full overflow-hidden bg-surface ${className}`.trim()}
     >
-      <img
-        src={src}
-        alt={secondary ? "" : alt}
-        loading={priority ? "eager" : "lazy"}
-        decoding="async"
-        sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-        className="h-full w-full object-cover"
-      />
+      {responsive ? (
+        <picture className="block h-full w-full">
+          <source type="image/avif" srcSet={srcSet(images.basePath, responsive[1], "avif")} sizes={sizes} />
+          <source type="image/webp" srcSet={srcSet(images.basePath, responsive[1], "webp")} sizes={sizes} />
+          <img src={src} {...imgProps} />
+        </picture>
+      ) : (
+        <img src={src} sizes={sizes} {...imgProps} />
+      )}
     </div>
   );
 }

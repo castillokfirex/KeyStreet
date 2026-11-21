@@ -1,0 +1,545 @@
+{
+  "$comment": "Registro de imágenes de producto: fuente, autor, licencia y fecha. Lo consume scripts/process-images. Solo se aceptan: originales propios (assets/products/originales/), Unsplash/Pexels vía API o Wikimedia Commons CC0/CC BY/CC BY-SA.",
+  "version": 1,
+  "background": {
+    "token": "--color-surface",
+    "hex": "#ECECEA"
+  },
+  "output": {
+    "dir": "frontend/public/assets/products/{slug}",
+    "pattern": "{slug}-{n}.{w}.{ext}",
+    "widths": [
+      480,
+      960,
+      1440
+    ],
+    "formats": [
+      "avif",
+      "webp"
+    ],
+    "aspect": "4/5"
+  },
+  "products": {
+    "nike-air-force-1-low-07-blanco": {
+      "status": "ready",
+      "images": [
+        {
+          "n": 1,
+          "role": "primary",
+          "file": "nike-air-force-1-low-07-blanco-1",
+          "source": "Wikimedia Commons",
+          "title": "File:Nike Air Force 1's.jpg",
+          "url": "https://commons.wikimedia.org/wiki/File:Nike_Air_Force_1%27s.jpg",
+          "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/c/cb/Nike_Air_Force_1%27s.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "author": "Fallout86453",
+          "license": "CC BY-SA 4.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+          "retrievedAt": "2026-11-20",
+          "originalSize": "4032x3024",
+          "verifiedModel": true,
+          "process": {
+            "removeBackground": true,
+            "flip": true,
+            "crop": {
+              "left": 0.08,
+              "top": 0.25,
+              "right": 0.92,
+              "bottom": 0.92
+            },
+            "model": "birefnet-general-lite"
+          }
+        },
+        {
+          "n": 2,
+          "role": "secondary",
+          "file": "nike-air-force-1-low-07-blanco-2",
+          "source": "Wikimedia Commons",
+          "title": "File:Nike air Force 1 white on white.jpg",
+          "url": "https://commons.wikimedia.org/wiki/File:Nike_air_Force_1_white_on_white.jpg",
+          "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/7/7e/Nike_air_Force_1_white_on_white.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "author": "HI 622",
+          "license": "CC BY-SA 4.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+          "retrievedAt": "2026-11-20",
+          "originalSize": "5152x3864",
+          "verifiedModel": true,
+          "process": {
+            "removeBackground": true,
+            "flip": false,
+            "crop": null
+          }
+        },
+        {
+          "n": 3,
+          "role": "gallery",
+          "file": "nike-air-force-1-low-07-blanco-3",
+          "source": "Wikimedia Commons",
+          "title": "File:NikeAirForceOne07.jpg",
+          "url": "https://commons.wikimedia.org/wiki/File:NikeAirForceOne07.jpg",
+          "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/8/8c/NikeAirForceOne07.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "author": "Juicyfroot",
+          "license": "CC BY-SA 3.0",
+          "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+          "retrievedAt": "2026-11-20",
+          "originalSize": "800x600",
+          "verifiedModel": true,
+          "process": {
+            "removeBackground": true,
+            "flip": false,
+            "crop": null
+          }
+        },
+        {
+          "n": 4,
+          "role": "gallery",
+          "file": "nike-air-force-1-low-07-blanco-4",
+          "source": "Wikimedia Commons",
+          "title": "File:Dessus et dessous de l'AF1.jpg",
+          "url": "https://commons.wikimedia.org/wiki/File:Dessus_et_dessous_de_l%27AF1.jpg",
+          "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/9/9d/Dessus_et_dessous_de_l%27AF1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "author": "HI 622",
+          "license": "CC BY-SA 4.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+          "retrievedAt": "2026-11-20",
+          "originalSize": "5152x3864",
+          "verifiedModel": true,
+          "process": {
+            "removeBackground": true,
+            "flip": false,
+            "crop": null
+          }
+        }
+      ]
+    },
+    "adidas-superstar": {
+      "status": "ready",
+      "images": [
+        {
+          "n": 1,
+          "role": "primary",
+          "file": "adidas-superstar-1",
+          "source": "Wikimedia Commons",
+          "title": "File:Adidas Superstar shoes pair.jpg",
+          "url": "https://commons.wikimedia.org/wiki/File:Adidas_Superstar_shoes_pair.jpg",
+          "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/5/59/Adidas_Superstar_shoes_pair.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "author": "Yahoo! Blog from Sunnyvale, California, USA",
+          "license": "CC BY 2.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+          "retrievedAt": "2026-11-20",
+          "originalSize": "3456x2304",
+          "verifiedModel": true,
+          "process": {
+            "removeBackground": true,
+            "flip": false,
+            "crop": {
+              "left": 0.22,
+              "top": 0.3,
+              "right": 1,
+              "bottom": 0.95
+            }
+          }
+        },
+        {
+          "n": 2,
+          "role": "secondary",
+          "file": "adidas-superstar-2",
+          "source": "Wikimedia Commons",
+          "title": "File:Adidas Superstar.JPG",
+          "url": "https://commons.wikimedia.org/wiki/File:Adidas_Superstar.JPG",
+          "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/8/86/Adidas_Superstar.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "author": "Xanor",
+          "license": "CC0",
+          "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+          "retrievedAt": "2026-11-20",
+          "originalSize": "1600x1600",
+          "verifiedModel": true,
+          "process": {
+            "removeBackground": true,
+            "flip": false,
+            "crop": null
+          }
+        }
+      ]
+    },
+    "nike-dunk-low-retro-panda": {
+      "status": "ready",
+      "images": [
+        {
+          "n": 1,
+          "role": "primary",
+          "file": "nike-dunk-low-retro-panda-1",
+          "source": "Wikimedia Commons",
+          "title": "File:Panda Nike Dunk.jpg",
+          "url": "https://commons.wikimedia.org/wiki/File:Panda_Nike_Dunk.jpg",
+          "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/c/c9/Panda_Nike_Dunk.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "author": "LeDroider",
+          "license": "CC0",
+          "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+          "retrievedAt": "2026-11-20",
+          "originalSize": "3381x2052",
+          "verifiedModel": true,
+          "process": {
+            "removeBackground": true,
+            "flip": false,
+            "crop": {
+              "left": 0.03,
+              "top": 0.05,
+              "right": 0.9,
+              "bottom": 0.645
+            }
+          }
+        },
+        {
+          "n": 2,
+          "role": "secondary",
+          "file": "nike-dunk-low-retro-panda-2",
+          "source": "Wikimedia Commons",
+          "title": "File:Nike dunk (pandas).jpg",
+          "url": "https://commons.wikimedia.org/wiki/File:Nike_dunk_(pandas).jpg",
+          "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/e/ec/Nike_dunk_%28pandas%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "author": "Premeditated",
+          "license": "CC BY-SA 4.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+          "retrievedAt": "2026-11-20",
+          "originalSize": "3024x4032",
+          "verifiedModel": true,
+          "process": {
+            "removeBackground": true,
+            "flip": false,
+            "crop": null
+          }
+        }
+      ]
+    },
+    "air-jordan-1-low": {
+      "status": "ready",
+      "images": [
+        {
+          "n": 1,
+          "role": "primary",
+          "file": "air-jordan-1-low-1",
+          "source": "Wikimedia Commons",
+          "title": "File:Air Jordan 1 Low.jpg",
+          "url": "https://commons.wikimedia.org/wiki/File:Air_Jordan_1_Low.jpg",
+          "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e3/Air_Jordan_1_Low.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "author": "Pangalau",
+          "license": "CC BY-SA 4.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+          "retrievedAt": "2026-11-20",
+          "originalSize": "6945x4630",
+          "verifiedModel": true,
+          "process": {
+            "removeBackground": true,
+            "flip": false,
+            "crop": {
+              "left": 0,
+              "top": 0.03,
+              "right": 0.95,
+              "bottom": 0.645
+            },
+            "model": "birefnet-general-lite"
+          }
+        }
+      ]
+    },
+    "adidas-samba-og-blanco-negro": {
+      "status": "ready",
+      "images": [
+        {
+          "n": 1,
+          "role": "primary",
+          "file": "adidas-samba-og-blanco-negro-1",
+          "source": "Wikimedia Commons",
+          "title": "File:Adidas Samba OG.jpg",
+          "url": "https://commons.wikimedia.org/wiki/File:Adidas_Samba_OG.jpg",
+          "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/f/fa/Adidas_Samba_OG.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "author": "LeDroider",
+          "license": "CC0",
+          "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+          "retrievedAt": "2026-11-20",
+          "originalSize": "4000x2431",
+          "verifiedModel": true,
+          "process": {
+            "removeBackground": true,
+            "flip": false,
+            "crop": {
+              "left": 0.05,
+              "top": 0.15,
+              "right": 0.95,
+              "bottom": 0.665
+            },
+            "model": "birefnet-general-lite"
+          }
+        }
+      ]
+    },
+    "converse-chuck-taylor-all-star-clasico": {
+      "status": "ready",
+      "images": [
+        {
+          "n": 1,
+          "role": "primary",
+          "file": "converse-chuck-taylor-all-star-clasico-1",
+          "source": "Wikimedia Commons",
+          "title": "File:All Star Converse.png",
+          "url": "https://commons.wikimedia.org/wiki/File:All_Star_Converse.png",
+          "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/6/64/All_Star_Converse.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "author": "Tlc3707",
+          "license": "CC BY-SA 4.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+          "retrievedAt": "2026-11-20",
+          "originalSize": "1258x838",
+          "verifiedModel": true,
+          "process": {
+            "removeBackground": true,
+            "flip": false,
+            "crop": null
+          }
+        },
+        {
+          "n": 2,
+          "role": "secondary",
+          "file": "converse-chuck-taylor-all-star-clasico-2",
+          "source": "Wikimedia Commons",
+          "title": "File:Converse All Star 02248.JPG",
+          "url": "https://commons.wikimedia.org/wiki/File:Converse_All_Star_02248.JPG",
+          "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/7/71/Converse_All_Star_02248.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "author": "alberto",
+          "license": "CC BY-SA 3.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+          "retrievedAt": "2026-11-20",
+          "originalSize": "1224x1632",
+          "verifiedModel": true,
+          "process": {
+            "removeBackground": true,
+            "flip": false,
+            "crop": null
+          }
+        }
+      ]
+    },
+    "adidas-stan-smith": {
+      "status": "ready",
+      "images": [
+        {
+          "n": 1,
+          "role": "primary",
+          "file": "adidas-stan-smith-1",
+          "source": "Wikimedia Commons",
+          "title": "File:Stan Smith white and green.png",
+          "url": "https://commons.wikimedia.org/wiki/File:Stan_Smith_white_and_green.png",
+          "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/0/03/Stan_Smith_white_and_green.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "author": "Raizin",
+          "license": "CC BY-SA 3.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+          "retrievedAt": "2026-11-20",
+          "originalSize": "720x366",
+          "verifiedModel": true,
+          "process": {
+            "removeBackground": true,
+            "flip": false,
+            "crop": null
+          }
+        },
+        {
+          "n": 2,
+          "role": "secondary",
+          "file": "adidas-stan-smith-2",
+          "source": "Wikimedia Commons",
+          "title": "File:Zapatillas deportivas.jpg",
+          "url": "https://commons.wikimedia.org/wiki/File:Zapatillas_deportivas.jpg",
+          "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/d/db/Zapatillas_deportivas.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "author": "Carmenborass",
+          "license": "CC BY-SA 4.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+          "retrievedAt": "2026-11-20",
+          "originalSize": "3264x2448",
+          "verifiedModel": true,
+          "process": {
+            "removeBackground": true,
+            "flip": false,
+            "crop": null
+          }
+        },
+        {
+          "n": 3,
+          "role": "gallery",
+          "file": "adidas-stan-smith-3",
+          "source": "Wikimedia Commons",
+          "title": "File:Adidas Stan Smith (made in France).jpg",
+          "url": "https://commons.wikimedia.org/wiki/File:Adidas_Stan_Smith_(made_in_France).jpg",
+          "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/6/6a/Adidas_Stan_Smith_%28made_in_France%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "author": "Tohlsson",
+          "license": "CC BY-SA 3.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+          "retrievedAt": "2026-11-20",
+          "originalSize": "1024x1280",
+          "verifiedModel": true,
+          "process": {
+            "removeBackground": true,
+            "flip": false,
+            "crop": null
+          }
+        }
+      ]
+    },
+    "new-balance-550": {
+      "status": "ready",
+      "images": [
+        {
+          "n": 1,
+          "role": "primary",
+          "file": "new-balance-550-1",
+          "source": "Wikimedia Commons",
+          "title": "File:New Balance 550.jpg",
+          "url": "https://commons.wikimedia.org/wiki/File:New_Balance_550.jpg",
+          "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/7/75/New_Balance_550.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "author": "LeDroider",
+          "license": "CC0",
+          "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+          "retrievedAt": "2026-11-20",
+          "originalSize": "1002x678",
+          "verifiedModel": true,
+          "process": {
+            "removeBackground": true,
+            "flip": false,
+            "crop": null
+          }
+        }
+      ]
+    },
+    "adidas-campus-00s": {
+      "status": "ready",
+      "images": [
+        {
+          "n": 1,
+          "role": "primary",
+          "file": "adidas-campus-00s-1",
+          "source": "Wikimedia Commons",
+          "title": "File:Adidas Campus 00s.jpg",
+          "url": "https://commons.wikimedia.org/wiki/File:Adidas_Campus_00s.jpg",
+          "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f5/Adidas_Campus_00s.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "author": "LeDroider",
+          "license": "CC0",
+          "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+          "retrievedAt": "2026-11-20",
+          "originalSize": "1336x1336",
+          "verifiedModel": true,
+          "process": {
+            "removeBackground": true,
+            "flip": false,
+            "crop": {
+              "left": 0.04,
+              "top": 0.18,
+              "right": 0.95,
+              "bottom": 0.665
+            },
+            "model": "birefnet-general-lite"
+          }
+        }
+      ]
+    },
+    "adidas-handball-spezial": {
+      "status": "ready",
+      "images": [
+        {
+          "n": 1,
+          "role": "primary",
+          "file": "adidas-handball-spezial-1",
+          "source": "Wikimedia Commons",
+          "title": "File:Adidas Handball Spezial.jpg",
+          "url": "https://commons.wikimedia.org/wiki/File:Adidas_Handball_Spezial.jpg",
+          "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b5/Adidas_Handball_Spezial.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "author": "LeDroider",
+          "license": "CC0",
+          "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+          "retrievedAt": "2026-11-20",
+          "originalSize": "1961x1195",
+          "verifiedModel": true,
+          "process": {
+            "removeBackground": true,
+            "flip": false,
+            "crop": {
+              "left": 0.05,
+              "top": 0.05,
+              "right": 0.93,
+              "bottom": 0.775
+            },
+            "model": "birefnet-general-lite"
+          }
+        }
+      ]
+    },
+    "air-jordan-4": {
+      "status": "ready",
+      "images": [
+        {
+          "n": 1,
+          "role": "primary",
+          "file": "air-jordan-4-1",
+          "source": "Wikimedia Commons",
+          "title": "File:Nike Air Jordan IV.jpg",
+          "url": "https://commons.wikimedia.org/wiki/File:Nike_Air_Jordan_IV.jpg",
+          "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a5/Nike_Air_Jordan_IV.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "author": "Osyffar",
+          "license": "CC0",
+          "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+          "retrievedAt": "2026-11-20",
+          "originalSize": "2952x2592",
+          "verifiedModel": true,
+          "process": {
+            "removeBackground": true,
+            "flip": false,
+            "crop": null
+          }
+        },
+        {
+          "n": 2,
+          "role": "secondary",
+          "file": "air-jordan-4-2",
+          "source": "Wikimedia Commons",
+          "title": "File:Nike Air Jordan IV, (White Cement Colorway) (cropped).jpg",
+          "url": "https://commons.wikimedia.org/wiki/File:Nike_Air_Jordan_IV,_(White_Cement_Colorway)_(cropped).jpg",
+          "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/c/c5/Nike_Air_Jordan_IV%2C_%28White_Cement_Colorway%29_%28cropped%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+          "author": "2Pacalyp",
+          "license": "CC BY-SA 4.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+          "retrievedAt": "2026-11-20",
+          "originalSize": "1859x1397",
+          "verifiedModel": true,
+          "process": {
+            "removeBackground": true,
+            "flip": false,
+            "crop": {
+              "left": 0,
+              "top": 0.28,
+              "right": 1,
+              "bottom": 1
+            },
+            "model": "birefnet-general-lite"
+          }
+        }
+      ]
+    },
+    "vans-old-skool": {
+      "status": "pending",
+      "pendingReason": "Sin fotos con licencia CC0/CC BY/CC BY-SA del Old Skool en Wikimedia Commons; Unsplash/Pexels sin API key configurada.",
+      "images": []
+    },
+    "new-balance-530": {
+      "status": "pending",
+      "pendingReason": "Sin fotos del NB 530 con licencia válida en Wikimedia Commons; Unsplash/Pexels sin API key configurada.",
+      "images": []
+    },
+    "puma-suede-xl": {
+      "status": "pending",
+      "pendingReason": "Las fotos libres encontradas son Puma Suede Classic (no XL); descartadas por duda razonable.",
+      "images": []
+    },
+    "nike-court-vision-low": {
+      "status": "pending",
+      "pendingReason": "Sin resultados con licencia válida en Wikimedia Commons; Unsplash/Pexels sin API key configurada.",
+      "images": []
+    }
+  }
+}

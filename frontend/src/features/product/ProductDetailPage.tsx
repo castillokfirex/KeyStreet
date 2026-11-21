@@ -51,6 +51,12 @@ export function ProductDetailPage() {
     message: string | null;
   }>({ slug, message: null });
 
+  const [photoState, setPhotoState] = useState<{ slug: string; index: number }>({
+    slug,
+    index: 0,
+  });
+  const photoIndex = photoState.slug === slug ? photoState.index : 0;
+
   const selectedVariant =
     selectionState.slug === slug ? selectionState.variant : null;
   const sizeWarning =
@@ -93,6 +99,17 @@ export function ProductDetailPage() {
       next.delete("modo");
     }
     setSearchParams(next, { replace: true });
+  };
+
+  /** Vuelve a las fotos (sale del visor/probador) y muestra la foto i. */
+  const showPhoto = (index: number) => {
+    setPhotoState({ slug, index });
+    setViewerActivated(false);
+    if (searchParams.has("modo")) {
+      const next = new URLSearchParams(searchParams);
+      next.delete("modo");
+      setSearchParams(next, { replace: true });
+    }
   };
 
   const requireSelectedSize = (): SizeOption | null => {
@@ -234,17 +251,39 @@ export function ProductDetailPage() {
                     />
                   )}
                 </Suspense>
+              ) : product.images.ready ? (
+                <div className="relative h-full w-full">
+                  <ProductImage
+                    images={product.images}
+                    alt={product.name}
+                    priority
+                    index={photoIndex}
+                    className="h-full"
+                    sizes="(max-width: 1024px) 100vw, 58vw"
+                  />
+                  <div className="absolute inset-x-0 bottom-5 flex flex-wrap justify-center gap-2.5 px-4">
+                    <Button
+                      variant="forest"
+                      size="sm"
+                      onClick={() => activateViewer("viewer3d")}
+                    >
+                      <Rotate3d className="h-4 w-4" aria-hidden="true" />
+                      <span>Activar Visor 3D 360°</span>
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="bg-canvas/90"
+                      onClick={() => activateViewer("fitting")}
+                    >
+                      <Box className="h-4 w-4" aria-hidden="true" />
+                      <span>Abrir Probador 3D</span>
+                    </Button>
+                  </div>
+                </div>
               ) : (
                 <div className="flex h-full flex-col items-center justify-center p-8 text-center">
-                  {product.images.ready ? (
-                    <ProductImage
-                      images={product.images}
-                      alt={product.name}
-                      priority
-                      className="h-full"
-                    />
-                  ) : (
-                    <>
+                  <>
                       <div className="text-ink/15">
                         <KastLogo variant="isotype" size={128} title={product.name} />
                       </div>
@@ -274,16 +313,41 @@ export function ProductDetailPage() {
                         </Button>
                       </div>
                     </>
-                  )}
                 </div>
               )}
 
-              {!viewerActivated || mode === "viewer3d" ? (
+              {(viewerActivated && mode === "viewer3d") ||
+              (!viewerActivated && !product.images.ready) ? (
                 <div className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap bg-canvas/90 px-3 py-1 font-display text-[10px] font-semibold uppercase tracking-nav text-ink">
                   Arrastra para rotar {mode === "fitting" ? "maniquí" : "zapato"}
                 </div>
               ) : null}
             </div>
+
+            {/* Galería de fotos (solo con imágenes reales) */}
+            {product.images.ready && product.images.files.length > 1 && (
+              <ul
+                className="no-scrollbar flex gap-[var(--ks-grid-gap)] overflow-x-auto"
+                aria-label="Galería de fotos"
+              >
+                {product.images.files.map((file, i) => {
+                  const current = !viewerActivated && photoIndex === i;
+                  return (
+                    <li key={file} className="w-20 shrink-0 sm:w-24">
+                      <button
+                        type="button"
+                        onClick={() => showPhoto(i)}
+                        aria-label={`Ver foto ${i + 1} de ${product.images.files.length}`}
+                        aria-current={current || undefined}
+                        className={`block w-full cursor-pointer transition-opacity ${current ? "opacity-100 outline outline-1 outline-offset-[-1px] outline-ink" : "opacity-70 hover:opacity-100"}`}
+                      >
+                        <ProductImage images={product.images} alt="" index={i} sizes="96px" />
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
 
             {/* Franja inferior de material certificado */}
             <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line pb-4">

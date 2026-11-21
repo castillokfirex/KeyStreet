@@ -1,0 +1,20 @@
+{
+  "$comment": "Términos de búsqueda en Wikimedia Commons por producto (solo descubrimiento de candidatas; la selección final y su licencia viven en assets/products/manifest.json).",
+  "models": [
+    { "slug": "nike-air-force-1-low-07-blanco", "categories": ["Nike Air Force 1"], "queries": ["Nike Air Force 1 white", "Air Force 1 low"] },
+    { "slug": "adidas-superstar", "categories": ["Adidas Superstar"], "queries": ["Adidas Superstar shoe"] },
+    { "slug": "nike-dunk-low-retro-panda", "categories": ["Nike Dunk"], "queries": ["Nike Dunk Low", "Nike Dunk"] },
+    { "slug": "air-jordan-1-low", "categories": ["Air Jordan 1", "Air Jordan I"], "queries": ["Air Jordan 1 Low", "Air Jordan 1 Mid", "Air Jordan 1"] },
+    { "slug": "vans-old-skool", "categories": ["Vans Old Skool"], "queries": ["Vans Old Skool"] },
+    { "slug": "adidas-samba-og-blanco-negro", "categories": ["Adidas Samba"], "queries": ["Adidas Samba"] },
+    { "slug": "converse-chuck-taylor-all-star-clasico", "categories": ["Chuck Taylor All-Stars", "Converse All Star shoes"], "queries": ["Converse Chuck Taylor All Star high", "Chuck 70 Converse"] },
+    { "slug": "adidas-stan-smith", "categories": ["Adidas Stan Smith"], "queries": ["Adidas Stan Smith shoe"] },
+    { "slug": "new-balance-550", "categories": ["New Balance 550"], "queries": ["New Balance 550"] },
+    { "slug": "new-balance-530", "categories": ["New Balance 530"], "queries": ["New Balance 530"] },
+    { "slug": "adidas-campus-00s-gris-negro", "categories": ["Adidas Campus"], "queries": ["Adidas Campus 00s", "Adidas Campus shoe"] },
+    { "slug": "puma-suede-xl", "categories": ["Puma Suede"], "queries": ["Puma Suede shoe", "Puma Suede XL"] },
+    { "slug": "adidas-handball-spezial", "categories": ["Adidas Handball Spezial"], "queries": ["Handball Spezial adidas"] },
+    { "slug": "air-jordan-4", "categories": ["Air Jordan 4", "Air Jordan IV"], "queries": ["Air Jordan 4", "Air Jordan IV"] },
+    { "slug": "nike-court-vision-low", "categories": ["Nike Court Vision"], "queries": ["Nike Court Vision Low", "Nike Court Vision"] }
+  ]
+}
