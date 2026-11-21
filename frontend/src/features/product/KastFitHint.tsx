@@ -17,13 +17,14 @@ export function KastFitHint({
   const heightMeters = (heightCm / 100).toFixed(2).replace(".", ",");
 
   return (
-    <div className="flex items-start justify-between gap-3 rounded-2xl border border-line bg-surface/75 p-3.5">
-      <div className="flex items-start gap-2.5 min-w-0">
+    <div className="flex items-center justify-between gap-3 border-y border-line py-3">
+      <div className="flex min-w-0 items-center gap-3">
         <MotionScope>
-          <KastMascot state="idle" size={32} title="Consejo de talla Kast" />
+          {/* Despierto: sigue el cursor mientras lees la recomendación */}
+          <KastMascot state="listening" size={40} title="Consejo de talla Kast" />
         </MotionScope>
         <div className="text-xs leading-snug">
-          <p className="font-semibold text-navy">
+          <p className="font-semibold text-ink">
             Según tu perfil ({heightMeters} m · talla {usualSizeEu})
           </p>
           <p className="mt-0.5 text-muted">{reason}</p>
@@ -32,7 +33,7 @@ export function KastFitHint({
       <button
         type="button"
         onClick={onAskKast}
-        className="shrink-0 text-[11px] font-bold text-forest underline hover:opacity-80 cursor-pointer"
+        className="shrink-0 font-display text-[10px] font-semibold uppercase tracking-nav text-ink underline underline-offset-4 hover:opacity-60 cursor-pointer"
       >
         Preguntar
       </button>

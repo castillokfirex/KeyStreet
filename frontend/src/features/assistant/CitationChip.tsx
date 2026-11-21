@@ -11,12 +11,12 @@ export function CitationChip({ citation }: { citation: CitationItem }) {
       : `pág. ${citation.pageNumber}`;
 
   return (
-    <div className="rounded-xl border border-line bg-canvas text-left">
+    <div className="rounded-sm border border-line bg-canvas text-left">
       <button
         type="button"
         aria-expanded={expanded}
         onClick={() => setExpanded((prev) => !prev)}
-        className="flex w-full items-center justify-between gap-2 px-3 py-1.5 text-[11px] font-semibold text-forest hover:bg-surface/70 rounded-xl cursor-pointer"
+        className="flex w-full items-center justify-between gap-2 px-3 py-1.5 text-[11px] font-semibold text-forest hover:bg-surface/70 cursor-pointer"
       >
         <span className="inline-flex items-center gap-1.5 truncate">
           <FileText className="h-3 w-3 shrink-0" aria-hidden="true" />
@@ -32,7 +32,7 @@ export function CitationChip({ citation }: { citation: CitationItem }) {
       </button>
 
       {expanded && citation.snippet && (
-        <div className="border-t border-line px-3 py-2 text-[11px] leading-relaxed text-muted bg-surface/50 rounded-b-xl">
+        <div className="border-t border-line px-3 py-2 text-[11px] leading-relaxed text-muted bg-surface/50">
           “{citation.snippet}”
         </div>
       )}

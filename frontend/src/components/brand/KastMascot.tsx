@@ -1,5 +1,8 @@
-import { useId } from "react";
-import { m, useReducedMotion } from "motion/react";
+import { useId, useRef } from "react";
+import { m, useReducedMotion, type Variants } from "motion/react";
+import { KastDefs, KastHead, KastLineEyes, KastMouth, KastNose, KastOpenEye } from "./KastFace";
+import { KAST_EYES, KAST_STATUS_DOT, KAST_STATUS_LABEL, KAST_VIEWBOX } from "./kastStatus";
+import { useEyeTracking } from "./useEyeTracking";
 
 export type KastMascotState =
   | "idle"
@@ -14,165 +17,209 @@ export type KastMascotProps = {
   size?: number;
   className?: string;
   title?: string;
+  /** Muestra la etiqueta de estado ("Te escucho"…) debajo del koala */
+  showStatus?: boolean;
 };
 
-const STATUS_DOT: Record<KastMascotState, string> = {
-  idle: "#16302B",
-  listening: "#0EA5E9",
-  thinking: "#F59E0B",
-  speaking: "#10B981",
-  success: "#16A34A",
-  error: "#DC2626",
-};
-
-/**
- * Mascota IA animada "Kast" el Koala (< 4 KB).
- * Solo anima transform/opacidad dentro de LazyMotion; respeta prefers-reduced-motion.
+/*
+ * Mapeo de estados (ver AUDITORIA_UI.md §4):
+ *   idle      → dormido: ojos ︶ ︶, respiración, Zzz
+ *   listening → despierto: ojos que siguen el cursor + parpadeo
+ *   thinking  → mira arriba a un lado, tres puntos
+ *   speaking  → ojos felices, leve rebote, boca animada
+ *   success   → ojos felices + pulso
+ *   error     → ojos "x" + sacudida corta
+ * Solo anima transform/opacidad dentro de LazyMotion.
  */
+const BODY: Variants = {
+  idle: {
+    scale: [1, 1.03, 1],
+    x: 0,
+    y: 0,
+    rotate: 0,
+    transition: { duration: 3.4, repeat: Infinity, ease: "easeInOut" },
+  },
+  listening: {
+    scaleY: [1, 1.07, 0.98, 1],
+    scaleX: [1, 0.97, 1.01, 1],
+    scale: 1,
+    x: 0,
+    y: [0, -5, 0],
+    rotate: 0,
+    transition: { duration: 0.6, ease: "easeOut" },
+  },
+  thinking: { scale: 1, x: 0, y: 0, rotate: -4, transition: { duration: 0.4, ease: "easeOut" } },
+  speaking: {
+    scale: 1,
+    x: 0,
+    rotate: 0,
+    y: [0, -4, 0],
+    transition: { duration: 0.7, repeat: Infinity, ease: "easeInOut" },
+  },
+  success: { scale: [1, 1.08, 1], x: 0, y: 0, rotate: 0, transition: { duration: 0.6 } },
+  error: { scale: 1, y: 0, rotate: 0, x: [0, -4, 4, -3, 3, 0], transition: { duration: 0.45 } },
+  still: { scale: 1, scaleX: 1, scaleY: 1, x: 0, y: 0, rotate: 0 },
+};
+
 export function KastMascot({
   state = "idle",
   size = 40,
   className = "",
   title = "Kast, asistente IA de Key Street",
+  showStatus = false,
 }: KastMascotProps) {
-  const titleId = useId();
+  const uid = useId().replace(/[^a-zA-Z0-9_-]/g, "");
+  const titleId = `kast-mascot-${uid}`;
+  const svgRef = useRef<SVGSVGElement>(null);
   const reduced = useReducedMotion();
+  const eyes = useEyeTracking(svgRef, { enabled: state === "listening" });
+  const eyesOpen = state === "listening" || state === "thinking";
 
-  const shouldAnimate = !reduced && state !== "idle";
-
-  const headAnimate = !shouldAnimate
-    ? undefined
-    : state === "thinking"
-      ? { rotate: [-4, 4, -4] }
-      : state === "speaking"
-        ? { y: [0, -1.8, 0] }
-        : state === "success"
-          ? { scale: [1, 1.07, 1] }
-          : state === "error"
-            ? { x: [-2, 2, -2, 0] }
-            : undefined;
-
-  const headTransition =
-    state === "error"
-      ? { duration: 0.4, repeat: 1 }
-      : state === "thinking"
-        ? { duration: 1.1, repeat: Infinity, ease: "easeInOut" as const }
-        : state === "speaking"
-          ? { duration: 0.45, repeat: Infinity, ease: "easeInOut" as const }
-          : { duration: 0.6, repeat: 1 };
-
-  return (
+  const svg = (
     <svg
+      ref={svgRef}
       width={size}
       height={size}
-      viewBox="0 0 64 64"
+      viewBox={KAST_VIEWBOX}
       fill="none"
       role="img"
       aria-labelledby={titleId}
       data-kast-state={state}
-      className={`shrink-0 overflow-visible ${className}`.trim()}
+      className={`shrink-0 overflow-visible ${showStatus ? "" : className}`.trim()}
     >
       <title id={titleId}>{title}</title>
+      <KastDefs uid={uid} />
 
       <m.g
-        style={{ transformOrigin: "32px 34px" }}
-        animate={headAnimate}
-        transition={headTransition}
+        variants={BODY}
+        initial={false}
+        animate={reduced ? "still" : state}
+        style={{ originX: 0.5, originY: 1 }}
       >
-        {/* Orejas */}
-        <m.g
-          style={{ transformOrigin: "15px 22px" }}
-          animate={
-            reduced
-              ? undefined
-              : state === "listening"
-                ? { rotate: [-6, 0, -6] }
-                : { rotate: 0 }
-          }
-          transition={{ duration: 0.8, repeat: Infinity }}
-        >
-          <circle cx="15" cy="23" r="10.5" fill="#64748B" />
-          <circle cx="15.5" cy="23.5" r="5.5" fill="#E2E8F0" />
-        </m.g>
-        <m.g
-          style={{ transformOrigin: "49px 22px" }}
-          animate={
-            reduced
-              ? undefined
-              : state === "listening"
-                ? { rotate: [6, 0, 6] }
-                : { rotate: 0 }
-          }
-          transition={{ duration: 0.8, repeat: Infinity }}
-        >
-          <circle cx="49" cy="23" r="10.5" fill="#64748B" />
-          <circle cx="48.5" cy="23.5" r="5.5" fill="#E2E8F0" />
-        </m.g>
+        <KastHead uid={uid} />
 
-        {/* Cabeza */}
-        <rect x="14" y="16" width="36" height="31" rx="15" fill="#94A3B8" />
-        <rect x="17" y="19" width="30" height="25" rx="12" fill="#CBD5E1" />
+        {eyesOpen ? (
+          KAST_EYES.map((pos) => (
+            <g key={pos.x} transform={`translate(${pos.x} ${pos.y})`}>
+              <m.g
+                style={state === "listening" ? { x: eyes.x, y: eyes.y } : undefined}
+                animate={state === "thinking" ? { x: 4.5, y: -6.5 } : undefined}
+                transition={{ duration: 0.35, ease: "easeOut" }}
+              >
+                <m.g
+                  className="ks-kast-eye"
+                  initial={reduced ? false : { scaleY: 0.08 }}
+                  animate={{ scaleY: 1 }}
+                  transition={{ duration: 0.4, ease: [0.2, 1.6, 0.4, 1], delay: 0.1 }}
+                >
+                  {/* parpadeo en un grupo aparte: la animación CSS no pisa el scaleY de motion */}
+                  <g className={state === "listening" ? "ks-kast-eye ks-kast-blink" : undefined}>
+                    <KastOpenEye />
+                  </g>
+                </m.g>
+              </m.g>
+            </g>
+          ))
+        ) : (
+          <KastLineEyes state={state} />
+        )}
 
-        {/* Ojos pill */}
-        <m.rect
-          x="22"
-          y="27"
-          width="4.2"
-          height="6"
-          rx="2.1"
-          fill="#0F172A"
-          style={{ transformOrigin: "24.1px 30px" }}
-          animate={
-            shouldAnimate
-              ? { scaleY: [1, 1, 0.15, 1] }
-              : undefined
-          }
-          transition={{
-            duration: 3.6,
-            repeat: Infinity,
-            times: [0, 0.9, 0.95, 1],
-          }}
-        />
-        <m.rect
-          x="37.8"
-          y="27"
-          width="4.2"
-          height="6"
-          rx="2.1"
-          fill="#0F172A"
-          style={{ transformOrigin: "39.9px 30px" }}
-          animate={
-            shouldAnimate
-              ? { scaleY: [1, 1, 0.15, 1] }
-              : undefined
-          }
-          transition={{
-            duration: 3.6,
-            repeat: Infinity,
-            times: [0, 0.9, 0.95, 1],
-          }}
-        />
-        {/* Brillos */}
-        <circle cx="23.4" cy="28.7" r="0.9" fill="#FFFFFF" />
-        <circle cx="39.2" cy="28.7" r="0.9" fill="#FFFFFF" />
+        <KastNose uid={uid} />
 
-        {/* Nariz emblemática de koala */}
-        <ellipse cx="32" cy="34.5" rx="4.2" ry="5.4" fill="#0F172A" />
-
-        {/* Mejillas sutiles */}
-        <ellipse cx="21" cy="37" rx="2.6" ry="1.4" fill="#F4A3A3" opacity="0.55" />
-        <ellipse cx="43" cy="37" rx="2.6" ry="1.4" fill="#F4A3A3" opacity="0.55" />
-
-        {/* Indicador de estado */}
-        <circle
-          cx="52"
-          cy="44"
-          r="5"
-          fill={STATUS_DOT[state]}
-          stroke="#FFFFFF"
-          strokeWidth="2"
-        />
+        {state === "speaking" && !reduced ? (
+          <m.ellipse
+            cx="100"
+            cy="157"
+            rx="5"
+            ry="3.4"
+            fill="var(--color-kast-nose-dark)"
+            style={{ originX: 0.5, originY: 0.5 }}
+            animate={{ scaleY: [0.6, 1.2, 0.6] }}
+            transition={{ duration: 0.36, repeat: Infinity, ease: "easeInOut" }}
+          />
+        ) : (
+          <KastMouth state={state} />
+        )}
       </m.g>
+
+      {state === "idle" && <Zzz still={Boolean(reduced)} />}
+      {state === "thinking" && <ThinkingDots still={Boolean(reduced)} />}
     </svg>
+  );
+
+  if (!showStatus) return svg;
+
+  return (
+    <span className={`inline-flex flex-col items-center gap-2 ${className}`.trim()}>
+      {svg}
+      <KastStatusLabel state={state} />
+    </span>
+  );
+}
+
+export function KastStatusLabel({ state }: { state: KastMascotState }) {
+  return (
+    <span
+      aria-live="polite"
+      className="inline-flex items-center gap-2 font-display text-[10px] font-semibold uppercase tracking-label text-muted"
+    >
+      <span
+        aria-hidden="true"
+        className={`h-1.5 w-1.5 rounded-full ${KAST_STATUS_DOT[state]} ${state === "thinking" ? "motion-safe:animate-pulse" : ""}`}
+      />
+      {KAST_STATUS_LABEL[state]}
+    </span>
+  );
+}
+
+function Zzz({ still }: { still: boolean }) {
+  const letters = [
+    { char: "Z", x: 168, y: 18, size: 20, delay: 0 },
+    { char: "z", x: 184, y: 2, size: 15, delay: 0.6 },
+    { char: "z", x: 197, y: -9, size: 11, delay: 1.2 },
+  ];
+  return (
+    <g aria-hidden="true" className="fill-current font-display font-semibold" opacity={0.7}>
+      {letters.map((l) =>
+        still ? (
+          <text key={l.x} x={l.x} y={l.y} fontSize={l.size}>
+            {l.char}
+          </text>
+        ) : (
+          <m.text
+            key={l.x}
+            x={l.x}
+            y={l.y}
+            fontSize={l.size}
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: [0, 1, 0], y: [4, -4, -10] }}
+            transition={{ duration: 2.6, repeat: Infinity, delay: l.delay, ease: "easeOut" }}
+          >
+            {l.char}
+          </m.text>
+        ),
+      )}
+    </g>
+  );
+}
+
+function ThinkingDots({ still }: { still: boolean }) {
+  return (
+    <g aria-hidden="true" className="fill-current">
+      {[0, 1, 2].map((i) =>
+        still ? (
+          <circle key={i} cx={164 + i * 13} cy={4} r={4} opacity={0.6} />
+        ) : (
+          <m.circle
+            key={i}
+            cx={164 + i * 13}
+            cy={4}
+            r={4}
+            animate={{ opacity: [0.25, 1, 0.25], y: [0, -4, 0] }}
+            transition={{ duration: 0.9, repeat: Infinity, delay: i * 0.15, ease: "easeInOut" }}
+          />
+        ),
+      )}
+    </g>
   );
 }

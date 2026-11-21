@@ -199,6 +199,41 @@
   }
 }
 
+/* ---- Kast: parpadeo (despierto) y respiración (versión estática dormida) ---- */
+.ks-kast-eye,
+.ks-kast-breathe {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.ks-kast-breathe {
+  transform-origin: 50% 100%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ks-kast-blink {
+    animation: kast-blink 8.4s infinite;
+  }
+  .ks-kast-breathe {
+    animation: var(--animate-kast-breathe);
+  }
+}
+
+@keyframes kast-blink {
+  0%,
+  44%,
+  48%,
+  92%,
+  96%,
+  100% {
+    transform: scaleY(1);
+  }
+  46%,
+  94% {
+    transform: scaleY(0.1);
+  }
+}
+
 /* ---- Logo alternante (crossfade CSS, sin motion en el bundle de entrada) ---- */
 .ks-logo-layer {
   transition: opacity var(--ks-fade) cubic-bezier(0.4, 0, 0.2, 1);

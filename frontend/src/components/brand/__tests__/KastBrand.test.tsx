@@ -1,10 +1,13 @@
-import { render, screen } from "@testing-library/react";
+import { cleanup, render, screen } from "@testing-library/react";
 import { domAnimation, LazyMotion } from "motion/react";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 import { KastLogo } from "../KastLogo";
 import { KastMascot, type KastMascotState } from "../KastMascot";
+import { KastStaticIcon } from "../KastStaticIcon";
 
 describe("KastLogo & KastMascot", () => {
+  afterEach(cleanup);
+
   it("renders both variants of KastLogo with accessible roles", () => {
     render(
       <>
@@ -36,5 +39,53 @@ describe("KastLogo & KastMascot", () => {
       expect(svg).toHaveAttribute("data-kast-state", state);
       unmount();
     }
+  });
+
+  it("idle se dibuja dormido (ojos cerrados + Zzz) y listening despierto (ojos abiertos)", () => {
+    const { unmount } = render(
+      <LazyMotion features={domAnimation}>
+        <KastMascot state="idle" title="Kast dormido" />
+      </LazyMotion>,
+    );
+    const sleeping = screen.getByRole("img", { name: "Kast dormido" });
+    expect(sleeping.querySelectorAll("ellipse.fill-ink")).toHaveLength(0);
+    expect(sleeping.textContent).toContain("Z");
+    unmount();
+
+    render(
+      <LazyMotion features={domAnimation}>
+        <KastMascot state="listening" title="Kast despierto" />
+      </LazyMotion>,
+    );
+    const awake = screen.getByRole("img", { name: "Kast despierto" });
+    expect(awake.querySelectorAll("ellipse.fill-ink")).toHaveLength(2);
+    cleanup();
+  });
+
+  it("muestra la etiqueta de estado con showStatus", () => {
+    const labels: [KastMascotState, string][] = [
+      ["idle", "Descansando"],
+      ["listening", "Te escucho"],
+      ["thinking", "Pensando…"],
+      ["speaking", "Respondiendo"],
+    ];
+    for (const [state, label] of labels) {
+      const { unmount } = render(
+        <LazyMotion features={domAnimation}>
+          <KastMascot state={state} showStatus title={`Kast ${state}`} />
+        </LazyMotion>,
+      );
+      expect(screen.getByText(label)).toBeInTheDocument();
+      unmount();
+    }
+  });
+
+  it("KastStaticIcon (sin motion) conserva rol, nombre y estado", () => {
+    render(<KastStaticIcon state="error" title="Kast estático" />);
+    expect(screen.getByRole("img", { name: "Kast estático" })).toHaveAttribute(
+      "data-kast-state",
+      "error",
+    );
+    cleanup();
   });
 });

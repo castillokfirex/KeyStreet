@@ -1,17 +1,12 @@
 import { useId } from "react";
-import type { KastMascotProps, KastMascotState } from "./KastMascot";
-
-const STATUS_DOT: Record<KastMascotState, string> = {
-  idle: "#16302B",
-  listening: "#0EA5E9",
-  thinking: "#F59E0B",
-  speaking: "#10B981",
-  success: "#16A34A",
-  error: "#DC2626",
-};
+import { KastDefs, KastHead, KastLineEyes, KastMouth, KastNose, KastOpenEye } from "./KastFace";
+import type { KastMascotProps } from "./KastMascot";
+import { KAST_EYES, KAST_VIEWBOX } from "./kastStatus";
 
 /**
- * Versión SVG estática ligera (< 1.5 KB) de Kast para carga inicial sin animaciones JS.
+ * Versión estática de Kast (sin `motion`) para la carga inicial.
+ * Dibuja el mismo koala que KastMascot para que no haya salto al cargar el
+ * animado; "idle" (dormido) usa la respiración CSS y un "z" fijo.
  */
 export function KastStaticIcon({
   state = "idle",
@@ -19,13 +14,15 @@ export function KastStaticIcon({
   className = "",
   title = "Kast, asistente IA de Key Street",
 }: KastMascotProps) {
-  const titleId = useId();
+  const uid = useId().replace(/[^a-zA-Z0-9_-]/g, "");
+  const titleId = `kast-static-${uid}`;
+  const eyesOpen = state === "listening" || state === "thinking";
 
   return (
     <svg
       width={size}
       height={size}
-      viewBox="0 0 64 64"
+      viewBox={KAST_VIEWBOX}
       fill="none"
       role="img"
       aria-labelledby={titleId}
@@ -33,27 +30,26 @@ export function KastStaticIcon({
       className={`shrink-0 overflow-visible ${className}`.trim()}
     >
       <title id={titleId}>{title}</title>
-      <circle cx="15" cy="23" r="10.5" fill="#64748B" />
-      <circle cx="15.5" cy="23.5" r="5.5" fill="#E2E8F0" />
-      <circle cx="49" cy="23" r="10.5" fill="#64748B" />
-      <circle cx="48.5" cy="23.5" r="5.5" fill="#E2E8F0" />
-      <rect x="14" y="16" width="36" height="31" rx="15" fill="#94A3B8" />
-      <rect x="17" y="19" width="30" height="25" rx="12" fill="#CBD5E1" />
-      <rect x="22" y="27" width="4.2" height="6" rx="2.1" fill="#0F172A" />
-      <rect x="37.8" y="27" width="4.2" height="6" rx="2.1" fill="#0F172A" />
-      <circle cx="23.4" cy="28.7" r="0.9" fill="#FFFFFF" />
-      <circle cx="39.2" cy="28.7" r="0.9" fill="#FFFFFF" />
-      <ellipse cx="32" cy="34.5" rx="4.2" ry="5.4" fill="#0F172A" />
-      <ellipse cx="21" cy="37" rx="2.6" ry="1.4" fill="#F4A3A3" opacity="0.55" />
-      <ellipse cx="43" cy="37" rx="2.6" ry="1.4" fill="#F4A3A3" opacity="0.55" />
-      <circle
-        cx="52"
-        cy="44"
-        r="5"
-        fill={STATUS_DOT[state]}
-        stroke="#FFFFFF"
-        strokeWidth="2"
-      />
+      <KastDefs uid={uid} />
+      <g className={state === "idle" ? "ks-kast-breathe" : undefined}>
+        <KastHead uid={uid} />
+        {eyesOpen ? (
+          KAST_EYES.map(({ x, y }) => (
+            <g key={x} transform={`translate(${state === "thinking" ? x + 4.5 : x} ${state === "thinking" ? y - 6.5 : y})`}>
+              <KastOpenEye />
+            </g>
+          ))
+        ) : (
+          <KastLineEyes state={state} />
+        )}
+        <KastNose uid={uid} />
+        <KastMouth state={state} />
+      </g>
+      {state === "idle" && (
+        <text x={172} y={14} fontSize={20} aria-hidden="true" className="fill-current font-display font-semibold" opacity={0.6}>
+          z
+        </text>
+      )}
     </svg>
   );
 }
