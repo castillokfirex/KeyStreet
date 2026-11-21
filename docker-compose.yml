@@ -13,6 +13,8 @@ services:
       - ./db/init/00-roles.sh:/docker-entrypoint-initdb.d/00-roles.sh:ro
       - ./db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
       - ./db/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+      - ./db/migrations/V002__catalogo_15_modelos.sql:/docker-entrypoint-initdb.d/03-catalogo-15-modelos.sql:ro
+      - ./db/migrations:/db-migrations:ro
       - ./db/tests:/db-tests:ro
     ports: ["127.0.0.1:5432:5432"]
     healthcheck:

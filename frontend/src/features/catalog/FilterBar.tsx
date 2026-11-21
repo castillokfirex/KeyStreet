@@ -111,7 +111,11 @@ export function FilterBar({
               <option value="">Silueta</option>
               {(facets?.silhouettes ?? ["LOW", "HIGH"]).map((sil) => (
                 <option key={sil} value={sil}>
-                  {sil === "HIGH" ? "Caña alta (High)" : "Perfil bajo (Low)"}
+                  {sil === "HIGH"
+                    ? "Caña alta (High)"
+                    : sil === "MID"
+                      ? "Caña media (Mid)"
+                      : "Perfil bajo (Low)"}
                 </option>
               ))}
             </select>

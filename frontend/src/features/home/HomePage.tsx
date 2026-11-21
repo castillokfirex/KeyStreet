@@ -28,7 +28,7 @@ export function HomePage() {
         <div className="mx-auto grid max-w-[1680px] grid-cols-1 items-end gap-12 px-4 py-16 sm:px-6 sm:py-20 lg:grid-cols-12 lg:px-8 lg:py-24">
           <div className="space-y-6 lg:col-span-8">
             <p className="font-display text-[10px] font-semibold uppercase tracking-nav text-muted">
-              Drop Colombia 2026 · 10 siluetas curadas
+              Drop Colombia 2026 · 15 siluetas curadas
             </p>
 
             <h1 className="max-w-4xl font-display text-3xl font-semibold uppercase leading-[1.05] tracking-tight text-ink sm:text-5xl lg:text-6xl">
@@ -36,7 +36,7 @@ export function HomePage() {
             </h1>
 
             <p className="max-w-xl text-sm leading-relaxed text-muted">
-              Modelos icónicos de Nike, Adidas, Puma, New Balance y Converse en pesos
+              Modelos icónicos de Nike, Jordan, Adidas, Puma, New Balance, Converse y Vans en pesos
               colombianos. Ajusta tu talla con Kast y verifica cada material en 360°
               antes de pedir por WhatsApp.
             </p>
@@ -108,7 +108,7 @@ export function HomePage() {
             to="/catalogo"
             className="inline-flex items-center gap-1 font-display text-[10px] font-semibold uppercase tracking-nav text-ink underline underline-offset-4 hover:opacity-60"
           >
-            <span>Ver los 10 pares</span>
+            <span>Ver los 15 pares</span>
             <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.5} aria-hidden="true" />
           </Link>
         </div>

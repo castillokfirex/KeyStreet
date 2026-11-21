@@ -68,6 +68,13 @@ public abstract class AbstractIT {
               + "CREATE ROLE keystreet_rag LOGIN NOSUPERUSER NOBYPASSRLS PASSWORD 'rag_test_pw';");
       st.execute(Files.readString(repoRoot.resolve("db/schema.sql"), StandardCharsets.UTF_8));
       st.execute(Files.readString(repoRoot.resolve("db/seed.sql"), StandardCharsets.UTF_8));
+      // Migraciones de datos posteriores al seed, en orden (db/migrations/V*.sql)
+      try (var migrations = Files.list(repoRoot.resolve("db/migrations"))) {
+        for (Path migration :
+            migrations.filter(f -> f.getFileName().toString().endsWith(".sql")).sorted().toList()) {
+          st.execute(Files.readString(migration, StandardCharsets.UTF_8));
+        }
+      }
       st.execute(
           """
           INSERT INTO tenants (id, slug, name, legal_name, whatsapp_phone)
