@@ -1,0 +1,102 @@
+name: keystreet
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      APP_DB_PASSWORD: ${APP_DB_PASSWORD}
+      RAG_DB_PASSWORD: ${RAG_DB_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db/init/00-roles.sh:/docker-entrypoint-initdb.d/00-roles.sh:ro
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./db/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+      - ./db/tests:/db-tests:ro
+    ports: ["127.0.0.1:5432:5432"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  rag-service:
+    build: ./rag-service
+    environment:
+      DATABASE_URL: postgresql://keystreet_rag:${RAG_DB_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      AI_PROVIDER: ${AI_PROVIDER:-gemini}
+      GEMINI_CHAT_MODEL: ${GEMINI_CHAT_MODEL}
+      GEMINI_EMBEDDING_MODEL: ${GEMINI_EMBEDDING_MODEL}
+      EMBEDDING_DIM: ${EMBEDDING_DIM:-768}
+      INTERNAL_API_TOKEN: ${INTERNAL_API_TOKEN}
+      BACKEND_CALLBACK_BASE_URL: http://backend-java:8080
+      PDF_TMP_DIR: /var/keystreet/pdf-tmp
+    volumes: ["pdf_tmp:/var/keystreet/pdf-tmp:ro"]
+    expose: ["8000"]
+    depends_on:
+      postgres: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request;urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  backend-java:
+    build: ./backend-java
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB}
+      SPRING_DATASOURCE_USERNAME: keystreet_app
+      SPRING_DATASOURCE_PASSWORD: ${APP_DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      INTERNAL_API_TOKEN: ${INTERNAL_API_TOKEN}
+      RAG_BASE_URL: http://rag-service:8000
+      WHATSAPP_PHONE: ${WHATSAPP_PHONE}
+      DEFAULT_TENANT_SLUG: ${DEFAULT_TENANT_SLUG}
+      MAX_PDF_MB: ${MAX_PDF_MB:-20}
+      MAX_PDF_PAGES: ${MAX_PDF_PAGES:-300}
+      PDF_TMP_DIR: /var/keystreet/pdf-tmp
+      PDF_TMP_TTL_MINUTES: ${PDF_TMP_TTL_MINUTES:-30}
+    volumes: ["pdf_tmp:/var/keystreet/pdf-tmp"]
+    ports: ["127.0.0.1:8080:8080"]
+    depends_on:
+      postgres: { condition: service_healthy }
+      rag-service: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/actuator/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 18
+      start_period: 20s
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_BASE_URL: /api
+        VITE_TENANT_SLUG: ${DEFAULT_TENANT_SLUG}
+    volumes:
+      - ./infra/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./infra/certs:/etc/nginx/certs:ro
+    ports: ["80:80", "443:443"]
+    depends_on:
+      backend-java: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1/healthz || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  clamav:
+    image: clamav/clamav:stable
+    profiles: ["security"]
+
+volumes:
+  pgdata:
+  pdf_tmp:
+    driver: local
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+      o: "size=512m,uid=10001,gid=10001,mode=0770"

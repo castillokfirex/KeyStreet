@@ -1,0 +1,8 @@
+# Override para E2E deterministas sin Gemini: docker compose -f docker-compose.yml -f docker-compose.e2e.yml up -d --build
+services:
+  rag-service:
+    environment:
+      AI_PROVIDER: fake
+  backend-java:
+    environment:
+      PDF_TMP_TTL_MINUTES: "2"
