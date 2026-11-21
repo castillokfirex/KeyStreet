@@ -5,49 +5,87 @@ export type KastLogoProps = {
   size?: number;
   className?: string;
   title?: string;
+  /** Solo wordmark: antepone el isotipo mini */
   showMark?: boolean;
 };
 
+const STROKE = 3.2;
+
+/**
+ * Silueta lineal de la cabeza de Kast: orejas grandes, cara redonda,
+ * nariz ovalada y ojos punto. Trazo uniforme sin relleno (currentColor).
+ * Las orejas se recortan con una máscara para que su trazo no cruce la cara.
+ * Legible de 24 a 64 px.
+ */
+function KastSilhouette({
+  size,
+  className,
+  title,
+  decorative = false,
+}: {
+  size: number;
+  className?: string;
+  title?: string;
+  decorative?: boolean;
+}) {
+  const uid = useId().replace(/[^a-zA-Z0-9_-]/g, "");
+  const titleId = `kast-title-${uid}`;
+  const maskId = `kast-mask-${uid}`;
+
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 64 64"
+      fill="none"
+      role={decorative ? undefined : "img"}
+      aria-labelledby={decorative ? undefined : titleId}
+      aria-hidden={decorative || undefined}
+      focusable="false"
+      className={`shrink-0 ${className ?? ""}`.trim()}
+    >
+      {!decorative && <title id={titleId}>{title}</title>}
+      <defs>
+        <mask id={maskId} maskUnits="userSpaceOnUse">
+          <rect width="64" height="64" fill="white" />
+          <circle cx="32" cy="37" r="20" fill="black" />
+        </mask>
+      </defs>
+      <g
+        stroke="currentColor"
+        strokeWidth={STROKE}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <g mask={`url(#${maskId})`}>
+          <circle cx="14" cy="19.5" r="10.5" />
+          <circle cx="50" cy="19.5" r="10.5" />
+          <path d="M10 22.5a5.5 5.5 0 0 1 6.5-7" />
+          <path d="M54 22.5a5.5 5.5 0 0 0-6.5-7" />
+        </g>
+        <circle cx="32" cy="37" r="20" />
+        <ellipse cx="32" cy="41" rx="5.2" ry="7" />
+      </g>
+      <circle cx="23.5" cy="34" r="2" fill="currentColor" />
+      <circle cx="40.5" cy="34" r="2" fill="currentColor" />
+    </svg>
+  );
+}
+
 /**
  * Identidad visual dual de Key Street x Kast:
- * - "isotype": silueta geométrica continua del koala (catálogo, móvil, favicon, marcas de agua)
- * - "wordmark": logotipo tipográfico editorial "KEY STREET" con notch de llave (detalle de producto)
+ * - "isotype": silueta lineal del koala (header, móvil, favicon, marcas de agua)
+ * - "wordmark": "KEY STREET" en mayúsculas con tracking amplio
  */
 export function KastLogo({
   variant,
   size = 28,
   className = "",
   title = "Key Street x Kast",
-  showMark = true,
+  showMark = false,
 }: KastLogoProps) {
-  const titleId = useId();
-
   if (variant === "isotype") {
-    return (
-      <svg
-        width={size}
-        height={size}
-        viewBox="0 0 64 64"
-        fill="none"
-        role="img"
-        aria-labelledby={titleId}
-        className={`shrink-0 ${className}`.trim()}
-      >
-        <title id={titleId}>{title}</title>
-        {/* Trazo continuo estilo Matisse de orejas y cabeza geométrica del koala Kast */}
-        <path
-          d="M21 28 C14 28 11 22 14 16 C17 11 24 13 26 19 C30 17.5 34 17.5 38 19 C40 13 47 11 50 16 C53 22 50 28 43 28 C46.5 33 45.5 41 39 45 C35 47.5 29 47.5 25 45 C18.5 41 17.5 33 21 28 Z"
-          stroke="currentColor"
-          strokeWidth="2.4"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          vectorEffect="non-scaling-stroke"
-        />
-        <ellipse cx="32" cy="34.5" rx="3.4" ry="4.4" fill="currentColor" />
-        <circle cx="24.5" cy="29.5" r="1.8" fill="currentColor" />
-        <circle cx="39.5" cy="29.5" r="1.8" fill="currentColor" />
-      </svg>
-    );
+    return <KastSilhouette size={size} className={className} title={title} />;
   }
 
   return (
@@ -56,28 +94,8 @@ export function KastLogo({
       aria-label={title}
       className={`inline-flex items-center gap-2.5 select-none ${className}`.trim()}
     >
-      {showMark && (
-        <svg
-          width={size}
-          height={size}
-          viewBox="0 0 40 40"
-          fill="none"
-          aria-hidden="true"
-          className="shrink-0"
-        >
-          <rect x="2" y="2" width="36" height="36" rx="9" fill="currentColor" />
-          {/* K geométrica con notch de llave */}
-          <path
-            d="M13 11 V29 M26 11 L16 20 L26 29 M16 20 H21"
-            stroke="#FFFFFF"
-            strokeWidth="2.6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <circle cx="29" cy="20" r="1.8" fill="#DDF3E6" />
-        </svg>
-      )}
-      <span className="font-display text-sm sm:text-base font-bold uppercase tracking-[0.32em] leading-none">
+      {showMark && <KastSilhouette size={size} decorative />}
+      <span className="-mr-[0.32em] font-display text-sm sm:text-base font-semibold uppercase tracking-wordmark leading-none">
         KEY STREET
       </span>
     </span>

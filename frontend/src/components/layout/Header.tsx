@@ -1,16 +1,56 @@
 import { Menu, Search, ShoppingBag, User } from "lucide-react";
 import { lazy, Suspense, useState, type FormEvent } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
-import { KastLogo } from "@/components/brand/KastLogo";
 import { useCartStore } from "@/stores/cart";
+import { AlternatingLogo } from "./AlternatingLogo";
+import { CATEGORY_NAV, isNavActive, MAIN_NAV, type NavItem } from "./navigation";
+import { useScrolled } from "./useScrolled";
 
 const LazyMobileNav = lazy(() =>
   import("./MobileNav").then((m) => ({ default: m.MobileNav })),
 );
 
+const ICON_BTN =
+  "relative inline-flex h-10 w-10 items-center justify-center text-ink hover:opacity-60 transition-opacity cursor-pointer";
+
+function NavLinkItem({
+  item,
+  active,
+  size,
+}: {
+  item: NavItem;
+  active: boolean;
+  size: "main" | "sub";
+}) {
+  return (
+    <Link
+      to={item.to}
+      aria-current={active ? "page" : undefined}
+      className={[
+        "group relative inline-block whitespace-nowrap py-2 font-display uppercase tracking-nav transition-colors",
+        size === "main"
+          ? "text-[11px] font-semibold"
+          : "text-[10px] font-medium",
+        item.highlight
+          ? "text-sale-text"
+          : size === "sub" && !active
+            ? "text-muted hover:text-ink"
+            : "text-ink",
+      ].join(" ")}
+    >
+      {item.label}
+      <span
+        aria-hidden="true"
+        className={`absolute inset-x-0 bottom-1 h-px origin-left bg-current transition-transform duration-300 ${active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"}`}
+      />
+    </Link>
+  );
+}
+
 export function Header() {
   const location = useLocation();
   const navigate = useNavigate();
+  const compact = useScrolled(40);
   const [searchValue, setSearchValue] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -19,7 +59,8 @@ export function Header() {
   );
   const setBagOpen = useCartStore((s) => s.setBagOpen);
 
-  const isProductDetail = location.pathname.startsWith("/producto/");
+  const active = (to: string) =>
+    isNavActive(to, location.pathname, location.search);
 
   const handleSearch = (e: FormEvent) => {
     e.preventDefault();
@@ -30,124 +71,92 @@ export function Header() {
   return (
     <>
       <header className="sticky top-0 z-30 border-b border-line bg-canvas">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-          {/* Izquierda: menú móvil + links editoriales */}
-          <div className="flex items-center gap-4 lg:gap-6">
+        <div
+          className={[
+            "mx-auto grid max-w-[1680px] grid-cols-[1fr_auto_1fr] items-center gap-4 px-4 sm:px-6 lg:px-8 transition-[height] duration-300",
+            compact ? "h-[var(--ks-header-h-compact)]" : "h-[var(--ks-header-h)]",
+          ].join(" ")}
+        >
+          {/* Izquierda: menú móvil + navegación principal */}
+          <div className="flex min-w-0 items-center">
             <button
               type="button"
               onClick={() => setMobileOpen(true)}
               aria-label="Abrir menú de navegación"
-              className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-line text-navy lg:hidden cursor-pointer"
+              className={`${ICON_BTN} -ml-2 lg:hidden`}
             >
-              <Menu className="h-4 w-4" aria-hidden="true" />
+              <Menu className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
             </button>
 
-            <nav
-              aria-label="Categorías principales"
-              className="hidden lg:flex items-center gap-6"
-            >
-              <Link
-                to="/catalogo?silhouette=HIGH"
-                className="font-display text-[11px] font-bold uppercase tracking-[0.16em] text-navy hover:text-forest transition-colors"
-              >
-                Hombre
-              </Link>
-              <Link
-                to="/catalogo?silhouette=LOW"
-                className="font-display text-[11px] font-bold uppercase tracking-[0.16em] text-navy hover:text-forest transition-colors"
-              >
-                Mujer
-              </Link>
-              <Link
-                to="/catalogo"
-                className="font-display text-[11px] font-bold uppercase tracking-[0.16em] text-navy hover:text-forest transition-colors"
-              >
-                Streetwear
-              </Link>
-              <Link
-                to="/catalogo?discounted=true"
-                className="inline-flex items-center gap-1.5 font-display text-[11px] font-bold uppercase tracking-[0.16em] text-forest hover:opacity-80 transition-opacity"
-              >
-                <span>Sale</span>
-                <span className="rounded-full bg-mint px-1.5 py-0.5 text-[9px] text-forest">
-                  OFF
-                </span>
-              </Link>
+            <nav aria-label="Categorías principales" className="hidden lg:block">
+              <ul className="flex items-center gap-6">
+                {MAIN_NAV.map((item) => (
+                  <li key={item.label}>
+                    <NavLinkItem item={item} active={active(item.to)} size="main" />
+                  </li>
+                ))}
+              </ul>
             </nav>
           </div>
 
-          {/* Centro: Identidad dual Key Street x Kast */}
-          <Link
-            to="/"
-            aria-label="Inicio Key Street"
-            className="flex items-center justify-center text-navy hover:text-forest transition-colors"
-          >
-            {isProductDetail ? (
-              <>
-                <KastLogo
-                  variant="wordmark"
-                  size={30}
-                  className="hidden sm:inline-flex"
-                  title="Key Street"
-                />
-                <KastLogo
-                  variant="isotype"
-                  size={30}
-                  className="sm:hidden"
-                  title="Key Street x Kast"
-                />
-              </>
-            ) : (
-              <span className="inline-flex items-center gap-2">
-                <KastLogo
-                  variant="isotype"
-                  size={30}
-                  title="Key Street x Kast"
-                />
-                <span className="hidden sm:inline font-display text-xs font-bold uppercase tracking-[0.26em]">
-                  KEY STREET
-                </span>
-              </span>
-            )}
-          </Link>
+          {/* Centro: Kast ↔ KEY STREET */}
+          <AlternatingLogo compact={compact} />
 
-          {/* Derecha: buscador, admin, bolsa */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          {/* Derecha: búsqueda, cuenta, bolsa */}
+          <div className="-mr-2 flex items-center justify-end gap-1">
             <form
               onSubmit={handleSearch}
-              className="hidden md:flex items-center rounded-full border border-line bg-surface px-3 py-1.5 focus-within:border-navy"
               role="search"
+              className="mr-2 hidden items-center gap-2 border-b border-line focus-within:border-ink md:flex"
             >
-              <Search className="h-3.5 w-3.5 text-muted mr-2" aria-hidden="true" />
+              <Search className="h-4 w-4 text-muted" strokeWidth={1.5} aria-hidden="true" />
               <input
                 type="search"
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
-                placeholder="Buscar modelo o marca..."
+                placeholder="Buscar modelo o marca"
                 aria-label="Buscar silueta o marca"
-                className="w-40 bg-transparent text-xs text-navy placeholder:text-muted focus:outline-none"
+                className="h-9 w-32 bg-transparent text-xs text-ink placeholder:text-muted focus:outline-none lg:w-40"
               />
             </form>
 
             <Link
               to="/admin/documents"
               aria-label="Panel administrativo"
-              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-line text-navy hover:bg-surface transition-colors"
+              className={`${ICON_BTN} hidden sm:inline-flex`}
             >
-              <User className="h-4 w-4" aria-hidden="true" />
+              <User className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
             </Link>
 
             <button
               type="button"
               onClick={() => setBagOpen(true)}
               aria-label={`Abrir bolsa (${itemsCount} artículos)`}
-              className="relative inline-flex h-9 items-center gap-1.5 rounded-full bg-navy px-3 text-white hover:bg-[#1e293b] transition-colors cursor-pointer"
+              className={ICON_BTN}
             >
-              <ShoppingBag className="h-4 w-4" aria-hidden="true" />
-              <span className="font-display text-xs font-bold">{itemsCount}</span>
+              <ShoppingBag className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
+              {itemsCount > 0 && (
+                <span
+                  aria-hidden="true"
+                  className="absolute right-0.5 top-0.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-ink px-1 font-display text-[10px] font-semibold leading-none text-canvas"
+                >
+                  {itemsCount > 99 ? "99+" : itemsCount}
+                </span>
+              )}
             </button>
           </div>
         </div>
+
+        {/* Subcategorías: scroll horizontal en móvil */}
+        <nav aria-label="Colecciones" className="border-t border-line">
+          <ul className="no-scrollbar mx-auto flex h-10 max-w-[1680px] items-center gap-6 overflow-x-auto px-4 sm:px-6 lg:justify-center lg:gap-8 lg:px-8">
+            {CATEGORY_NAV.map((item) => (
+              <li key={item.label}>
+                <NavLinkItem item={item} active={active(item.to)} size="sub" />
+              </li>
+            ))}
+          </ul>
+        </nav>
       </header>
       {mobileOpen && (
         <Suspense fallback={null}>
