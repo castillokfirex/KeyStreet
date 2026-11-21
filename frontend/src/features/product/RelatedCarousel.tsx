@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ProductCard } from "@/features/catalog/ProductCard";
 import { publicApi, queryKeys } from "@/lib/queries";
 
+/** "Esto te puede gustar": misma tarjeta del catálogo; carrusel en móvil, rejilla en desktop. */
 export function RelatedCarousel({ slug }: { slug: string }) {
   const { data: related = [] } = useQuery({
     queryKey: queryKeys.related(slug),
@@ -12,24 +13,20 @@ export function RelatedCarousel({ slug }: { slug: string }) {
   if (related.length === 0) return null;
 
   return (
-    <section
-      aria-label="Productos relacionados"
-      className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 border-t border-line"
-    >
-      <div className="mb-6">
-        <p className="font-display text-[10px] font-bold uppercase tracking-[0.2em] text-forest">
-          Atelier Capsule 2026
-        </p>
-        <h2 className="mt-1 font-display text-xl sm:text-2xl font-bold uppercase tracking-tight text-navy">
+    <section aria-label="Productos relacionados" className="mx-auto max-w-[1680px] pt-16">
+      <div className="mb-4 px-4 sm:px-6 lg:px-8">
+        <h2 className="font-display text-[11px] font-semibold uppercase tracking-nav text-ink">
           Esto te puede gustar
         </h2>
       </div>
 
-      <div className="grid grid-cols-2 gap-3.5 sm:gap-5 md:grid-cols-4">
+      <ul className="no-scrollbar grid snap-x snap-mandatory auto-cols-[46%] grid-flow-col gap-[var(--ks-grid-gap)] overflow-x-auto md:auto-cols-auto md:grid-flow-row md:grid-cols-4 md:overflow-visible">
         {related.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          <li key={product.id} className="snap-start">
+            <ProductCard product={product} />
+          </li>
         ))}
-      </div>
+      </ul>
     </section>
   );
 }

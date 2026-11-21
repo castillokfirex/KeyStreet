@@ -48,7 +48,7 @@ export function PurchasePanel({
     selectedVariant?.sku || sizeOptions[0]?.sku || product.modelCode;
 
   return (
-    <div className="rounded-2xl border border-line bg-canvas p-5 sm:p-6 space-y-5">
+    <div className="space-y-6 lg:sticky lg:top-28 lg:max-w-[30rem]">
       {/* Encabezado ficha técnica */}
       <div className="flex flex-wrap items-center justify-between gap-2">
         <button
@@ -56,22 +56,22 @@ export function PurchasePanel({
           onClick={() =>
             onAskKast(`¿De qué materiales está hecho ${product.name} y cómo cuidarlo?`)
           }
-          className="inline-flex items-center gap-1.5 rounded-full bg-forest px-3 py-1 font-display text-[10px] font-bold uppercase tracking-[0.14em] text-white hover:bg-[#1e423b] cursor-pointer"
+          className="inline-flex items-center gap-1.5 border-b border-ink pb-0.5 font-display text-[10px] font-semibold uppercase tracking-nav text-ink hover:opacity-60 cursor-pointer"
         >
-          <Sparkles className="h-3 w-3" aria-hidden="true" />
+          <Sparkles className="h-3 w-3" strokeWidth={1.5} aria-hidden="true" />
           <span>Material verificado IA · Ficha técnica</span>
         </button>
 
-        <span className="font-display text-[10px] font-bold uppercase tracking-[0.16em] text-forest">
+        <span className="font-display text-[10px] font-semibold uppercase tracking-nav text-sale-text">
           • En stock inmediato
         </span>
       </div>
 
       <div>
-        <p className="font-display text-[10px] font-bold uppercase tracking-[0.18em] text-muted">
+        <p className="font-display text-[10px] font-semibold uppercase tracking-nav text-muted">
           SKU {activeSku} · {product.brand}
         </p>
-        <h1 className="mt-1 font-display text-2xl sm:text-3xl font-bold uppercase tracking-tight text-navy">
+        <h1 className="mt-2 font-display text-2xl font-semibold uppercase leading-tight tracking-label text-ink sm:text-[1.75rem]">
           {product.name}
         </h1>
         {product.colorway && (
@@ -102,11 +102,11 @@ export function PurchasePanel({
       {/* Selector de talla */}
       <div className="space-y-2.5">
         <div className="flex items-center justify-between text-xs">
-          <span className="font-display text-[11px] font-bold uppercase tracking-[0.14em] text-navy">
+          <span className="font-display text-[10px] font-semibold uppercase tracking-nav text-ink">
             Selecciona tu talla (EU)
           </span>
           {selectedVariant && (
-            <span className="text-[11px] font-semibold text-forest">
+            <span className="text-[11px] font-medium text-muted">
               Talla {selectedVariant.sizeEu} · {selectedVariant.stock} uds. disponibles
             </span>
           )}
@@ -121,7 +121,7 @@ export function PurchasePanel({
         {sizeWarning && (
           <p
             role="alert"
-            className="rounded-xl border border-amber-300 bg-amber-50 px-3 py-2 text-xs font-semibold text-amber-950"
+            className="border-l-2 border-kast-error py-1 pl-3 text-xs font-semibold text-kast-error"
           >
             {sizeWarning}
           </p>
@@ -129,7 +129,7 @@ export function PurchasePanel({
       </div>
 
       {/* CTAs principales */}
-      <div className="space-y-2.5 pt-1">
+      <div className="space-y-2 pt-1">
         <Button
           variant="forest"
           size="lg"
@@ -167,26 +167,26 @@ export function PurchasePanel({
       </div>
 
       {/* 3 tiles mini de confianza */}
-      <div className="grid grid-cols-3 gap-2 pt-1">
-        <div className="rounded-xl border border-line bg-surface/60 p-2.5 text-center">
-          <Truck className="mx-auto h-4 w-4 text-forest" aria-hidden="true" />
-          <p className="mt-1 font-display text-[9px] font-bold uppercase tracking-wider text-navy">
+      <ul className="grid grid-cols-3 gap-2 border-y border-line py-4">
+        <li className="text-center">
+          <Truck className="mx-auto h-4 w-4 text-ink" strokeWidth={1.5} aria-hidden="true" />
+          <p className="mt-1.5 font-display text-[9px] font-semibold uppercase tracking-nav text-ink">
             Envío Colombia
           </p>
-        </div>
-        <div className="rounded-xl border border-line bg-surface/60 p-2.5 text-center">
-          <ShieldCheck className="mx-auto h-4 w-4 text-forest" aria-hidden="true" />
-          <p className="mt-1 font-display text-[9px] font-bold uppercase tracking-wider text-navy">
+        </li>
+        <li className="text-center">
+          <ShieldCheck className="mx-auto h-4 w-4 text-ink" strokeWidth={1.5} aria-hidden="true" />
+          <p className="mt-1.5 font-display text-[9px] font-semibold uppercase tracking-nav text-ink">
             Autenticidad
           </p>
-        </div>
-        <div className="rounded-xl border border-line bg-surface/60 p-2.5 text-center">
-          <RefreshCw className="mx-auto h-4 w-4 text-forest" aria-hidden="true" />
-          <p className="mt-1 font-display text-[9px] font-bold uppercase tracking-wider text-navy">
+        </li>
+        <li className="text-center">
+          <RefreshCw className="mx-auto h-4 w-4 text-ink" strokeWidth={1.5} aria-hidden="true" />
+          <p className="mt-1.5 font-display text-[9px] font-semibold uppercase tracking-nav text-ink">
             Cambios 30d
           </p>
-        </div>
-      </div>
+        </li>
+      </ul>
 
       {/* Acordeones */}
       <Accordion

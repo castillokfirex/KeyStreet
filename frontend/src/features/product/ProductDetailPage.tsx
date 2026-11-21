@@ -166,7 +166,7 @@ export function ProductDetailPage() {
   if (isError || !product) {
     return (
       <div className="mx-auto max-w-3xl px-4 py-16 text-center space-y-4">
-        <h1 className="font-display text-2xl font-bold uppercase text-navy">
+        <h1 className="font-display text-xl font-semibold uppercase tracking-label text-ink">
           Silueta no encontrada
         </h1>
         <p className="text-sm text-muted">
@@ -174,7 +174,7 @@ export function ProductDetailPage() {
         </p>
         <Link
           to="/catalogo"
-          className="inline-flex h-11 items-center rounded-xl bg-navy px-6 font-display text-xs font-bold uppercase tracking-wider text-white"
+          className="inline-flex h-11 items-center bg-ink px-6 font-display text-[11px] font-semibold uppercase tracking-nav text-canvas"
         >
           Volver al catálogo
         </Link>
@@ -198,7 +198,7 @@ export function ProductDetailPage() {
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 items-start">
           {/* Columna izquierda (7 cols): Visor 360° & Probador anatómico lazy */}
           <div className="lg:col-span-7 space-y-4">
-            <div className="relative aspect-[3/4] w-full overflow-hidden rounded-2xl border border-line bg-surface">
+            <div className="relative aspect-[3/4] w-full overflow-hidden bg-surface">
               {/* Toolbar superior fiel a Stitch */}
               <div className="absolute left-3 right-3 top-3 z-20">
                 <ViewerToolbar
@@ -218,7 +218,7 @@ export function ProductDetailPage() {
                     <div className="flex h-full items-center justify-center p-8 text-center">
                       <div className="space-y-2">
                         <Skeleton className="mx-auto h-12 w-12 rounded-full" />
-                        <p className="font-display text-xs font-bold uppercase tracking-wider text-muted">
+                        <p className="font-display text-[10px] font-semibold uppercase tracking-nav text-muted">
                           Cargando motor 3D...
                         </p>
                       </div>
@@ -245,7 +245,7 @@ export function ProductDetailPage() {
                     />
                   ) : (
                     <>
-                      <div className="text-navy/15">
+                      <div className="text-ink/15">
                         <KastLogo variant="isotype" size={128} title={product.name} />
                       </div>
                       <Badge tone="mint" className="mt-4">
@@ -279,16 +279,16 @@ export function ProductDetailPage() {
               )}
 
               {!viewerActivated || mode === "viewer3d" ? (
-                <div className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-canvas/90 border border-line px-4 py-1 font-display text-[10px] font-bold uppercase tracking-[0.16em] text-navy shadow-xs">
+                <div className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap bg-canvas/90 px-3 py-1 font-display text-[10px] font-semibold uppercase tracking-nav text-ink">
                   Arrastra para rotar {mode === "fitting" ? "maniquí" : "zapato"}
                 </div>
               ) : null}
             </div>
 
             {/* Franja inferior de material certificado */}
-            <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-line bg-canvas p-4">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line pb-4">
               <div>
-                <p className="text-xs font-bold text-navy">
+                <p className="text-xs font-semibold text-ink">
                   {specs.upper || "Cuero / Textil seleccionado"} ·{" "}
                   {specs.outsole || "Suela de caucho"}
                 </p>
@@ -296,7 +296,7 @@ export function ProductDetailPage() {
                   Especificaciones verificables con Kast mediante fichas PDF indexadas.
                 </p>
               </div>
-              <span className="inline-flex items-center gap-1 font-display text-[10px] font-bold uppercase tracking-[0.16em] text-forest">
+              <span className="inline-flex items-center gap-1 font-display text-[10px] font-semibold uppercase tracking-nav text-sale-text">
                 <CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" />
                 <span>Certificado 2026</span>
               </span>
@@ -326,10 +326,10 @@ export function ProductDetailPage() {
       {/* Barra fija inferior móvil con precio + WhatsApp */}
       <div className="fixed inset-x-0 bottom-0 z-30 flex items-center justify-between gap-3 border-t border-line bg-canvas/95 px-4 py-3 backdrop-blur-sm sm:hidden">
         <div>
-          <p className="text-[10px] font-bold uppercase tracking-wider text-muted">
+          <p className="font-display text-[10px] font-semibold uppercase tracking-nav text-muted">
             {selectedVariant ? `Talla ${selectedVariant.sizeEu}` : "Elige talla"}
           </p>
-          <p className="font-display text-sm font-bold text-navy">
+          <p className={`font-display text-sm font-semibold ${product.hasDiscount ? "text-sale-text" : "text-ink"}`}>
             {formatCop(product.finalPriceCop)}
           </p>
         </div>
