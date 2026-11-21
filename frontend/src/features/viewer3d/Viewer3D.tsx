@@ -165,7 +165,7 @@ export function Viewer3D({
                 `¿Qué detalle y cuidados tiene "${activeHotspot.label}"?`,
               )
             }
-            className="mt-3 inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-forest px-3 py-1.5 font-display text-[10px] font-bold uppercase tracking-wider text-white hover:bg-[#1e423b] cursor-pointer"
+            className="mt-3 inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-forest px-3 py-1.5 font-display text-[10px] font-bold uppercase tracking-wider text-white hover:bg-forest-hover cursor-pointer"
           >
             <Sparkles className="h-3 w-3" aria-hidden="true" />
             <span>Preguntar a Kast</span>

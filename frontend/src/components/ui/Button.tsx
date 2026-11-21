@@ -9,19 +9,20 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   fullWidth?: boolean;
 }
 
+/* Estética editorial: esquinas rectas, mayúsculas con tracking, sin sombras. */
 const VARIANT_CLASSES: Record<ButtonVariant, string> = {
   forest:
-    "bg-forest text-white hover:bg-[#1e423b] active:bg-[#112622] border border-transparent",
-  navy: "bg-navy text-white hover:bg-[#1e293b] active:bg-[#090e1a] border border-transparent",
+    "bg-forest text-canvas hover:bg-forest-hover border border-transparent",
+  navy: "bg-ink text-canvas hover:bg-forest border border-transparent",
   outline:
-    "bg-canvas text-navy border border-line hover:border-navy hover:bg-surface",
-  ghost: "bg-transparent text-navy hover:bg-surface border border-transparent",
+    "bg-transparent text-ink border border-ink hover:bg-ink hover:text-canvas",
+  ghost: "bg-transparent text-ink hover:bg-surface border border-transparent",
 };
 
 const SIZE_CLASSES: Record<ButtonSize, string> = {
-  sm: "h-9 px-3.5 text-xs tracking-[0.12em]",
-  md: "h-11 px-5 text-xs tracking-[0.14em]",
-  lg: "h-12 px-6 text-xs sm:text-sm tracking-[0.14em]",
+  sm: "h-9 px-4 text-[10px] tracking-nav",
+  md: "h-11 px-5 text-[11px] tracking-nav",
+  lg: "h-12 px-6 text-[11px] tracking-nav",
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -43,8 +44,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       type={type}
       disabled={disabled}
       className={[
-        "inline-flex items-center justify-center gap-2 rounded-xl font-display font-bold uppercase transition-colors",
-        "disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer select-none",
+        "inline-flex items-center justify-center gap-2 rounded-sm font-display font-semibold uppercase transition-colors duration-150",
+        "disabled:opacity-45 disabled:cursor-not-allowed cursor-pointer select-none",
         VARIANT_CLASSES[variant],
         SIZE_CLASSES[size],
         fullWidth ? "w-full" : "",

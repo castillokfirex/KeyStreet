@@ -2,12 +2,13 @@ import type { ReactNode } from "react";
 
 export type BadgeTone = "forest" | "navy" | "mint" | "neutral" | "danger";
 
+/* Etiquetas mínimas: texto pequeño en mayúsculas, sin fondos llamativos. */
 const TONE_CLASSES: Record<BadgeTone, string> = {
-  forest: "bg-forest text-white",
-  navy: "bg-navy text-white",
-  mint: "bg-mint text-forest",
-  neutral: "bg-canvas text-navy border border-line",
-  danger: "bg-red-50 text-red-700 border border-red-200",
+  forest: "text-sale-text",
+  navy: "text-ink",
+  mint: "bg-mint text-forest px-2",
+  neutral: "text-ink",
+  danger: "text-kast-error",
 };
 
 export function Badge({
@@ -22,7 +23,7 @@ export function Badge({
   return (
     <span
       className={[
-        "inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 font-display text-[10px] font-bold uppercase tracking-[0.14em]",
+        "inline-flex items-center gap-1 rounded-sm py-0.5 font-display text-[10px] font-semibold uppercase tracking-nav",
         TONE_CLASSES[tone],
         className,
       ].join(" ")}

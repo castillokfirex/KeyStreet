@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+/* Tipografía de PLAN §9.1 (obligatoria): autohospedada, subset latino, swap. */
 @font-face {
   font-family: "Plus Jakarta Sans Variable";
   font-style: normal;
@@ -16,18 +17,94 @@
   src: url("/fonts/space-grotesk-latin.woff2") format("woff2-variations");
 }
 
+/*
+ * Tokens del diseño editorial Key Street (adaptado de key-street-ui).
+ * Se conservan los nombres históricos (canvas, surface, line, muted, navy,
+ * forest, mint) para que todo el sitio —incluido /admin— herede la paleta.
+ *
+ * Contraste: #8A8A8A (gray) y #7FA03A (sale) no alcanzan AA en texto pequeño
+ * sobre canvas; para texto se usan muted (#6B6B69) y sale-text (#5A7526).
+ */
 @theme {
-  --color-canvas: #ffffff;
-  --color-surface: #f5f6f8;
-  --color-line: #e6e8ec;
-  --color-muted: #6b7280;
-  --color-forest: #16302b;
-  --color-navy: #0f172a;
-  --color-mint: #ddf3e6;
+  /* Superficies */
+  --color-canvas: #f4f4f2; /* fondo general */
+  --color-surface: #ececea; /* fondo de imagen de producto / placeholders */
+  --color-line: #e2e2e0; /* líneas */
+
+  /* Texto */
+  --color-navy: #111111; /* tinta principal (nombre histórico) */
+  --color-ink: #111111;
+  --color-muted: #6b6b69; /* texto secundario AA */
+  --color-gray: #8a8a8a; /* iconos, tachados, decorativo */
+
+  /* Acentos */
+  --color-forest: #1f3a2e; /* verde profundo: CTA WhatsApp, foco puntual */
+  --color-forest-hover: #2a4d3d;
+  --color-sale: #7fa03a; /* acento SALE (líneas, barras) */
+  --color-sale-text: #5a7526; /* acento SALE para texto */
+  --color-mint: #e5ecd8; /* fondo suave de pills */
+
+  /* Kast (mascota) */
+  --color-kast-fur-light: #b9bec4;
+  --color-kast-fur-dark: #8e949b;
+  --color-kast-ear-light: #e6e8eb;
+  --color-kast-ear-dark: #c4c9ce;
+  --color-kast-nose-light: #4a4e54;
+  --color-kast-nose-dark: #141518;
+  --color-kast-cheek: #e4b4b4;
+  --color-kast-awake: #7fa03a;
+  --color-kast-thinking: #c08a1e;
+  --color-kast-error: #a33a2a;
+
+  /* Tipografía */
   --font-display: "Space Grotesk Variable", system-ui, sans-serif;
   --font-sans: "Plus Jakarta Sans Variable", system-ui, sans-serif;
-  --radius-xl: 0.75rem;
-  --radius-2xl: 1rem;
+  --tracking-label: 0.08em; /* etiquetas en mayúsculas */
+  --tracking-nav: 0.14em; /* navegación */
+  --tracking-wordmark: 0.32em; /* "KEY STREET" */
+
+  /* Forma: esquinas rectas o mínimas (2px) */
+  --radius-sm: 2px;
+  --radius-md: 2px;
+  --radius-lg: 2px;
+  --radius-xl: 2px;
+  --radius-2xl: 2px;
+  --radius-3xl: 2px;
+
+  /* Movimiento */
+  --ease-editorial: cubic-bezier(0.2, 0, 0, 1);
+  --animate-kast-breathe: kast-breathe 3.4s ease-in-out infinite;
+}
+
+/* Variables de layout (no generan utilidades) */
+:root {
+  --ks-grid-gap: 2px;
+  --ks-header-h: 4.5rem;
+  --ks-header-h-compact: 3.5rem;
+  --ks-logo-w: 10.5rem;
+  --ks-logo-h: 2.125rem;
+  --ks-logo-h-compact: 1.625rem;
+  --ks-fade: 900ms;
+}
+
+@media (max-width: 767px) {
+  :root {
+    --ks-header-h: 3.75rem;
+    --ks-header-h-compact: 3.25rem;
+    --ks-logo-w: 8.5rem;
+    --ks-logo-h: 1.75rem;
+    --ks-logo-h-compact: 1.5rem;
+  }
+}
+
+@keyframes kast-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+  }
 }
 
 @layer base {
@@ -46,8 +123,13 @@
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-forest);
+    outline: 2px solid var(--color-ink);
     outline-offset: 2px;
+  }
+
+  ::selection {
+    background: var(--color-ink);
+    color: var(--color-canvas);
   }
 }
 
@@ -57,4 +139,80 @@
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* ---- Tarjeta de producto: crossfade en hover / carrusel en táctil ---- */
+.ks-card-track {
+  display: grid;
+  height: 100%;
+}
+
+.ks-card-slide {
+  height: 100%;
+  width: 100%;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ks-card-slide {
+    grid-area: 1 / 1;
+    transition: opacity 300ms var(--ease-editorial);
+  }
+  .ks-card-slide:nth-child(2) {
+    opacity: 0;
+  }
+  .ks-card:hover .ks-card-slide:nth-child(2),
+  .ks-card:focus-within .ks-card-slide:nth-child(2) {
+    opacity: 1;
+  }
+  /* crossfade real: la principal se desvanece (placeholders transparentes) */
+  .ks-card:hover .ks-card-slide:nth-child(1):not(:only-child),
+  .ks-card:focus-within .ks-card-slide:nth-child(1):not(:only-child) {
+    opacity: 0;
+  }
+  .ks-card-fav {
+    opacity: 0;
+  }
+  .ks-card:hover .ks-card-fav,
+  .ks-card-fav:focus-visible,
+  .ks-card-fav[aria-pressed="true"] {
+    opacity: 1;
+  }
+  .ks-card-dots {
+    display: none;
+  }
+}
+
+@media not ((hover: hover) and (pointer: fine)) {
+  .ks-card-track {
+    grid-auto-flow: column;
+    grid-auto-columns: 100%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+  }
+  .ks-card-track::-webkit-scrollbar {
+    display: none;
+  }
+  .ks-card-slide {
+    scroll-snap-align: start;
+  }
+}
+
+/* ---- Logo alternante (crossfade CSS, sin motion en el bundle de entrada) ---- */
+.ks-logo-layer {
+  transition: opacity var(--ks-fade) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
