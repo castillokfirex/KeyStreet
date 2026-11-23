@@ -6,7 +6,6 @@ import { useAssistantStore } from "@/stores/assistant";
 import { useCartStore } from "@/stores/cart";
 import { Footer } from "./Footer";
 import { Header } from "./Header";
-import { PromoBar } from "./PromoBar";
 
 const LazyAssistantDrawer = lazy(() =>
   import("@/features/assistant/AssistantDrawer").then((mod) => ({
@@ -28,7 +27,6 @@ export function StoreLayout() {
 
   return (
     <div className="flex min-h-screen flex-col bg-canvas text-navy">
-      <PromoBar />
       <Header />
 
       <main className="flex-1">

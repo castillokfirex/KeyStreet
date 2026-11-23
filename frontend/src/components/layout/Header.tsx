@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router";
 import { useCartStore } from "@/stores/cart";
 import { AlternatingLogo } from "./AlternatingLogo";
 import { isNavActive, MAIN_NAV, type NavItem } from "./navigation";
+import { PromoBar } from "./PromoBar";
 import { useScrolled } from "./useScrolled";
 
 const LazyMobileNav = lazy(() =>
@@ -71,6 +72,7 @@ export function Header() {
   return (
     <>
       <header className="sticky top-0 z-30 border-b border-line bg-canvas">
+        <PromoBar visible={compact} />
         <div
           className={[
             "mx-auto grid max-w-[1680px] grid-cols-[1fr_auto_1fr] items-center gap-4 px-4 sm:px-6 lg:px-8 transition-[height] duration-300",
