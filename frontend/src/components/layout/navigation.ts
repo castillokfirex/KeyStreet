@@ -11,19 +11,7 @@ export interface NavItem {
 export const MAIN_NAV: NavItem[] = [
   { label: "Hombre", to: "/catalogo?silhouette=HIGH" },
   { label: "Mujer", to: "/catalogo?silhouette=LOW" },
-  { label: "Sneakers", to: "/catalogo" },
-  { label: "Novedades", to: "/catalogo?sort=newest" },
   { label: "Sale", to: "/catalogo?discounted=true", highlight: true },
-];
-
-export const CATEGORY_NAV: NavItem[] = [
-  { label: "Low Top", to: "/catalogo?silhouette=LOW" },
-  { label: "High Top", to: "/catalogo?silhouette=HIGH" },
-  { label: "Retro", to: "/catalogo?tags=retro" },
-  { label: "Skate", to: "/catalogo?tags=skate" },
-  { label: "Básquet", to: "/catalogo?tags=basquet" },
-  { label: "Clásicos", to: "/catalogo?tags=clasico" },
-  { label: "Gamuza", to: "/catalogo?tags=gamuza" },
 ];
 
 const SEGMENT_KEYS = ["silhouette", "tags", "discounted"];

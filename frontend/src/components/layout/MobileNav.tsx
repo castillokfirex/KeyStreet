@@ -1,8 +1,8 @@
-import { Search, ShieldCheck } from "lucide-react";
+import { Home, Search, ShieldCheck } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router";
 import { Drawer } from "@/components/ui/Drawer";
-import { CATEGORY_NAV, MAIN_NAV } from "./navigation";
+import { MAIN_NAV } from "./navigation";
 
 export function MobileNav({
   open,
@@ -41,6 +41,16 @@ export function MobileNav({
         </form>
 
         <ul className="flex flex-col">
+          <li>
+            <Link
+              to="/"
+              onClick={onClose}
+              className="flex items-center gap-2 py-3 font-display text-base font-semibold uppercase tracking-label text-ink"
+            >
+              <Home className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
+              <span>Inicio</span>
+            </Link>
+          </li>
           {MAIN_NAV.map((item) => (
             <li key={item.label}>
               <Link
@@ -53,25 +63,6 @@ export function MobileNav({
             </li>
           ))}
         </ul>
-
-        <div className="border-t border-line pt-4">
-          <p className="font-display text-[10px] font-semibold uppercase tracking-nav text-muted">
-            Colecciones
-          </p>
-          <ul className="mt-2 flex flex-col">
-            {CATEGORY_NAV.map((item) => (
-              <li key={item.label}>
-                <Link
-                  to={item.to}
-                  onClick={onClose}
-                  className="block py-2 font-display text-xs uppercase tracking-label text-ink"
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
 
         <Link
           to="/admin/documents"

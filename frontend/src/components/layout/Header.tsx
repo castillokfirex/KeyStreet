@@ -1,9 +1,9 @@
-import { Menu, Search, ShoppingBag, User } from "lucide-react";
+import { Home, Menu, Search, ShoppingBag, User } from "lucide-react";
 import { lazy, Suspense, useState, type FormEvent } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { useCartStore } from "@/stores/cart";
 import { AlternatingLogo } from "./AlternatingLogo";
-import { CATEGORY_NAV, isNavActive, MAIN_NAV, type NavItem } from "./navigation";
+import { isNavActive, MAIN_NAV, type NavItem } from "./navigation";
 import { useScrolled } from "./useScrolled";
 
 const LazyMobileNav = lazy(() =>
@@ -77,8 +77,8 @@ export function Header() {
             compact ? "h-[var(--ks-header-h-compact)]" : "h-[var(--ks-header-h)]",
           ].join(" ")}
         >
-          {/* Izquierda: menú móvil + navegación principal */}
-          <div className="flex min-w-0 items-center">
+          {/* Izquierda: menú móvil + inicio + navegación principal */}
+          <div className="flex min-w-0 items-center gap-1 lg:gap-4">
             <button
               type="button"
               onClick={() => setMobileOpen(true)}
@@ -87,6 +87,16 @@ export function Header() {
             >
               <Menu className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
             </button>
+
+            <Link
+              to="/"
+              aria-label="Inicio"
+              title="Inicio"
+              aria-current={location.pathname === "/" ? "page" : undefined}
+              className={`${ICON_BTN} lg:-ml-2`}
+            >
+              <Home className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
+            </Link>
 
             <nav aria-label="Categorías principales" className="hidden lg:block">
               <ul className="flex items-center gap-6">
@@ -146,17 +156,6 @@ export function Header() {
             </button>
           </div>
         </div>
-
-        {/* Subcategorías: scroll horizontal en móvil */}
-        <nav aria-label="Colecciones" className="border-t border-line">
-          <ul className="no-scrollbar mx-auto flex h-10 max-w-[1680px] items-center gap-6 overflow-x-auto px-4 sm:px-6 lg:justify-center lg:gap-8 lg:px-8">
-            {CATEGORY_NAV.map((item) => (
-              <li key={item.label}>
-                <NavLinkItem item={item} active={active(item.to)} size="sub" />
-              </li>
-            ))}
-          </ul>
-        </nav>
       </header>
       {mobileOpen && (
         <Suspense fallback={null}>
