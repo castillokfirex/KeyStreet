@@ -1,11 +1,29 @@
 import { useQuery } from "@tanstack/react-query";
 import { ArrowRight } from "lucide-react";
+import { lazy, Suspense } from "react";
 import { Link } from "react-router";
 import { TrustStrip } from "@/components/layout/TrustStrip";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { CollectionChips } from "@/features/catalog/CollectionChips";
 import { ProductCard } from "@/features/catalog/ProductCard";
 import { publicApi, queryKeys } from "@/lib/queries";
+
+const LazyEditorialSneakerCarousel = lazy(() =>
+  import("./EditorialSneakerCarousel").then((m) => ({
+    default: m.EditorialSneakerCarousel,
+  })),
+);
+
+function CarouselFallback() {
+  return (
+    <section
+      aria-hidden="true"
+      className="mx-auto max-w-[1680px] px-4 pt-12 sm:px-6 lg:px-8"
+    >
+      <Skeleton className="min-h-[580px] w-full rounded-2xl lg:min-h-[520px]" />
+    </section>
+  );
+}
 
 const CTA_BASE =
   "inline-flex h-12 items-center gap-2 px-6 font-display text-[11px] font-semibold uppercase tracking-nav transition-colors";
@@ -52,6 +70,11 @@ export function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Carrusel editorial de colección (lazy para proteger budget de Home) */}
+      <Suspense fallback={<CarouselFallback />}>
+        <LazyEditorialSneakerCarousel />
+      </Suspense>
 
       {/* Drops destacados */}
       <section className="mx-auto max-w-[1680px] pt-12">
