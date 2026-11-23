@@ -36,9 +36,8 @@ test.describe("Catálogo editorial y descuentos COP", () => {
     await expect(page).toHaveURL(/discounted=true/);
     await expect(cards).toHaveCount(4);
 
-    await page
-      .getByLabel("Ordenar productos")
-      .selectOption("price_asc");
+    await page.getByRole("button", { name: /Ordenar productos/ }).click();
+    await page.getByRole("option", { name: "Precio: menor a mayor" }).click();
     await expect(page).toHaveURL(/sort=price_asc/);
 
     const firstCard = cards.first();

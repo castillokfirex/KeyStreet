@@ -1,8 +1,8 @@
 import { useCatalogViewStore, type CatalogDensity } from "@/stores/catalogView";
 
-const OPTIONS: CatalogDensity[] = [2, 3, 4];
+const OPTIONS: CatalogDensity[] = [3, 4];
 
-/** "VER" 2 / 3 / 4 columnas. Oculto en móvil (siempre 2); la opción 4 solo en desktop. */
+/** "VER" 3 / 4 columnas. Oculto en móvil (siempre 2); la opción 4 solo en desktop. */
 export function DensityToggle() {
   const density = useCatalogViewStore((s) => s.density);
   const setDensity = useCatalogViewStore((s) => s.setDensity);

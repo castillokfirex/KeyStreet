@@ -3,11 +3,18 @@ import { KastLogo } from "@/components/brand/KastLogo";
 
 /** Chips de colección: bloque de color con texto blanco (sin pedir imágenes). */
 const CHIPS = [
-  { label: "Retro", param: ["tags", "retro"], tone: "bg-muted" },
+  // Running, básquet y tenis: siluetas de origen deportivo
+  { label: "Deportivos", param: ["tags", "running,basquet,tenis"], tone: "bg-[#2f4fa8]" },
   { label: "Skate", param: ["tags", "skate"], tone: "bg-forest" },
   { label: "Clásicos", param: ["tags", "clasico"], tone: "bg-ink" },
-  { label: "Sale", param: ["discounted", "true"], tone: "bg-sale-text" },
+  // Pares de línea limpia y materiales premium para outfits más formales
+  { label: "Elegantes", param: ["tags", "premium,minimalista,limpio"], tone: "bg-[#5c1f2a]" },
 ] as const;
+
+/** Nombre legible de una colección a partir del parámetro `tags`. */
+export function collectionLabel(tags: string): string {
+  return CHIPS.find((c) => c.param[0] === "tags" && c.param[1] === tags)?.label ?? tags;
+}
 
 export function CollectionChips() {
   const [searchParams] = useSearchParams();
@@ -20,7 +27,7 @@ export function CollectionChips() {
           return (
             <li key={label}>
               <Link
-                to={`/catalogo?${key}=${value}`}
+                to={`/catalogo?${key}=${encodeURIComponent(value)}`}
                 aria-current={active ? "page" : undefined}
                 className={`group relative block aspect-[4/3] w-[7.25rem] overflow-hidden md:w-[8.25rem] ${tone} ${active ? "outline outline-1 outline-offset-2 outline-ink" : ""}`}
               >

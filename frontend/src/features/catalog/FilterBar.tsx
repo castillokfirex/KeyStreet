@@ -1,7 +1,9 @@
-import { ChevronDown, RotateCcw, X } from "lucide-react";
-import type { ReactNode } from "react";
+import { RotateCcw, X } from "lucide-react";
 import { Chip } from "@/components/ui/Chip";
+import { Dropdown } from "@/components/ui/Dropdown";
+import { formatCop } from "@/lib/money";
 import type { FacetsDto } from "@/lib/types";
+import { collectionLabel } from "./CollectionChips";
 import { DensityToggle } from "./DensityToggle";
 
 export interface FilterState {
@@ -16,21 +18,16 @@ export interface FilterState {
   sort?: string;
 }
 
-const SELECT =
-  "h-10 appearance-none bg-transparent pr-6 font-display text-[10px] font-semibold uppercase tracking-nav text-ink focus:outline-none cursor-pointer";
+/** Topes de precio acordes al catálogo (pares entre ~$350.000 y ~$1.200.000). */
+const PRICE_CAPS = [400000, 550000, 700000, 1000000];
 
-function MinimalSelect({ children }: { children: ReactNode }) {
-  return (
-    <span className="relative inline-flex items-center border-b border-transparent focus-within:border-ink">
-      {children}
-      <ChevronDown
-        className="pointer-events-none absolute right-0 h-3.5 w-3.5 text-muted"
-        strokeWidth={1.5}
-        aria-hidden="true"
-      />
-    </span>
-  );
-}
+const SORT_OPTIONS = [
+  { value: "recommended", label: "Recomendados" },
+  { value: "price_asc", label: "Precio: menor a mayor" },
+  { value: "price_desc", label: "Precio: mayor a menor" },
+  { value: "discount_desc", label: "Mayor descuento" },
+  { value: "newest", label: "Más recientes" },
+];
 
 export function FilterBar({
   facets,
@@ -61,83 +58,71 @@ export function FilterBar({
           <DensityToggle />
 
           {/* Tallas */}
-          <MinimalSelect>
-            <select
-              aria-label="Filtrar por talla EU"
-              value={filters.size ?? ""}
-              onChange={(e) =>
-                onChange({
-                  size: e.target.value ? Number(e.target.value) : undefined,
-                })
-              }
-              className={SELECT}
-            >
-              <option value="">Talla</option>
-              {(facets?.sizes ?? []).map((s) => (
-                <option key={s.sizeEu} value={s.sizeEu}>
-                  EU {s.sizeEu} ({s.count})
-                </option>
-              ))}
-            </select>
-          </MinimalSelect>
+          <Dropdown
+            label="Talla"
+            ariaLabel="Filtrar por talla EU"
+            value={filters.size ? String(filters.size) : ""}
+            options={[
+              { value: "", label: "Todas las tallas" },
+              ...(facets?.sizes ?? []).map((s) => ({
+                value: String(s.sizeEu),
+                label: `EU ${s.sizeEu}`,
+                meta: String(s.count),
+              })),
+            ]}
+            onChange={(v) => onChange({ size: v ? Number(v) : undefined })}
+          />
 
           {/* Marcas */}
-          <MinimalSelect>
-            <select
-              aria-label="Filtrar por marca"
-              value={filters.brand ?? ""}
-              onChange={(e) => onChange({ brand: e.target.value || undefined })}
-              className={SELECT}
-            >
-              <option value="">Marca</option>
-              {(facets?.brands ?? []).map((b) => (
-                <option key={b.slug} value={b.slug}>
-                  {b.name} ({b.count})
-                </option>
-              ))}
-            </select>
-          </MinimalSelect>
+          <Dropdown
+            label="Marca"
+            ariaLabel="Filtrar por marca"
+            value={filters.brand ?? ""}
+            options={[
+              { value: "", label: "Todas las marcas" },
+              ...(facets?.brands ?? []).map((b) => ({
+                value: b.slug,
+                label: b.name,
+                meta: String(b.count),
+              })),
+            ]}
+            onChange={(v) => onChange({ brand: v || undefined })}
+          />
 
           {/* Silueta */}
-          <MinimalSelect>
-            <select
-              aria-label="Filtrar por silueta"
-              value={filters.silhouette ?? ""}
-              onChange={(e) =>
-                onChange({ silhouette: e.target.value || undefined })
-              }
-              className={SELECT}
-            >
-              <option value="">Silueta</option>
-              {(facets?.silhouettes ?? ["LOW", "HIGH"]).map((sil) => (
-                <option key={sil} value={sil}>
-                  {sil === "HIGH"
+          <Dropdown
+            label="Silueta"
+            ariaLabel="Filtrar por silueta"
+            value={filters.silhouette ?? ""}
+            options={[
+              { value: "", label: "Todas las siluetas" },
+              ...(facets?.silhouettes ?? ["LOW", "HIGH"]).map((sil) => ({
+                value: sil,
+                label:
+                  sil === "HIGH"
                     ? "Caña alta (High)"
                     : sil === "MID"
                       ? "Caña media (Mid)"
-                      : "Perfil bajo (Low)"}
-                </option>
-              ))}
-            </select>
-          </MinimalSelect>
+                      : "Perfil bajo (Low)",
+              })),
+            ]}
+            onChange={(v) => onChange({ silhouette: v || undefined })}
+          />
 
           {/* Rango COP */}
-          <MinimalSelect>
-            <select
-              aria-label="Filtrar por precio en COP"
-              value={filters.maxPrice ? String(filters.maxPrice) : ""}
-              onChange={(e) =>
-                onChange({
-                  maxPrice: e.target.value ? Number(e.target.value) : undefined,
-                })
-              }
-              className={SELECT}
-            >
-              <option value="">Precio</option>
-              <option value="185000">Hasta $185.000 COP</option>
-              <option value="200000">Hasta $200.000 COP</option>
-            </select>
-          </MinimalSelect>
+          <Dropdown
+            label="Precio"
+            ariaLabel="Filtrar por precio en COP"
+            value={filters.maxPrice ? String(filters.maxPrice) : ""}
+            options={[
+              { value: "", label: "Cualquier precio" },
+              ...PRICE_CAPS.map((cap) => ({
+                value: String(cap),
+                label: `Hasta ${formatCop(cap)}`,
+              })),
+            ]}
+            onChange={(v) => onChange({ maxPrice: v ? Number(v) : undefined })}
+          />
 
           {/* Solo descuentos */}
           <Chip
@@ -169,40 +154,26 @@ export function FilterBar({
         </div>
 
         {/* Orden */}
-        <div className="flex items-center gap-2">
-          <label
-            htmlFor="catalog-sort"
-            className="font-display text-[10px] font-semibold uppercase tracking-nav text-muted"
-          >
-            Ordenar
-          </label>
-          <MinimalSelect>
-            <select
-              id="catalog-sort"
-              aria-label="Ordenar productos"
-              value={filters.sort ?? "recommended"}
-              onChange={(e) => onChange({ sort: e.target.value })}
-              className={SELECT}
-            >
-              <option value="recommended">Recomendados</option>
-              <option value="price_asc">Precio: menor a mayor</option>
-              <option value="price_desc">Precio: mayor a menor</option>
-              <option value="discount_desc">Mayor descuento</option>
-              <option value="newest">Más recientes</option>
-            </select>
-          </MinimalSelect>
-        </div>
+        <Dropdown
+          label="Ordenar"
+          prefix="Ordenar"
+          ariaLabel="Ordenar productos"
+          align="right"
+          value={filters.sort ?? "recommended"}
+          options={SORT_OPTIONS}
+          onChange={(v) => onChange({ sort: v })}
+        />
       </div>
 
       {(filters.q || filters.tags) && (
         <div className="flex flex-wrap items-center gap-4 pb-3 text-xs text-muted">
           {filters.tags && (
             <span className="inline-flex items-center gap-1.5">
-              Colección: <strong className="font-semibold uppercase text-ink">{filters.tags}</strong>
+              Colección: <strong className="font-semibold uppercase text-ink">{collectionLabel(filters.tags)}</strong>
               <button
                 type="button"
                 onClick={() => onChange({ tags: undefined })}
-                aria-label={`Quitar colección ${filters.tags}`}
+                aria-label={`Quitar colección ${collectionLabel(filters.tags)}`}
                 className="inline-flex h-6 w-6 items-center justify-center hover:text-ink cursor-pointer"
               >
                 <X className="h-3.5 w-3.5" aria-hidden="true" />
