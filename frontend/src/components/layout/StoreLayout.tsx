@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useState } from "react";
 import { Outlet } from "react-router";
 import { LazyKastMascot } from "@/components/brand/LazyKastMascot";
 import { ToastViewport } from "@/components/ui/ToastViewport";
@@ -24,6 +24,9 @@ export function StoreLayout() {
   const openAssistant = useAssistantStore((s) => s.openDrawer);
   const mascotState = useAssistantStore((s) => s.mascotState);
   const bagOpen = useCartStore((s) => s.bagOpen);
+  // Tras abrirla una vez la bolsa queda montada para poder animar su cierre
+  const [bagLoaded, setBagLoaded] = useState(bagOpen);
+  if (bagOpen && !bagLoaded) setBagLoaded(true);
 
   return (
     <div className="flex min-h-screen flex-col bg-canvas text-navy">
@@ -52,7 +55,7 @@ export function StoreLayout() {
         </Suspense>
       )}
 
-      {bagOpen && (
+      {bagLoaded && (
         <Suspense fallback={null}>
           <LazyBagDrawer />
         </Suspense>
