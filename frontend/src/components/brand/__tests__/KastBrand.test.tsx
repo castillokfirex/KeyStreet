@@ -17,7 +17,7 @@ describe("KastLogo & KastMascot", () => {
     );
     expect(screen.getByRole("img", { name: "Koala Kast" })).toBeInTheDocument();
     expect(screen.getByRole("img", { name: "Key Street Editorial" })).toBeInTheDocument();
-    expect(screen.getByText("KEY STREET")).toBeInTheDocument();
+    expect(screen.getByRole("img", { name: "Key Street Editorial" })).toHaveTextContent("KEYSTREET");
   });
 
   it("renders all 6 KastMascot states safely inside LazyMotion", () => {

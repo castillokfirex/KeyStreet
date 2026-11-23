@@ -1,20 +1,35 @@
 @import "tailwindcss";
 
-/* Tipografía de PLAN §9.1 (obligatoria): autohospedada, subset latino, swap. */
+/*
+ * Tipografía autohospedada (subset latino, swap):
+ * - Archivo: display. Grotesca atlética con eje de ancho; expandida (125 %)
+ *   en titulares grandes y normal en navegación y etiquetas.
+ * - Geist: texto corrido, neutra y muy legible en tamaños pequeños.
+ * - Geist Mono: etiquetas técnicas (SKU, tallas, contadores), estilo "tag" de caja.
+ */
 @font-face {
-  font-family: "Plus Jakarta Sans Variable";
+  font-family: "Archivo Variable";
   font-style: normal;
   font-display: swap;
-  font-weight: 200 800;
-  src: url("/fonts/plus-jakarta-sans-latin.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  src: url("/fonts/archivo-latin.woff2") format("woff2-variations");
 }
 
 @font-face {
-  font-family: "Space Grotesk Variable";
+  font-family: "Geist Variable";
   font-style: normal;
   font-display: swap;
-  font-weight: 300 700;
-  src: url("/fonts/space-grotesk-latin.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  src: url("/fonts/geist-latin.woff2") format("woff2-variations");
+}
+
+@font-face {
+  font-family: "Geist Mono Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("/fonts/geist-mono-latin.woff2") format("woff2-variations");
 }
 
 /*
@@ -57,8 +72,9 @@
   --color-kast-error: #a33a2a;
 
   /* Tipografía */
-  --font-display: "Space Grotesk Variable", system-ui, sans-serif;
-  --font-sans: "Plus Jakarta Sans Variable", system-ui, sans-serif;
+  --font-display: "Archivo Variable", system-ui, sans-serif;
+  --font-sans: "Geist Variable", system-ui, sans-serif;
+  --font-mono: "Geist Mono Variable", ui-monospace, monospace;
   --tracking-label: 0.08em; /* etiquetas en mayúsculas */
   --tracking-nav: 0.14em; /* navegación */
   --tracking-wordmark: 0.32em; /* "KEY STREET" */
@@ -249,5 +265,262 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* Titulares expandidos (Archivo al 125 % de ancho) */
+.font-expanded {
+  font-stretch: 125%;
+}
+
+/* Texto en contorno para titulares y fondos tipográficos */
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: var(--outline-w, 1.5px) var(--outline-color, var(--color-ink));
+}
+
+/* Grano fotográfico sutil para superficies grandes */
+.bg-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@keyframes ks-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Entrada escalonada de titulares (solo si el usuario acepta movimiento) */
+@keyframes ks-rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.4em);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ks-rise {
+    animation: ks-rise 700ms var(--ease-editorial) both;
+  }
+}
+
+/* ---- Login: vitrina de Kast ------------------------------------------- */
+@keyframes ks-marquee-y {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes ks-marquee-x {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes ks-bob {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-2deg);
+  }
+  50% {
+    transform: translateY(-6%) rotate(2deg);
+  }
+}
+
+@keyframes ks-spin {
+  to {
+    rotate: 360deg;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ks-marquee-y {
+    animation: ks-marquee-y var(--ks-marquee-duration, 60s) linear infinite;
+  }
+  .ks-marquee-x {
+    animation: ks-marquee-x var(--ks-marquee-duration, 40s) linear infinite;
+  }
+  .ks-marquee-reverse {
+    animation-direction: reverse;
+  }
+  .ks-bob {
+    animation: ks-bob 3.6s ease-in-out infinite;
+  }
+  .ks-spin {
+    animation: ks-spin 16s linear infinite;
+  }
+}
+
+/* ---- Paneles laterales (bolsa, menú, asistente) ----------------------- */
+@keyframes ks-drawer-in {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes ks-drawer-out {
+  from {
+    transform: none;
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes ks-sheet-in-y {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes ks-sheet-out-y {
+  from {
+    transform: none;
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes ks-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes ks-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes ks-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(28px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.ks-drawer-in {
+  animation: ks-drawer-in 480ms var(--ease-editorial) both;
+}
+.ks-drawer-out {
+  animation: ks-drawer-out 320ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+.ks-sheet-in {
+  animation: ks-sheet-in-y 480ms var(--ease-editorial) both;
+}
+.ks-sheet-out {
+  animation: ks-sheet-out-y 320ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+@media (min-width: 640px) {
+  .ks-sheet-in {
+    animation-name: ks-drawer-in;
+  }
+  .ks-sheet-out {
+    animation-name: ks-drawer-out;
+  }
+}
+.ks-fade-in {
+  animation: ks-fade-in 400ms ease-out both;
+}
+.ks-fade-out {
+  animation: ks-fade-out 320ms ease-in both;
+}
+.ks-slide-in {
+  animation: ks-slide-in 520ms var(--ease-editorial) both;
+}
+
+/* Con movimiento reducido las animaciones duran 1 ms: el cierre sigue funcionando */
+@media (prefers-reduced-motion: reduce) {
+  .ks-drawer-in,
+  .ks-drawer-out,
+  .ks-sheet-in,
+  .ks-sheet-out,
+  .ks-fade-in,
+  .ks-fade-out,
+  .ks-slide-in {
+    animation-duration: 1ms;
+    animation-delay: 0ms;
+  }
+}
+
+/* ---- Menús desplegables --------------------------------------------- */
+@keyframes ks-dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ks-dropdown-in {
+    animation: ks-dropdown-in 220ms var(--ease-editorial) both;
+  }
+}
+
+/* ---- Eucalipto de Kast ---------------------------------------------- */
+@keyframes ks-sway {
+  0%,
+  100% {
+    rotate: -2deg;
+  }
+  50% {
+    rotate: 3deg;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ks-sway {
+    animation: ks-sway 6s ease-in-out infinite;
+    transform-origin: 50% 0%;
+  }
+  .ks-sway-slow {
+    animation: ks-sway 9s ease-in-out infinite reverse;
+    transform-origin: 50% 0%;
+  }
+}
+
+/* Marcador lima que se "pinta" detrás de una palabra */
+@keyframes ks-marker {
+  from {
+    transform: scaleX(0) rotate(-1deg);
+  }
+  to {
+    transform: scaleX(1) rotate(-1deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ks-marker {
+    transform-origin: left center;
+    animation: ks-marker 700ms 450ms var(--ease-editorial) both;
   }
 }

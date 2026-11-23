@@ -15,29 +15,15 @@ const rootDir = path.resolve(__dirname, "..");
 // 1. Subsets latinos de fuentes autohospedadas para preload instantáneo
 const fontsDest = path.join(rootDir, "public", "fonts");
 mkdirSync(fontsDest, { recursive: true });
+const fontFile = (pkg, file) =>
+  path.join(rootDir, "node_modules", "@fontsource-variable", pkg, "files", file);
 const fontCopies = [
-  [
-    path.join(
-      rootDir,
-      "node_modules",
-      "@fontsource-variable",
-      "plus-jakarta-sans",
-      "files",
-      "plus-jakarta-sans-latin-wght-normal.woff2",
-    ),
-    path.join(fontsDest, "plus-jakarta-sans-latin.woff2"),
-  ],
-  [
-    path.join(
-      rootDir,
-      "node_modules",
-      "@fontsource-variable",
-      "space-grotesk",
-      "files",
-      "space-grotesk-latin-wght-normal.woff2",
-    ),
-    path.join(fontsDest, "space-grotesk-latin.woff2"),
-  ],
+  // Archivo: display con ejes de peso (100–900) y ancho (62–125 %)
+  [fontFile("archivo", "archivo-latin-standard-normal.woff2"), path.join(fontsDest, "archivo-latin.woff2")],
+  // Geist: texto corrido
+  [fontFile("geist", "geist-latin-wght-normal.woff2"), path.join(fontsDest, "geist-latin.woff2")],
+  // Geist Mono: etiquetas técnicas (SKU, tallas, contadores)
+  [fontFile("geist-mono", "geist-mono-latin-wght-normal.woff2"), path.join(fontsDest, "geist-mono-latin.woff2")],
 ];
 for (const [src, dest] of fontCopies) {
   if (existsSync(src)) {

@@ -75,7 +75,7 @@ function KastSilhouette({
 /**
  * Identidad visual dual de Key Street x Kast:
  * - "isotype": silueta lineal del koala (header, móvil, favicon, marcas de agua)
- * - "wordmark": "KEY STREET" en mayúsculas con tracking amplio
+ * - "wordmark": "KEY ◆ STREET" en Archivo expandido extra grueso con rombo lima
  */
 export function KastLogo({
   variant,
@@ -95,8 +95,13 @@ export function KastLogo({
       className={`inline-flex items-center gap-2.5 select-none ${className}`.trim()}
     >
       {showMark && <KastSilhouette size={size} decorative />}
-      <span className="-mr-[0.32em] font-display text-sm sm:text-base font-semibold uppercase tracking-wordmark leading-none">
-        KEY STREET
+      <span className="inline-flex items-center whitespace-nowrap font-display font-expanded text-[14px] font-black uppercase leading-none tracking-[0.02em] sm:text-[17px]">
+        KEY
+        <span
+          aria-hidden="true"
+          className="mx-[0.22em] inline-block h-[0.38em] w-[0.38em] rotate-45 bg-[#b5d14a]"
+        />
+        STREET
       </span>
     </span>
   );
