@@ -26,6 +26,10 @@ export interface FitProfileState {
     usualSizeEu: number;
     ratios: AnatomicalRatios;
   }) => void;
+  /** Ajusta medidas sueltas conservando las proporciones de la foto. */
+  patchProfile: (
+    patch: Partial<{ heightCm: number; build: BodyBuild; usualSizeEu: number }>,
+  ) => void;
   resetProfile: () => void;
 }
 
@@ -39,8 +43,8 @@ export const useFitProfileStore = create<FitProfileState>()(
       source: "manual",
       setManualProfile: (profile) =>
         set({ ...profile, ratios: null, source: "manual" }),
-      setPhotoProfile: (profile) =>
-        set({ ...profile, source: "photo" }),
+      setPhotoProfile: (profile) => set({ ...profile, source: "photo" }),
+      patchProfile: (patch) => set(patch),
       resetProfile: () =>
         set({
           heightCm: 175,

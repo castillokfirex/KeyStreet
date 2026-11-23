@@ -43,7 +43,7 @@ test.describe("QA 3D por producto", () => {
       await page.waitForTimeout(2000);
       await viewer.screenshot({ path: path.join(OUT, `${slug}.png`) });
 
-      await page.getByRole("button", { name: "Probador 3D", exact: true }).click();
+      await page.getByRole("link", { name: "Probador 3D", exact: true }).click();
       const fitting = page.getByTestId("fitting-room");
       await expect(fitting.locator("canvas")).toBeVisible({ timeout: 30_000 });
       await page.getByRole("button", { name: /Zoom pies/i }).click();
