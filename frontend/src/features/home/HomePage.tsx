@@ -1,20 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Link } from "react-router";
-import { LazyKastMascot } from "@/components/brand/LazyKastMascot";
 import { TrustStrip } from "@/components/layout/TrustStrip";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { CollectionChips } from "@/features/catalog/CollectionChips";
 import { ProductCard } from "@/features/catalog/ProductCard";
 import { publicApi, queryKeys } from "@/lib/queries";
-import { useAssistantStore } from "@/stores/assistant";
 
 const CTA_BASE =
   "inline-flex h-12 items-center gap-2 px-6 font-display text-[11px] font-semibold uppercase tracking-nav transition-colors";
 
 export function HomePage() {
-  const openAssistant = useAssistantStore((s) => s.openDrawer);
-
   const { data: featured, isLoading } = useQuery({
     queryKey: queryKeys.products({ sort: "recommended", page: 0, pageSize: 4 }),
     queryFn: () =>
@@ -25,8 +21,8 @@ export function HomePage() {
     <div>
       {/* Hero editorial sin cargas 3D ni ML */}
       <section className="border-b border-line">
-        <div className="mx-auto grid max-w-[1680px] grid-cols-1 items-end gap-12 px-4 py-16 sm:px-6 sm:py-20 lg:grid-cols-12 lg:px-8 lg:py-24">
-          <div className="space-y-6 lg:col-span-8">
+        <div className="mx-auto max-w-[1680px] px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
+          <div className="space-y-6">
             <p className="font-display text-[10px] font-semibold uppercase tracking-nav text-muted">
               Drop Colombia 2026 · 15 siluetas curadas
             </p>
@@ -52,42 +48,6 @@ export function HomePage() {
               >
                 <span>Ver ofertas 10% – 15% OFF</span>
               </Link>
-            </div>
-          </div>
-
-          {/* Kast: dormido hasta interactuar */}
-          <div className="lg:col-span-4">
-            <div className="flex items-start gap-4 border-t border-line pt-6">
-              <LazyKastMascot state="idle" size={64} title="Kast, mascota de Key Street" />
-              <div className="space-y-2">
-                <h2 className="font-display text-xs font-semibold uppercase tracking-nav text-ink">
-                  Conoce a Kast
-                </h2>
-                <p className="text-xs leading-relaxed text-muted">
-                  Consulta fichas técnicas, hormas y cuidados citando guías reales de la
-                  tienda. Tu foto del probador se procesa local y se borra al instante.
-                </p>
-                <div className="flex flex-wrap gap-x-4 gap-y-2 pt-1">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      openAssistant({
-                        prefill: "¿El Adidas Samba OG tiene horma estrecha?",
-                      })
-                    }
-                    className="inline-flex items-center gap-1.5 font-display text-[10px] font-semibold uppercase tracking-nav text-ink underline underline-offset-4 hover:opacity-60 cursor-pointer"
-                  >
-                    <Sparkles className="h-3.5 w-3.5" strokeWidth={1.5} aria-hidden="true" />
-                    <span>Preguntar sobre hormas</span>
-                  </button>
-                  <Link
-                    to="/producto/nike-air-force-1-low-07-blanco"
-                    className="font-display text-[10px] font-semibold uppercase tracking-nav text-ink underline underline-offset-4 hover:opacity-60"
-                  >
-                    Probar 3D en Air Force 1
-                  </Link>
-                </div>
-              </div>
             </div>
           </div>
         </div>
