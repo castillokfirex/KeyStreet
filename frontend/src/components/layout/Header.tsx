@@ -1,10 +1,11 @@
-import { Home, Menu, Search, ShoppingBag, User } from "lucide-react";
-import { lazy, Suspense, useState, type FormEvent } from "react";
-import { Link, useLocation, useNavigate } from "react-router";
+import { Home, Menu, ShoppingBag, User } from "lucide-react";
+import { lazy, Suspense, useState } from "react";
+import { Link, useLocation } from "react-router";
 import { useCartStore } from "@/stores/cart";
 import { AlternatingLogo } from "./AlternatingLogo";
 import { isNavActive, MAIN_NAV, type NavItem } from "./navigation";
 import { PromoBar } from "./PromoBar";
+import { SearchBox } from "./SearchBox";
 import { useScrolled } from "./useScrolled";
 
 const LazyMobileNav = lazy(() =>
@@ -50,9 +51,7 @@ function NavLinkItem({
 
 export function Header() {
   const location = useLocation();
-  const navigate = useNavigate();
   const compact = useScrolled(40);
-  const [searchValue, setSearchValue] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const itemsCount = useCartStore((s) =>
@@ -63,11 +62,6 @@ export function Header() {
   const active = (to: string) =>
     isNavActive(to, location.pathname, location.search);
 
-  const handleSearch = (e: FormEvent) => {
-    e.preventDefault();
-    const q = searchValue.trim();
-    navigate(q ? `/catalogo?q=${encodeURIComponent(q)}` : "/catalogo");
-  };
 
   return (
     <>
@@ -103,8 +97,36 @@ export function Header() {
             <nav aria-label="Categorías principales" className="hidden lg:block">
               <ul className="flex items-center gap-6">
                 {MAIN_NAV.map((item) => (
-                  <li key={item.label}>
+                  <li key={item.label} className="group/nav relative">
                     <NavLinkItem item={item} active={active(item.to)} size="main" />
+                    {item.children && (
+                      <div className="invisible absolute left-1/2 top-full z-40 -translate-x-1/2 pt-2 opacity-0 transition-[opacity,visibility,transform] duration-200 ease-editorial group-hover/nav:visible group-hover/nav:opacity-100 group-focus-within/nav:visible group-focus-within/nav:opacity-100">
+                        <ul
+                          aria-label={`${item.label} por categoría`}
+                          className="min-w-[11rem] translate-y-1 border border-line bg-canvas py-1.5 shadow-[0_22px_48px_-24px_rgb(17_17_17/0.45)] transition-transform duration-200 ease-editorial group-hover/nav:translate-y-0 group-focus-within/nav:translate-y-0"
+                        >
+                          {item.children.map((child) => (
+                            <li key={child.label}>
+                              <Link
+                                to={child.to}
+                                aria-current={active(child.to) ? "page" : undefined}
+                                className="group/sub mx-1.5 flex h-10 items-center justify-between gap-6 px-3 font-display text-[10px] font-semibold uppercase tracking-nav text-ink transition-colors hover:bg-surface aria-[current=page]:text-sale-text"
+                              >
+                                <span>
+                                  {item.label} {child.label}
+                                </span>
+                                <span
+                                  aria-hidden="true"
+                                  className="-translate-x-1 text-sale-text opacity-0 transition-all duration-200 group-hover/sub:translate-x-0 group-hover/sub:opacity-100"
+                                >
+                                  →
+                                </span>
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -116,21 +138,7 @@ export function Header() {
 
           {/* Derecha: búsqueda, cuenta, bolsa */}
           <div className="-mr-2 flex items-center justify-end gap-1">
-            <form
-              onSubmit={handleSearch}
-              role="search"
-              className="mr-2 hidden items-center gap-2 border-b border-line focus-within:border-ink md:flex"
-            >
-              <Search className="h-4 w-4 text-muted" strokeWidth={1.5} aria-hidden="true" />
-              <input
-                type="search"
-                value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)}
-                placeholder="Buscar modelo o marca"
-                aria-label="Buscar silueta o marca"
-                className="h-9 w-32 bg-transparent text-xs text-ink placeholder:text-muted focus:outline-none lg:w-40"
-              />
-            </form>
+            <SearchBox />
 
             <Link
               to="/admin/documents"

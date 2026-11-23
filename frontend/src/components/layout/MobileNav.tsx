@@ -60,6 +60,21 @@ export function MobileNav({
               >
                 {item.label}
               </Link>
+              {item.children && (
+                <ul className="mb-2 ml-3 border-l border-line pl-4">
+                  {item.children.map((child) => (
+                    <li key={child.label}>
+                      <Link
+                        to={child.to}
+                        onClick={onClose}
+                        className="block py-2 font-display text-xs font-semibold uppercase tracking-label text-muted hover:text-ink"
+                      >
+                        {item.label} {child.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </li>
           ))}
         </ul>

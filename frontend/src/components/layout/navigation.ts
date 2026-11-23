@@ -6,12 +6,22 @@ export interface NavItem {
   label: string;
   to: string;
   highlight?: boolean;
+  /** Submenú que se despliega al pasar el mouse (o con el teclado). */
+  children?: NavItem[];
 }
 
 export const MAIN_NAV: NavItem[] = [
   { label: "Hombre", to: "/catalogo?silhouette=HIGH" },
   { label: "Mujer", to: "/catalogo?silhouette=LOW" },
-  { label: "Sale", to: "/catalogo?discounted=true", highlight: true },
+  {
+    label: "Sale",
+    to: "/catalogo?discounted=true",
+    highlight: true,
+    children: [
+      { label: "Hombre", to: "/catalogo?discounted=true&silhouette=HIGH" },
+      { label: "Mujer", to: "/catalogo?discounted=true&silhouette=LOW" },
+    ],
+  },
 ];
 
 const SEGMENT_KEYS = ["silhouette", "tags", "discounted"];
