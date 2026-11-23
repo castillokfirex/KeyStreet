@@ -167,7 +167,7 @@ $h = @{ 'X-Tenant-Slug' = 'key-street' }
 $login = Invoke-RestMethod -Method Post -Uri http://localhost:8080/api/v1/auth/login -Headers $h -ContentType 'application/json' -Body '{"email":"admin@keystreet.co","password":"KeyStreet2026!"}'
 $auth = @{ Authorization = "Bearer $($login.accessToken)"; 'X-Tenant-Slug' = 'key-street' }
 (Invoke-RestMethod "http://localhost:8080/api/v1/public/products?discounted=true" -Headers $h).totalItems   # 4
-(Invoke-RestMethod "http://localhost:8080/api/v1/public/products?pageSize=48" -Headers $h).totalItems       # 10
+(Invoke-RestMethod "http://localhost:8080/api/v1/public/products?pageSize=48" -Headers $h).totalItems       # 15
 curl.exe -s -o NUL -w "%{http_code}`n" http://localhost:8080/api/v1/admin/documents -H "X-Tenant-Slug: key-street"   # 401
 curl.exe -s -o NUL -w "%{http_code}`n" -X POST http://localhost:8080/api/v1/admin/documents -H "Authorization: Bearer $($login.accessToken)" -H "X-Tenant-Slug: key-street" -F "file=@README.md;type=application/pdf"   # 415
 ```
