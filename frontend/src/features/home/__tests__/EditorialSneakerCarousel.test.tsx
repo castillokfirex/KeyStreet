@@ -78,7 +78,7 @@ describe("EditorialSneakerCarousel", () => {
     renderCarousel(products);
 
     expect(screen.getByText("01 / 03")).toBeInTheDocument();
-    expect(screen.getByText("Modelo Editorial 1")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Modelo Editorial 1" })).toBeInTheDocument();
     expect(screen.getByText("$187.000 COP")).toBeInTheDocument();
     expect(screen.getByText("$220.000 COP")).toBeInTheDocument();
 

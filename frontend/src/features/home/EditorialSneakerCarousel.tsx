@@ -7,126 +7,32 @@ import {
   useMemo,
   useRef,
   useState,
+  type CSSProperties,
   type FocusEvent,
   type KeyboardEvent,
   type TouchEvent,
 } from "react";
 import { Link } from "react-router";
+import { KastLogo } from "@/components/brand/KastLogo";
 import { MotionScope } from "@/components/motion/MotionScope";
 import { Skeleton } from "@/components/ui/Skeleton";
-import { ProductImage } from "@/features/catalog/ProductImage";
 import { formatCop } from "@/lib/money";
 import { publicApi, queryKeys } from "@/lib/queries";
 import type { ProductSummaryDto } from "@/lib/types";
 
-const AUTOPLAY_MS = 6000;
+const AUTOPLAY_MS = 6500;
 const SHOWCASE_LIMIT = 6;
 const SWIPE_THRESHOLD_PX = 40;
+const EASE = [0.2, 0, 0, 1] as const;
 
-interface SlidePalette {
-  id: string;
-  bg: string;
-  spotlight: string;
-  border: string;
-  text: string;
-  muted: string;
-  accent: string;
-  ctaBg: string;
-  ctaText: string;
-  controlBg: string;
-  controlBorder: string;
-  isLight: boolean;
-}
-
-const SLIDE_PALETTES: readonly SlidePalette[] = [
-  {
-    id: "carbon",
-    bg: "#111315",
-    spotlight: "#23272D",
-    border: "rgba(255, 255, 255, 0.10)",
-    text: "#FFFFFF",
-    muted: "#A1A8B3",
-    accent: "#E5E7EB",
-    ctaBg: "#FFFFFF",
-    ctaText: "#111315",
-    controlBg: "rgba(255, 255, 255, 0.08)",
-    controlBorder: "rgba(255, 255, 255, 0.16)",
-    isLight: false,
-  },
-  {
-    id: "slate",
-    bg: "#24272B",
-    spotlight: "#383D44",
-    border: "rgba(255, 255, 255, 0.12)",
-    text: "#F8FAFC",
-    muted: "#C4CAD2",
-    accent: "#DCE2EA",
-    ctaBg: "#F8FAFC",
-    ctaText: "#111315",
-    controlBg: "rgba(255, 255, 255, 0.09)",
-    controlBorder: "rgba(255, 255, 255, 0.18)",
-    isLight: false,
-  },
-  {
-    id: "espresso",
-    bg: "#2C2520",
-    spotlight: "#433830",
-    border: "rgba(214, 206, 199, 0.18)",
-    text: "#FAF7F4",
-    muted: "#D6CEC7",
-    accent: "#E8DFD7",
-    ctaBg: "#FAF7F4",
-    ctaText: "#2C2520",
-    controlBg: "rgba(214, 206, 199, 0.10)",
-    controlBorder: "rgba(214, 206, 199, 0.22)",
-    isLight: false,
-  },
-  {
-    id: "bone",
-    bg: "#F5F6F8",
-    spotlight: "#FFFFFF",
-    border: "#E6E8EC",
-    text: "#0F172A",
-    muted: "#475569",
-    accent: "#0F172A",
-    ctaBg: "#0F172A",
-    ctaText: "#FFFFFF",
-    controlBg: "rgba(15, 23, 42, 0.05)",
-    controlBorder: "rgba(15, 23, 42, 0.14)",
-    isLight: true,
-  },
-  {
-    id: "forest",
-    bg: "#16302B",
-    spotlight: "#234B43",
-    border: "rgba(255, 255, 255, 0.12)",
-    text: "#F7F9F7",
-    muted: "#BDD1CB",
-    accent: "#DCE9E5",
-    ctaBg: "#F7F9F7",
-    ctaText: "#16302B",
-    controlBg: "rgba(255, 255, 255, 0.08)",
-    controlBorder: "rgba(255, 255, 255, 0.18)",
-    isLight: false,
-  },
-  {
-    id: "navy",
-    bg: "#0F172A",
-    spotlight: "#1E293B",
-    border: "rgba(255, 255, 255, 0.12)",
-    text: "#F8FAFC",
-    muted: "#94A3B8",
-    accent: "#CBD5E1",
-    ctaBg: "#F8FAFC",
-    ctaText: "#0F172A",
-    controlBg: "rgba(255, 255, 255, 0.08)",
-    controlBorder: "rgba(255, 255, 255, 0.16)",
-    isLight: false,
-  },
-];
+/** Color de fondo de cada lámina (tonos profundos de la marca). */
+const SLIDE_TONES = ["#1F3A2E", "#1B2A44", "#5C1F2A", "#2E241C", "#161616", "#3E4A2A"] as const;
+/** Fondo de las fotos de producto: el arco lo iguala para que no se vea el recorte. */
+const PHOTO_BG = "#ECECEA";
+const RESPONSIVE_FILE = /^(.*)\.(480|960|1440)\.(webp|avif)$/;
 
 /**
- * Selecciona hasta `limit` siluetas reales priorizando variedad de marca/silueta
+ * Selecciona hasta `limit` siluetas reales priorizando variedad de marca
  * y modelos con fotografía lista.
  */
 export function curateShowcaseProducts(
@@ -154,7 +60,6 @@ export function curateShowcaseProducts(
       picked.push(item);
     }
   }
-
   for (const item of sorted) {
     if (picked.length >= limit) break;
     if (!pickedIds.has(item.id)) {
@@ -162,41 +67,44 @@ export function curateShowcaseProducts(
       picked.push(item);
     }
   }
-
   return picked;
 }
 
-function formatCounter(index: number, total: number): string {
-  const pad = (n: number) => String(n).padStart(2, "0");
-  return `${pad(index + 1)} / ${pad(total)}`;
+const pad = (n: number) => String(n).padStart(2, "0");
+
+function photoSrc(p: ProductSummaryDto, width: 480 | 960 = 960) {
+  const file = p.images?.ready ? p.images.files[0] : undefined;
+  if (!file) return null;
+  const match = RESPONSIVE_FILE.exec(file);
+  const stem = match ? match[1] : null;
+  return {
+    src: stem ? `${p.images.basePath}${stem}.${width}.webp` : `${p.images.basePath}${file}`,
+    srcSet: stem
+      ? [480, 960, 1440].map((w) => `${p.images.basePath}${stem}.${w}.webp ${w}w`).join(", ")
+      : undefined,
+  };
+}
+
+function silhouetteLabel(s: string) {
+  if (s === "HIGH") return "Caña alta";
+  if (s === "MID") return "Caña media";
+  return "Perfil bajo";
 }
 
 function EditorialShowcaseSkeleton() {
   return (
     <section
       aria-label="Colección editorial destacada"
-      className="mx-auto max-w-[1680px] px-4 pt-12 sm:px-6 lg:px-8"
+      className="mx-auto max-w-[1680px] px-4 pt-14 sm:px-6 lg:px-8"
     >
-      <div className="min-h-[580px] overflow-hidden rounded-2xl border border-line bg-surface lg:min-h-[520px]">
-        <div className="grid h-full min-h-[580px] grid-cols-1 items-center gap-8 p-6 sm:p-10 lg:min-h-[520px] lg:grid-cols-12 lg:p-14">
-          <div className="space-y-4 lg:col-span-6">
-            <Skeleton className="h-3 w-40" />
-            <Skeleton className="h-10 w-3/4" />
-            <Skeleton className="h-16 w-full max-w-md" />
-            <Skeleton className="h-8 w-44" />
-            <Skeleton className="h-12 w-48" />
-          </div>
-          <div className="flex items-center justify-center lg:col-span-6">
-            <Skeleton className="aspect-[4/5] w-full max-w-[320px] rounded-xl" />
-          </div>
-        </div>
-      </div>
+      <Skeleton className="mb-5 h-6 w-64" />
+      <Skeleton className="min-h-[600px] w-full lg:min-h-[560px]" />
     </section>
   );
 }
 
 function CarouselInner({ products }: { products: ProductSummaryDto[] }) {
-  const reducedMotion = useReducedMotion();
+  const reducedMotion = useReducedMotion() ?? false;
   const [activeIndex, setActiveIndex] = useState(0);
   const [direction, setDirection] = useState<1 | -1>(1);
   const [paused, setPaused] = useState(false);
@@ -206,7 +114,8 @@ function CarouselInner({ products }: { products: ProductSummaryDto[] }) {
   const count = products.length;
   const safeIndex = count > 0 ? activeIndex % count : 0;
   const current = products[safeIndex];
-  const palette = SLIDE_PALETTES[safeIndex % SLIDE_PALETTES.length];
+  const tone = SLIDE_TONES[safeIndex % SLIDE_TONES.length];
+  const photo = current ? photoSrc(current) : null;
 
   const goTo = useCallback(
     (nextIndex: number, dir?: 1 | -1) => {
@@ -217,31 +126,14 @@ function CarouselInner({ products }: { products: ProductSummaryDto[] }) {
     },
     [count, safeIndex],
   );
+  const handleNext = useCallback(() => goTo(safeIndex + 1, 1), [goTo, safeIndex]);
+  const handlePrev = useCallback(() => goTo(safeIndex - 1, -1), [goTo, safeIndex]);
 
-  const handleNext = useCallback(() => {
-    goTo(safeIndex + 1, 1);
-  }, [goTo, safeIndex]);
-
-  const handlePrev = useCallback(() => {
-    goTo(safeIndex - 1, -1);
-  }, [goTo, safeIndex]);
-
-  useEffect(() => {
-    if (paused || reducedMotion || count <= 1) return;
-    const timer = window.setInterval(() => {
-      setDirection(1);
-      setActiveIndex((prev) => (prev + 1) % count);
-    }, AUTOPLAY_MS);
-    return () => window.clearInterval(timer);
-  }, [paused, reducedMotion, count, safeIndex]);
+  const running = !paused && !reducedMotion && count > 1;
 
   const handleBlurCapture = (e: FocusEvent<HTMLElement>) => {
-    const nextTarget = e.relatedTarget as Node | null;
-    if (!sectionRef.current?.contains(nextTarget)) {
-      setPaused(false);
-    }
+    if (!sectionRef.current?.contains(e.relatedTarget as Node | null)) setPaused(false);
   };
-
   const handleKeyDown = (e: KeyboardEvent<HTMLElement>) => {
     if (e.key === "ArrowRight") {
       e.preventDefault();
@@ -251,33 +143,39 @@ function CarouselInner({ products }: { products: ProductSummaryDto[] }) {
       handlePrev();
     }
   };
-
   const handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
     touchStartX.current = e.touches[0]?.clientX ?? null;
   };
-
   const handleTouchEnd = (e: TouchEvent<HTMLDivElement>) => {
     if (touchStartX.current === null) return;
-    const endX = e.changedTouches[0]?.clientX ?? touchStartX.current;
-    const delta = endX - touchStartX.current;
+    const delta = (e.changedTouches[0]?.clientX ?? touchStartX.current) - touchStartX.current;
     touchStartX.current = null;
     if (Math.abs(delta) < SWIPE_THRESHOLD_PX) return;
     if (delta < 0) handleNext();
     else handlePrev();
   };
 
+  // Precarga de la siguiente foto
+  useEffect(() => {
+    if (count < 2) return;
+    const next = photoSrc(products[(safeIndex + 1) % count]);
+    if (!next) return;
+    const img = new Image();
+    if (next.srcSet) img.srcset = next.srcSet;
+    img.src = next.src;
+  }, [count, products, safeIndex]);
+
   if (!current) return null;
 
-  const silhouetteLabel =
-    current.silhouette === "HIGH"
-      ? "HIGH TOP"
-      : current.silhouette === "LOW"
-        ? "LOW TOP"
-        : current.silhouette || "ARCHIVO";
+  const textMotion = {
+    initial: reducedMotion ? { opacity: 0 } : { opacity: 0, x: direction * 28 },
+    animate: { opacity: 1, x: 0 },
+    exit: reducedMotion ? { opacity: 0 } : { opacity: 0, x: direction * -20 },
+    transition: { duration: reducedMotion ? 0.15 : 0.5, ease: EASE },
+  };
 
-  const microLabel = current.badge
-    ? `${current.badge} · ${silhouetteLabel}`
-    : `CURADURÍA ESTUDIO · ${silhouetteLabel}`;
+  const arrowBtn =
+    "flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-ink/15 bg-canvas text-ink transition-all duration-300 hover:-translate-y-0.5 hover:border-ink hover:bg-ink hover:text-canvas";
 
   return (
     <section
@@ -289,315 +187,207 @@ function CarouselInner({ products }: { products: ProductSummaryDto[] }) {
       onFocusCapture={() => setPaused(true)}
       onBlurCapture={handleBlurCapture}
       onKeyDown={handleKeyDown}
-      className="mx-auto max-w-[1680px] px-4 pt-12 sm:px-6 lg:px-8"
+      className="mx-auto max-w-[1680px] px-4 pt-14 sm:px-6 lg:px-8"
     >
+      {/* Encabezado de sección */}
+      <div className="mb-5 flex items-end justify-between gap-4">
+        <div>
+          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted">
+            Colección de la semana
+          </p>
+          <h2 className="mt-1 font-display font-expanded text-xl font-black uppercase tracking-[-0.02em] text-ink sm:text-2xl">
+            Selección Key Street
+          </h2>
+        </div>
+        <div className="flex gap-2">
+          <button type="button" onClick={handlePrev} aria-label="Silueta anterior" className={arrowBtn}>
+            <ChevronLeft className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
+          </button>
+          <button type="button" onClick={handleNext} aria-label="Siguiente silueta" className={arrowBtn}>
+            <ChevronRight className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
+          </button>
+        </div>
+      </div>
+
+      {/* Lámina */}
       <div
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
-        style={{
-          backgroundColor: palette.bg,
-          borderColor: palette.border,
-          color: palette.text,
-        }}
-        className="relative min-h-[580px] overflow-hidden rounded-2xl border transition-colors duration-700 ease-out lg:min-h-[520px]"
+        style={{ backgroundColor: tone }}
+        className="relative overflow-hidden text-white transition-colors duration-700"
       >
-        {/* Iluminación radial de estudio detrás del zapato */}
-        <div
-          aria-hidden="true"
-          style={{
-            background: `radial-gradient(circle at 72% 48%, ${palette.spotlight} 0%, transparent 64%)`,
-          }}
-          className="pointer-events-none absolute inset-0 transition-opacity duration-700"
-        />
+        {/* Número gigante de fondo */}
+        <AnimatePresence initial={false}>
+          <m.span
+            key={`n-${current.id}`}
+            aria-hidden="true"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.7, ease: EASE }}
+            className="text-outline pointer-events-none absolute -bottom-[0.18em] left-4 select-none font-display font-expanded text-[clamp(9rem,22vw,20rem)] font-black leading-none sm:left-8"
+            style={{ "--outline-color": "rgba(255,255,255,0.13)", "--outline-w": "2px" } as CSSProperties}
+          >
+            {pad(safeIndex + 1)}
+          </m.span>
+        </AnimatePresence>
 
-        {/* Contenido principal con altura fija para CLS < 0.05 */}
-        <div className="relative z-10 grid min-h-[520px] grid-cols-1 items-center gap-8 px-6 pb-16 pt-8 sm:px-10 sm:pt-10 lg:min-h-[520px] lg:grid-cols-12 lg:gap-10 lg:px-16 lg:pb-16 lg:pt-12">
-          {/* Columna izquierda: tipografía editorial */}
-          <div className="order-2 flex flex-col justify-center lg:order-1 lg:col-span-6">
+        <div className="relative grid min-h-[600px] grid-cols-1 items-center gap-8 px-6 py-10 sm:px-10 lg:min-h-[560px] lg:grid-cols-12 lg:gap-6 lg:px-14 lg:py-12">
+          {/* Texto */}
+          <div className="order-2 lg:order-1 lg:col-span-6">
             <AnimatePresence mode="wait" initial={false}>
-              <m.div
-                key={current.id}
-                initial={
-                  reducedMotion
-                    ? { opacity: 0 }
-                    : { opacity: 0, x: direction * 20 }
-                }
-                animate={{ opacity: 1, x: 0 }}
-                exit={
-                  reducedMotion
-                    ? { opacity: 0 }
-                    : { opacity: 0, x: direction * -16 }
-                }
-                transition={{
-                  duration: reducedMotion ? 0.15 : 0.45,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-                className="space-y-5"
-              >
-                {/* Micro-etiqueta y contador */}
-                <div className="flex flex-wrap items-center gap-3">
-                  <span
-                    style={{ color: palette.muted }}
-                    className="font-display text-[10px] font-semibold uppercase tracking-nav"
-                  >
-                    {microLabel}
-                  </span>
-                  <span
-                    aria-hidden="true"
-                    style={{ backgroundColor: palette.border }}
-                    className="h-3 w-px"
-                  />
-                  <span
-                    style={{ color: palette.accent }}
-                    className="font-display text-[10px] font-semibold uppercase tracking-nav tabular-nums"
-                  >
-                    {formatCounter(safeIndex, count)}
-                  </span>
-                </div>
+              <m.div key={current.id} {...textMotion} className="space-y-5">
+                <p className="flex flex-wrap items-center gap-3 font-mono text-[11px] uppercase tracking-[0.14em] text-white/60">
+                  <span className="tabular-nums text-white">{`${pad(safeIndex + 1)} / ${pad(count)}`}</span>
+                  <span aria-hidden="true" className="h-3 w-px bg-white/25" />
+                  <span>{current.badge ?? "Curaduría Key Street"}</span>
+                  <span aria-hidden="true">·</span>
+                  <span>{silhouetteLabel(current.silhouette)}</span>
+                </p>
 
-                {/* Marca + Modelo */}
-                <div className="space-y-2">
-                  <p
-                    style={{ color: palette.muted }}
-                    className="font-display text-xs font-semibold uppercase tracking-nav"
-                  >
+                <div>
+                  <p className="font-mono text-xs uppercase tracking-[0.16em] text-[#c9e265]">
                     {current.brand}
                   </p>
-                  <h2 className="max-w-xl font-display text-2xl font-semibold uppercase leading-[1.06] tracking-tight sm:text-4xl lg:text-[2.75rem]">
+                  <h3 className="mt-2 max-w-xl font-display font-expanded text-3xl font-black uppercase leading-[0.95] tracking-[-0.02em] sm:text-4xl lg:text-[2.9rem]">
                     {current.name}
-                  </h2>
+                  </h3>
                 </div>
 
-                {/* Descripción corta */}
-                <p
-                  style={{ color: palette.muted }}
-                  className="line-clamp-3 max-w-lg text-sm leading-relaxed"
-                >
+                <p className="line-clamp-3 max-w-md text-sm leading-relaxed text-white/70">
                   {current.shortDescription}
                 </p>
 
-                {/* Precio formateado COP */}
-                <div className="flex flex-wrap items-baseline gap-3 pt-1">
-                  <span className="font-display text-xl font-semibold tracking-tight tabular-nums sm:text-2xl">
+                <div className="flex flex-wrap items-baseline gap-3">
+                  <span className="font-display text-2xl font-bold tabular-nums">
                     {formatCop(current.finalPriceCop)}
                   </span>
                   {current.hasDiscount && (
                     <>
-                      <span
-                        style={{ color: palette.muted }}
-                        className="font-display text-sm line-through opacity-75 tabular-nums"
-                      >
+                      <span className="font-mono text-sm text-white/45 line-through tabular-nums">
                         {formatCop(current.originalPriceCop)}
                       </span>
-                      <span
-                        style={{
-                          backgroundColor: palette.controlBg,
-                          borderColor: palette.controlBorder,
-                          color: palette.accent,
-                        }}
-                        className="rounded-full border px-2.5 py-0.5 font-display text-[10px] font-semibold uppercase tracking-nav"
-                      >
-                        -{current.discountPercent}% OFF
+                      <span className="bg-[#c9e265] px-2 py-0.5 font-mono text-[11px] font-semibold text-ink">
+                        −{current.discountPercent}%
                       </span>
                     </>
                   )}
                 </div>
 
-                {/* CTA minimalista */}
-                <div className="pt-2">
-                  <Link
-                    to={`/producto/${current.slug}`}
-                    style={{
-                      backgroundColor: palette.ctaBg,
-                      color: palette.ctaText,
-                    }}
-                    className="inline-flex h-12 items-center gap-2.5 rounded-full px-7 font-display text-[11px] font-semibold uppercase tracking-nav transition-opacity hover:opacity-85 focus-visible:outline-2 focus-visible:outline-offset-2"
-                  >
-                    <span>Explorar silueta</span>
-                    <ArrowRight className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
-                  </Link>
-                </div>
+                <Link
+                  to={`/producto/${current.slug}`}
+                  className="group relative isolate inline-flex h-12 items-center gap-2 overflow-hidden bg-white px-6 font-display text-[11px] font-semibold uppercase tracking-nav text-ink"
+                >
+                  <span
+                    aria-hidden="true"
+                    className="absolute inset-0 -z-10 origin-left scale-x-0 bg-[#c9e265] transition-transform duration-500 ease-editorial group-hover:scale-x-100"
+                  />
+                  Explorar silueta
+                  <ArrowRight
+                    className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1.5"
+                    aria-hidden="true"
+                  />
+                </Link>
               </m.div>
             </AnimatePresence>
           </div>
 
-          {/* Columna derecha: zapato protagonista con foco de estudio y sombra de piso */}
-          <div className="order-1 flex items-center justify-center lg:order-2 lg:col-span-6">
-            <div className="relative flex w-full max-w-[300px] items-center justify-center sm:max-w-[340px] lg:max-w-[370px]">
-              {/* Halo de luz de estudio detrás del calzado */}
-              <div
-                aria-hidden="true"
-                style={{
-                  background: `radial-gradient(circle, ${palette.spotlight} 0%, transparent 72%)`,
-                }}
-                className="pointer-events-none absolute -inset-8 rounded-full opacity-90 blur-2xl"
-              />
-
-              <AnimatePresence mode="wait" initial={false}>
+          {/* Foto dentro de un arco del mismo gris que el fondo de la foto */}
+          <div className="order-1 flex justify-center lg:order-2 lg:col-span-6 lg:justify-end">
+            <div
+              className="relative aspect-[4/5] w-[min(78vw,380px)] overflow-hidden rounded-t-[999px] lg:w-[min(32vw,420px)]"
+              style={{ backgroundColor: PHOTO_BG }}
+            >
+              <AnimatePresence initial={false} mode="popLayout">
                 <m.div
                   key={current.id}
+                  className="absolute inset-0"
                   initial={
                     reducedMotion
                       ? { opacity: 0 }
-                      : { opacity: 0, y: 16, scale: 0.96 }
+                      : { clipPath: "inset(100% 0% 0% 0%)", scale: 1.12 }
                   }
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={
-                    reducedMotion
-                      ? { opacity: 0 }
-                      : { opacity: 0, y: -12, scale: 0.97 }
-                  }
-                  transition={{
-                    duration: reducedMotion ? 0.15 : 0.55,
-                    ease: [0.22, 1, 0.36, 1],
-                  }}
-                  className="relative w-full"
+                  animate={{ clipPath: "inset(0% 0% 0% 0%)", scale: 1, opacity: 1 }}
+                  exit={{ opacity: 0, transition: { duration: 0.3, delay: 0.25 } }}
+                  transition={{ duration: 0.8, ease: EASE }}
                 >
-                  <Link
-                    to={`/producto/${current.slug}`}
-                    aria-label={`Ver detalles de ${current.brand} ${current.name}`}
-                    className="group block focus-visible:outline-2 focus-visible:outline-offset-4"
-                  >
-                    <div
-                      style={{ borderColor: palette.border }}
-                      className="overflow-hidden rounded-xl border shadow-[0_24px_48px_rgba(0,0,0,0.28)] transition-transform duration-500 ease-out group-hover:-translate-y-1"
-                    >
-                      <ProductImage
-                        images={current.images}
-                        alt={`${current.brand} ${current.name}`}
-                        priority={safeIndex === 0}
-                        sizes="(max-width: 1024px) 85vw, 370px"
-                        className="aspect-[4/5] w-full"
-                      />
+                  {photo ? (
+                    <img
+                      src={photo.src}
+                      srcSet={photo.srcSet}
+                      sizes="(min-width: 1024px) 32vw, 78vw"
+                      alt={current.name}
+                      loading="lazy"
+                      decoding="async"
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center text-ink/10">
+                      <KastLogo variant="isotype" size={120} title={current.name} />
                     </div>
-                  </Link>
-
-                  {/* Sombra de piso suave tipo estudio */}
-                  <div
-                    aria-hidden="true"
-                    className={[
-                      "pointer-events-none mx-auto mt-4 h-4 w-3/4 rounded-full blur-xl",
-                      palette.isLight ? "bg-slate-900/20" : "bg-black/60",
-                    ].join(" ")}
-                  />
+                  )}
                 </m.div>
               </AnimatePresence>
+              <span className="absolute bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap bg-ink px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-white">
+                {current.colorway ?? current.brand}
+              </span>
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Flechas laterales discretas */}
-        {count > 1 && (
-          <>
+      {/* Miniaturas con progreso */}
+      <div
+        role="tablist"
+        aria-label="Elegir silueta"
+        className="no-scrollbar mt-3 flex gap-2 overflow-x-auto"
+      >
+        {products.map((p, i) => {
+          const selected = i === safeIndex;
+          const thumb = photoSrc(p, 480);
+          return (
             <button
+              key={p.id}
               type="button"
-              onClick={handlePrev}
-              aria-label="Silueta anterior"
-              style={{
-                backgroundColor: palette.controlBg,
-                borderColor: palette.controlBorder,
-                color: palette.text,
-              }}
-              className="absolute left-3 top-1/2 z-20 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border backdrop-blur-sm transition-opacity hover:opacity-75 cursor-pointer sm:inline-flex"
+              role="tab"
+              aria-selected={selected}
+              aria-label={`Ver ${p.name}`}
+              onClick={() => goTo(i)}
+              className={`group relative flex min-w-[10.5rem] flex-1 cursor-pointer items-center gap-3 border p-2 text-left transition-colors ${
+                selected ? "border-ink bg-white" : "border-line bg-white/50 hover:border-ink/40"
+              }`}
             >
-              <ChevronLeft className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
-            </button>
-
-            <button
-              type="button"
-              onClick={handleNext}
-              aria-label="Siguiente silueta"
-              style={{
-                backgroundColor: palette.controlBg,
-                borderColor: palette.controlBorder,
-                color: palette.text,
-              }}
-              className="absolute right-3 top-1/2 z-20 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border backdrop-blur-sm transition-opacity hover:opacity-75 cursor-pointer sm:inline-flex"
-            >
-              <ChevronRight className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
-            </button>
-          </>
-        )}
-
-        {/* Indicadores inferiores minimalistas + progreso de 6s */}
-        {count > 1 && (
-          <div className="absolute inset-x-0 bottom-5 z-20 flex items-center justify-between px-6 sm:justify-center sm:px-10">
-            <div
-              role="tablist"
-              aria-label="Seleccionar silueta del carrusel"
-              className="flex items-center gap-2"
-            >
-              {products.map((item, idx) => {
-                const isActive = idx === safeIndex;
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    role="tab"
-                    aria-selected={isActive}
-                    aria-label={`Ver ${item.brand} ${item.name} (${idx + 1} de ${count})`}
-                    onClick={() => goTo(idx)}
-                    style={{
-                      backgroundColor: palette.controlBorder,
-                    }}
-                    className={[
-                      "relative h-1.5 overflow-hidden rounded-full transition-[width] duration-300 cursor-pointer",
-                      isActive ? "w-10" : "w-2.5 hover:opacity-80",
-                    ].join(" ")}
-                  >
-                    {isActive && (
-                      <m.span
-                        key={`${item.id}-${paused ? "paused" : "play"}`}
-                        initial={{ scaleX: reducedMotion || paused ? 1 : 0 }}
-                        animate={{ scaleX: 1 }}
-                        transition={
-                          reducedMotion || paused
-                            ? { duration: 0 }
-                            : { duration: AUTOPLAY_MS / 1000, ease: "linear" }
-                        }
-                        style={{
-                          backgroundColor: palette.text,
-                          transformOrigin: "left center",
-                        }}
-                        className="absolute inset-0 block rounded-full"
-                      />
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Flechas compactas para móvil */}
-            <div className="flex items-center gap-2 sm:hidden">
-              <button
-                type="button"
-                onClick={handlePrev}
-                aria-label="Silueta anterior"
-                style={{
-                  backgroundColor: palette.controlBg,
-                  borderColor: palette.controlBorder,
-                  color: palette.text,
-                }}
-                className="inline-flex h-8 w-8 items-center justify-center rounded-full border cursor-pointer"
+              <span
+                className="h-12 w-10 shrink-0 overflow-hidden"
+                style={{ backgroundColor: PHOTO_BG }}
               >
-                <ChevronLeft className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
-              </button>
-              <button
-                type="button"
-                onClick={handleNext}
-                aria-label="Siguiente silueta"
-                style={{
-                  backgroundColor: palette.controlBg,
-                  borderColor: palette.controlBorder,
-                  color: palette.text,
-                }}
-                className="inline-flex h-8 w-8 items-center justify-center rounded-full border cursor-pointer"
-              >
-                <ChevronRight className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
-              </button>
-            </div>
-          </div>
-        )}
+                {thumb && (
+                  <img src={thumb.src} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                )}
+              </span>
+              <span className="min-w-0">
+                <span className="block font-mono text-[9px] uppercase tracking-[0.12em] text-muted">
+                  {pad(i + 1)} · {p.brand}
+                </span>
+                <span className="block truncate text-[11px] font-semibold text-ink">
+                  {p.name.replace(/\s*\(.*\)$/, "")}
+                </span>
+              </span>
+              {selected && (
+                <span
+                  key={`bar-${safeIndex}`}
+                  aria-hidden="true"
+                  className="absolute inset-x-0 bottom-0 h-0.5 origin-left bg-ink"
+                  style={{
+                    animation: reducedMotion ? undefined : `ks-progress ${AUTOPLAY_MS}ms linear forwards`,
+                    animationPlayState: running ? "running" : "paused",
+                  }}
+                  onAnimationEnd={handleNext}
+                />
+              )}
+            </button>
+          );
+        })}
       </div>
     </section>
   );
@@ -610,8 +400,7 @@ export function EditorialSneakerCarousel({
 }) {
   const { data, isLoading } = useQuery({
     queryKey: queryKeys.products({ sort: "recommended", page: 0, pageSize: 15 }),
-    queryFn: () =>
-      publicApi.getProducts({ sort: "recommended", page: 0, pageSize: 15 }),
+    queryFn: () => publicApi.getProducts({ sort: "recommended", page: 0, pageSize: 15 }),
     enabled: !initialProducts,
   });
 
@@ -620,13 +409,8 @@ export function EditorialSneakerCarousel({
     [initialProducts, data?.items],
   );
 
-  if (!initialProducts && isLoading) {
-    return <EditorialShowcaseSkeleton />;
-  }
-
-  if (curated.length === 0) {
-    return null;
-  }
+  if (!initialProducts && isLoading) return <EditorialShowcaseSkeleton />;
+  if (curated.length === 0) return null;
 
   return (
     <MotionScope>

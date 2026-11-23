@@ -7,11 +7,16 @@ import { Skeleton } from "@/components/ui/Skeleton";
 import { CollectionChips } from "@/features/catalog/CollectionChips";
 import { ProductCard } from "@/features/catalog/ProductCard";
 import { publicApi, queryKeys } from "@/lib/queries";
+import { HeroShowcase } from "./HeroShowcase";
 
 const LazyEditorialSneakerCarousel = lazy(() =>
   import("./EditorialSneakerCarousel").then((m) => ({
     default: m.EditorialSneakerCarousel,
   })),
+);
+
+const LazyStyleWall = lazy(() =>
+  import("./StyleWall").then((m) => ({ default: m.StyleWall })),
 );
 
 function CarouselFallback() {
@@ -25,9 +30,6 @@ function CarouselFallback() {
   );
 }
 
-const CTA_BASE =
-  "inline-flex h-12 items-center gap-2 px-6 font-display text-[11px] font-semibold uppercase tracking-nav transition-colors";
-
 export function HomePage() {
   const { data: featured, isLoading } = useQuery({
     queryKey: queryKeys.products({ sort: "recommended", page: 0, pageSize: 4 }),
@@ -37,39 +39,8 @@ export function HomePage() {
 
   return (
     <div>
-      {/* Hero editorial sin cargas 3D ni ML */}
-      <section className="border-b border-line">
-        <div className="mx-auto max-w-[1680px] px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
-          <div className="space-y-6">
-            <p className="font-display text-[10px] font-semibold uppercase tracking-nav text-muted">
-              Drop Colombia 2026 · 15 siluetas curadas
-            </p>
-
-            <h1 className="max-w-4xl font-display text-3xl font-semibold uppercase leading-[1.05] tracking-tight text-ink sm:text-5xl lg:text-6xl">
-              Sneakers de archivo con <span className="text-forest">probador 3D</span> y asesoría IA
-            </h1>
-
-            <p className="max-w-xl text-sm leading-relaxed text-muted">
-              Modelos icónicos de Nike, Jordan, Adidas, Puma, New Balance, Converse y Vans en pesos
-              colombianos. Ajusta tu talla con Kast y verifica cada material en 360°
-              antes de pedir por WhatsApp.
-            </p>
-
-            <div className="flex flex-wrap items-center gap-2 pt-2">
-              <Link to="/catalogo" className={`${CTA_BASE} bg-ink text-canvas hover:bg-forest`}>
-                <span>Explorar colección</span>
-                <ArrowRight className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
-              </Link>
-              <Link
-                to="/catalogo?discounted=true"
-                className={`${CTA_BASE} border border-ink text-ink hover:bg-ink hover:text-canvas`}
-              >
-                <span>Ver ofertas 10% – 15% OFF</span>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Hero: zapato flotante con parallax (sin cargas 3D ni ML) */}
+      <HeroShowcase />
 
       {/* Carrusel editorial de colección (lazy para proteger budget de Home) */}
       <Suspense fallback={<CarouselFallback />}>
@@ -116,6 +87,11 @@ export function HomePage() {
           </ul>
         )}
       </section>
+
+      {/* Muro negro de pósters: frases, marcas y escenas de Kast */}
+      <Suspense fallback={<div className="mt-16 h-[640px] bg-ink" aria-hidden="true" />}>
+        <LazyStyleWall />
+      </Suspense>
 
       <TrustStrip />
     </div>
