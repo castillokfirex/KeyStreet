@@ -9,6 +9,7 @@
     "images:process": "node process-images/process-images.mjs",
     "models:build": "node models/build-generic-glb.mjs",
     "models:validate": "node models/validate-models.mjs",
+    "avatars:build": "node models/build-avatars.mjs",
     "catalog:build": "node catalog/build-catalog.mjs"
   },
   "dependencies": {

@@ -94,6 +94,11 @@ export function FittingPage() {
   const build = useFitProfileStore((s) => s.build);
   const usualSizeEu = useFitProfileStore((s) => s.usualSizeEu);
   const ratios = useFitProfileStore((s) => s.ratios);
+  const bodyStyle = useFitProfileStore((s) => s.bodyStyle);
+  const skinTone = useFitProfileStore((s) => s.skinTone);
+  const hairStyle = useFitProfileStore((s) => s.hairStyle);
+  const hairColor = useFitProfileStore((s) => s.hairColor);
+  const facialHair = useFitProfileStore((s) => s.facialHair);
   const outfit = useFittingOutfitStore((s) => s.outfit);
   const addItem = useCartStore((s) => s.addItem);
   const setBagOpen = useCartStore((s) => s.setBagOpen);
@@ -209,7 +214,7 @@ export function FittingPage() {
       className="ks-fade-in fixed inset-0 z-[45] flex flex-col bg-canvas"
     >
       {/* Barra superior */}
-      <header className="flex h-14 shrink-0 items-center gap-3 border-b border-line px-3 sm:px-5">
+      <header className="flex h-12 shrink-0 items-center gap-3 border-b border-line px-3 sm:h-14 sm:px-5">
         <Link
           to={productHref}
           className="group inline-flex h-10 items-center gap-1.5 pr-2 font-display text-[10px] font-semibold uppercase tracking-nav text-ink"
@@ -235,18 +240,6 @@ export function FittingPage() {
             )}
           </p>
         </div>
-
-        {product && (
-          <button
-            type="button"
-            onClick={addToBag}
-            className="group relative isolate hidden h-10 cursor-pointer items-center gap-2 overflow-hidden bg-ink px-4 font-display text-[10px] font-semibold uppercase tracking-nav text-canvas md:inline-flex"
-          >
-            <span aria-hidden="true" className={CTA_SWEEP} />
-            <ShoppingBag className="h-3.5 w-3.5" aria-hidden="true" />
-            {selected ? `Añadir · talla ${selected.sizeEu}` : "Elegir talla"}
-          </button>
-        )}
 
         <Link
           to={productHref}
@@ -286,6 +279,11 @@ export function FittingPage() {
                   product={product}
                   outfit={outfit}
                   scale={scale}
+                  bodyStyle={bodyStyle}
+                  skinTone={skinTone}
+                  hairStyle={hairStyle}
+                  hairColor={hairColor}
+                  facialHair={facialHair}
                   view={view}
                   spinning={spinning}
                 />
@@ -326,6 +324,24 @@ export function FittingPage() {
                 {heightCm} cm · pie{" "}
                 {scale.footLengthCm.toFixed(1).replace(".", ",")} cm
               </span>
+              <span
+                className="inline-flex items-center gap-1.5 bg-canvas/90 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-ink backdrop-blur-sm"
+                aria-label="Armonía de colores: piel, prendas y tenis"
+              >
+                <span>Armonía</span>
+                {[
+                  skinTone,
+                  outfit.top.color,
+                  outfit.bottom.color,
+                  product?.materialSpecs?.palette?.upper ?? "#FFFFFF",
+                ].map((hex, i) => (
+                  <span
+                    key={`${hex}-${i}`}
+                    className="h-2.5 w-2.5 rounded-full border border-ink/20"
+                    style={{ backgroundColor: hex }}
+                  />
+                ))}
+              </span>
             </div>
             <p className="pointer-events-none absolute bottom-3 right-3 hidden font-mono text-[10px] uppercase tracking-[0.12em] text-muted sm:block sm:bottom-4 sm:right-4">
               Arrastra para girar · rueda para acercar
@@ -333,7 +349,7 @@ export function FittingPage() {
           </section>
 
           {/* Panel de pasos (lateral en escritorio, hoja inferior en móvil) */}
-          <aside className="flex max-h-[56svh] shrink-0 flex-col overflow-hidden border-t border-line bg-canvas lg:max-h-none lg:w-[380px] lg:border-l lg:border-t-0">
+          <aside className="flex max-h-[56svh] shrink-0 flex-col overflow-hidden border-t border-line bg-canvas lg:max-h-none lg:w-[340px] lg:border-l lg:border-t-0 xl:w-[380px]">
             <button
               type="button"
               onClick={() => setSheetOpen((v) => !v)}
@@ -347,7 +363,7 @@ export function FittingPage() {
             <div
               role="tablist"
               aria-label="Pasos del probador"
-              className={`shrink-0 gap-1 px-4 pb-3 lg:flex lg:px-6 lg:pt-6 ${sheetOpen ? "flex" : "hidden"}`}
+              className={`shrink-0 gap-1 px-4 pb-3 lg:flex lg:px-5 lg:pt-4 xl:px-6 xl:pt-6 ${sheetOpen ? "flex" : "hidden"}`}
             >
               {STEPS.map((s, i) => {
                 const active = s.id === step;
@@ -387,7 +403,7 @@ export function FittingPage() {
               role="tabpanel"
               id={`fit-panel-${step}`}
               aria-labelledby={`fit-tab-${step}`}
-              className={`min-h-0 flex-1 overflow-y-auto overflow-x-hidden border-t border-line px-4 py-5 lg:block lg:px-6 ${
+              className={`min-h-0 flex-1 overflow-y-auto overflow-x-hidden border-t border-line px-4 py-4 lg:block lg:px-5 xl:px-6 xl:py-5 ${
                 sheetOpen ? "block" : "hidden"
               }`}
             >

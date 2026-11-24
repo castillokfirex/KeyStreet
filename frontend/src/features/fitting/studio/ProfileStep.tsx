@@ -8,9 +8,17 @@ import {
 } from "lucide-react";
 import { useState, type ChangeEvent } from "react";
 import { useFitProfileStore, type BodyBuild } from "@/stores/fitProfile";
+import {
+  BODY_STYLE_OPTIONS,
+  FACIAL_HAIR_OPTIONS,
+  HAIR_COLORS,
+  HAIR_STYLE_OPTIONS,
+  SKIN_TONES,
+} from "../avatarAppearance";
 import { clamp, footLengthCm } from "../bodyParams";
+import { swatchName } from "../garments";
 import { estimatePoseFromFile } from "../PhotoPoseEstimator";
-import { OptionChip, SectionLabel } from "./controls";
+import { OptionChip, SectionLabel, SwatchRow } from "./controls";
 
 const BUILDS: { id: BodyBuild; label: string }[] = [
   { id: "delgada", label: "Delgada" },
@@ -28,6 +36,11 @@ export function ProfileStep() {
   const build = useFitProfileStore((s) => s.build);
   const usualSizeEu = useFitProfileStore((s) => s.usualSizeEu);
   const source = useFitProfileStore((s) => s.source);
+  const bodyStyle = useFitProfileStore((s) => s.bodyStyle);
+  const skinTone = useFitProfileStore((s) => s.skinTone);
+  const hairStyle = useFitProfileStore((s) => s.hairStyle);
+  const hairColor = useFitProfileStore((s) => s.hairColor);
+  const facialHair = useFitProfileStore((s) => s.facialHair);
   const patchProfile = useFitProfileStore((s) => s.patchProfile);
   const setPhotoProfile = useFitProfileStore((s) => s.setPhotoProfile);
   const resetProfile = useFitProfileStore((s) => s.resetProfile);
@@ -67,6 +80,8 @@ export function ProfileStep() {
         build: result.build,
         usualSizeEu,
         ratios: result.ratios,
+        skinTone: result.skinTone,
+        hairColor: result.hairColor,
       });
       setPhotoStatus("Foto eliminada ✓");
     } catch (err) {
@@ -82,12 +97,12 @@ export function ProfileStep() {
   };
 
   return (
-    <div className="space-y-7">
+    <div className="space-y-6">
       {/* Foto efímera */}
       <section>
         <SectionLabel>Desde una foto</SectionLabel>
         <label
-          className={`group flex cursor-pointer items-center gap-3 border border-dashed px-4 py-4 transition-colors ${
+          className={`group flex cursor-pointer items-center gap-3 border border-dashed px-4 py-3.5 transition-colors ${
             estimating
               ? "border-ink bg-white"
               : "border-ink/30 bg-white/60 hover:border-ink hover:bg-white"
@@ -103,11 +118,11 @@ export function ProfileStep() {
           <span className="min-w-0">
             <span className="block text-sm font-semibold text-ink">
               {estimating
-                ? "Analizando tu postura…"
+                ? "Analizando tu postura y tonos…"
                 : "Usar una foto de cuerpo entero"}
             </span>
             <span className="mt-0.5 block text-xs leading-snug text-muted">
-              De frente y con buena luz. Se analiza en tu equipo y se borra al
+              Detecta postura, piel y cabello en tu equipo y se borra al
               instante.
             </span>
           </span>
@@ -153,8 +168,78 @@ export function ProfileStep() {
       </section>
 
       <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.16em] text-gray">
-        <span className="h-px flex-1 bg-line" />o a mano
+        <span className="h-px flex-1 bg-line" />o personaliza tu avatar
         <span className="h-px flex-1 bg-line" />
+      </div>
+
+      {/* Apariencia del avatar */}
+      <div className="space-y-4 border border-line bg-white/50 p-3.5">
+        <section>
+          <SectionLabel>Silueta</SectionLabel>
+          <div className="grid grid-cols-2 gap-1.5">
+            {BODY_STYLE_OPTIONS.map((opt) => (
+              <OptionChip
+                key={opt.id}
+                active={bodyStyle === opt.id}
+                onClick={() => patchProfile({ bodyStyle: opt.id })}
+              >
+                {opt.label}
+              </OptionChip>
+            ))}
+          </div>
+        </section>
+
+        <section>
+          <SectionLabel aside={swatchName(SKIN_TONES, skinTone)}>
+            Tono de piel
+          </SectionLabel>
+          <SwatchRow
+            swatches={SKIN_TONES}
+            value={skinTone}
+            onChange={(hex) => patchProfile({ skinTone: hex })}
+            label="Tono de piel"
+          />
+        </section>
+
+        <section>
+          <SectionLabel aside={swatchName(HAIR_COLORS, hairColor)}>
+            Cabello
+          </SectionLabel>
+          <div className="mb-2.5 flex flex-wrap gap-1.5">
+            {HAIR_STYLE_OPTIONS.map((opt) => (
+              <OptionChip
+                key={opt.id}
+                active={hairStyle === opt.id}
+                onClick={() => patchProfile({ hairStyle: opt.id })}
+              >
+                {opt.label}
+              </OptionChip>
+            ))}
+          </div>
+          <SwatchRow
+            swatches={HAIR_COLORS}
+            value={hairColor}
+            onChange={(hex) => patchProfile({ hairColor: hex })}
+            label="Color de cabello"
+          />
+        </section>
+
+        {bodyStyle === "masculino" && (
+          <section>
+            <SectionLabel>Barba</SectionLabel>
+            <div className="grid grid-cols-2 gap-1.5">
+              {FACIAL_HAIR_OPTIONS.map((opt) => (
+                <OptionChip
+                  key={opt.id}
+                  active={facialHair === opt.id}
+                  onClick={() => patchProfile({ facialHair: opt.id })}
+                >
+                  {opt.label}
+                </OptionChip>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
 
       {/* Estatura */}
