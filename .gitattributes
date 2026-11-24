@@ -6,6 +6,7 @@ mvnw text eol=lf
 *.png binary
 *.jpg binary
 *.webp binary
+*.avif binary
 *.glb binary
 *.pdf binary
 *.task binary

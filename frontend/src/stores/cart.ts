@@ -14,6 +14,22 @@ export interface CartItem {
   discountPercent: number;
   hasDiscount: boolean;
   quantity: number;
+  /** Miniatura del producto (opcional: las bolsas guardadas antes no la tienen). */
+  image?: string;
+}
+
+/** Máximo de unidades por talla en la bolsa. */
+export const MAX_QTY_PER_ITEM = 10;
+
+/** Miniatura liviana (480 px) a partir de las imágenes del producto. */
+export function cartImageFor(images?: {
+  basePath: string;
+  files: string[];
+  ready: boolean;
+}) {
+  if (!images?.ready || !images.files[0]) return undefined;
+  const file = images.files[0];
+  return `${images.basePath}${file.replace(/\.(960|1440)\.(webp|avif)$/, ".480.$2")}`;
 }
 
 interface CartState {
@@ -37,12 +53,17 @@ export const useCartStore = create<CartState>()(
       setBagOpen: (bagOpen) => set({ bagOpen }),
       addItem: (item, quantity = 1) =>
         set((state) => {
-          const idx = state.items.findIndex((i) => i.variantId === item.variantId);
+          const idx = state.items.findIndex(
+            (i) => i.variantId === item.variantId,
+          );
           if (idx >= 0) {
             const updated = [...state.items];
             updated[idx] = {
               ...updated[idx],
-              quantity: Math.min(10, updated[idx].quantity + quantity),
+              quantity: Math.min(
+                MAX_QTY_PER_ITEM,
+                updated[idx].quantity + quantity,
+              ),
             };
             return { items: updated };
           }
@@ -51,12 +72,14 @@ export const useCartStore = create<CartState>()(
       updateQty: (variantId, quantity) =>
         set((state) => {
           if (quantity <= 0) {
-            return { items: state.items.filter((i) => i.variantId !== variantId) };
+            return {
+              items: state.items.filter((i) => i.variantId !== variantId),
+            };
           }
           return {
             items: state.items.map((i) =>
               i.variantId === variantId
-                ? { ...i, quantity: Math.min(10, quantity) }
+                ? { ...i, quantity: Math.min(MAX_QTY_PER_ITEM, quantity) }
                 : i,
             ),
           };

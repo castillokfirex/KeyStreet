@@ -1,16 +1,15 @@
-desktop.ini
 .env
 node_modules/
 target/
 .venv/
 dist/
-infra/certs/*
-!infra/certs/.gitkeep
 __pycache__/
 *.pyc
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+infra/certs/*
+!infra/certs/.gitkeep
 frontend/public/mediapipe/
 frontend/public/fonts/
 playwright-report/
@@ -19,5 +18,9 @@ test-results/
 *.pdf
 !rag-service/tests/fixtures/*.pdf
 !backend-java/src/test/resources/**/*.pdf
+desktop.ini
 .idea/
 .vscode/
+
+# Caché de herramientas del catálogo (originales descargados, miniaturas, rembg)
+scripts/.cache/

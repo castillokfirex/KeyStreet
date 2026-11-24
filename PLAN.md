@@ -647,7 +647,7 @@ GRANT INSERT ON rag_audit_logs TO keystreet_rag;
 - **Tenant** fijo `id = '00000000-0000-4000-8000-000000000001'`, `slug = 'key-street'`, `name = 'Key Street'`, `whatsapp_phone = '573000000000'` (el backend lo sincroniza al arrancar con `WHATSAPP_PHONE`), `branding = {"primary":"#16302B","navy":"#0F172A","surface":"#F5F6F8","fontDisplay":"Space Grotesk","fontBody":"Plus Jakarta Sans","promoBar":"Envíos express gratis a toda Colombia por compras superiores a $300.000 COP"}`.
 - **Usuarios** (solo dev, BCrypt vía `crypt(..., gen_salt('bf', 10))` de pgcrypto): `admin@keystreet.co` (ADMIN_TENANT) y `cliente@keystreet.co` (CUSTOMER), contraseña dev `KeyStreet2026!` documentada en README.
 - **Marcas**: Nike (`NIK`), Adidas (`ADI`), Puma (`PUM`), New Balance (`NBL`), Converse (`CNV`).
-- **10 productos exactos** (precios en COP enteros):
+- **10 productos exactos del seed inicial** (línea base histórica; la regla vigente es **15 modelos**, aplicada por la migración `db/migrations/V002__catalogo_15_modelos.sql`, ver §5.5). Precios en COP enteros:
 
 | # | Nombre (exacto) | slug | Marca/código | Silueta | Base | Desc. | Final | Badge |
 |---|---|---|---|---|---:|---:|---:|---|
@@ -696,6 +696,35 @@ GRANT INSERT ON rag_audit_logs TO keystreet_rag;
                {"id":"outsole","label":"Suela de caucho","position":[0,-0.01,0],"normal":[0,-1,0]}]}
   ```
 - **`style_tags`** p. ej. AF1 `{clasico,urbano,cuero,blanco}`, Campus `{skate,gamuza,y2k}`, Converse `{lona,atemporal,cana-alta}`.
+
+### 5.5 Catálogo vigente: 15 modelos (`db/migrations/V002__catalogo_15_modelos.sql`)
+
+- **Regla:** exactamente **15 modelos activos** por tenant Key Street; los modelos fuera de la lista quedan `is_active = false` (no se borran, para conservar pedidos). Marcas: Nike (`NIK`), Jordan (`JOR`), Adidas (`ADI`), Puma (`PUM`), New Balance (`NBL`), Converse (`CNV`), Vans (`VAN`).
+- **Fuente única:** `scripts/catalog/catalog.json` → `scripts/catalog/build-catalog.mjs` genera la migración (idempotente, `ON CONFLICT DO UPDATE`), `docs/catalogo-fuentes.md` y `docs/creditos-imagenes.md`.
+- **Orden de ejecución:** `01-schema.sql` → `02-seed.sql` (línea base, sin cambios) → `03-catalogo-15-modelos.sql` (= V002). En bases existentes se ejecuta V002 a mano (ver PROGRESS › Bitácora).
+- **Precios:** precio de lista vigente en la tienda oficial en Colombia (URL y fecha en `docs/catalogo-fuentes.md`); sin fuente verificable → precio `PRUEBA` documentado.
+- **Descuentos:** se mantiene la regla de **4 modelos activos con descuento automático de 10 % a 15 %**. El rango de precio base $170.000–$185.000 de §5.4 solo aplicaba a los precios ficticios del seed y no puede convivir con precios reales; la migración fija los 4 modelos y lo verifica.
+- **Variantes:** 9 tallas (36–44) × 15 = **135 activas**, mismo formato de SKU y misma regla de stock.
+- **Imágenes:** `image_placeholder_paths.ready = true` solo con archivos procesados en `/assets/products/<slug>/` (`<slug>-<n>.<480|960|1440>.<avif|webp>`); sin imágenes válidas, `ready = false` y `files = []` (cero 404).
+- **3D:** `model_3d_url = /assets/models/<slug>.glb`, `model_3d_ready = true` cuando el GLB pasa `scripts/models/validate-models.mjs`; sin modelo con licencia válida se usa el **3D genérico** del proyecto con la paleta del colorway.
+
+| # | Modelo | slug | Marca/código | Silueta | Base COP | Desc. | Final | Precio |
+|---|---|---|---|---|---:|---:|---:|---|
+| 1 | Nike Air Force 1 '07 (Blanco) | `nike-air-force-1-low-07-blanco` | NIK/AF1 | LOW | 584.950 | **10 %** | **526.400** | Verificado |
+| 2 | Adidas Superstar (Blanco / Negro) | `adidas-superstar` | ADI/SST | LOW | 549.950 | 0 | 549.950 | Verificado |
+| 3 | Nike Dunk Low Retro (Panda) | `nike-dunk-low-retro-panda` | NIK/DNK | LOW | 679.950 | 0 | 679.950 | Verificado |
+| 4 | Air Jordan 1 Low (Blanco / Azul marino) | `air-jordan-1-low` | JOR/AJ1L | LOW | 699.950 | 0 | 699.950 | Verificado |
+| 5 | Vans Old Skool (Negro / Blanco) | `vans-old-skool` | VAN/OSK | LOW | 329.900 | 0 | 329.900 | Verificado |
+| 6 | Adidas Samba OG (Blanco / Negro) | `adidas-samba-og-blanco-negro` | ADI/SMB | LOW | 499.950 | 0 | 499.950 | Verificado |
+| 7 | Converse Chuck Taylor All Star (Bota / Clásico) | `converse-chuck-taylor-all-star-clasico` | CNV/CTA | HIGH | 299.900 | **15 %** | **254.900** | PRUEBA |
+| 8 | Adidas Stan Smith (Blanco / Verde) | `adidas-stan-smith` | ADI/STS | LOW | 549.950 | 0 | 549.950 | Verificado |
+| 9 | New Balance 550 (Blanco / Burdeos) | `new-balance-550` | NBL/550 | LOW | 649.900 | 0 | 649.900 | Verificado |
+| 10 | New Balance 530 (Blanco / Plata) | `new-balance-530` | NBL/530 | LOW | 529.900 | **12 %** | **466.300** | Verificado |
+| 11 | Adidas Campus 00s (Café / Blanco) | `adidas-campus-00s` | ADI/C00S | LOW | 499.950 | 0 | 499.950 | Verificado |
+| 12 | Puma Suede XL | `puma-suede-xl` | PUM/SXL | LOW | 449.900 | **12 %** | **395.900** | PRUEBA |
+| 13 | Adidas Handball Spezial (Negro / Goma) | `adidas-handball-spezial` | ADI/HBS | LOW | 549.950 | 0 | 549.950 | Verificado |
+| 14 | Air Jordan 4 Retro (White Cement) | `air-jordan-4` | JOR/AJ4 | MID | 1.219.950 | 0 | 1.219.950 | Verificado |
+| 15 | Nike Court Vision Low (Blanco / Negro) | `nike-court-vision-low` | NIK/CVL | LOW | 459.950 | 0 | 459.950 | Verificado |
 
 ---
 
@@ -974,7 +1003,7 @@ type KastLogoProps = { variant: "isotype" | "wordmark"; size?: number; className
 `ProductImage` lee `images.ready`: si `false` → skeleton elegante `aspect-[4/5]` (`animate-pulse` suave en `bg-surface` + isotipo Kast al 6 % de opacidad) **sin pedir archivos** (cero 404). Cuando se agreguen fotos a `/assets/products/{slug}/` basta con poner `ready=true`; se renderiza `<img loading="lazy" decoding="async">` con `srcset` y `sizes`.
 
 ### 9.6 Catálogo + WhatsApp
-- Badges de descuento automáticos (`hasDiscount`) → solo los 4 pares de $170k–$185k muestran `-X% OFF`, precio anterior `line-through text-muted` y precio final.
+- Badges de descuento automáticos (`hasDiscount`) → solo los 4 modelos con descuento automático (10 %–15 %, §5.5) muestran `-X% OFF`, precio anterior `line-through text-muted` y precio final.
 - Formato COP: `$166.500 COP` (`toLocaleString('es-CO')`, sin decimales) en `lib/money.ts`.
 - CTA WhatsApp exige talla seleccionada; llama a `/public/orders/whatsapp-intent` (precio canónico del servidor) y abre `whatsappUrl` en nueva pestaña; fallback local `lib/whatsapp.ts` si el endpoint falla. Bolsa (Zustand persistido) permite pedido multi-ítem.
 
@@ -1018,7 +1047,7 @@ Login → tabla de documentos (título, hash corto, páginas, OCR, fragmentos, e
 
 | Nivel | Herramienta | Cobertura clave |
 |---|---|---|
-| BD | `psql -f db/tests/verify_seed.sql` | 10 productos, 4 descuentos exactos, 90 variantes, índices HNSW/GIN, RLS sin tenant = 0 filas |
+| BD | `psql -f db/tests/verify_seed.sql` | 15 productos activos, 4 descuentos exactos, 135 variantes activas, índices HNSW/GIN, RLS sin tenant = 0 filas |
 | Backend unit/IT | JUnit + Testcontainers + WireMock | JWT, aislamiento multi-tenant, validación PDF (413/415/422/409), borrado verificado, janitor, callbacks, cálculo WhatsApp |
 | RAG | pytest (+ Postgres efímero) | Extracción, OCR en PDF escaneado, chunker 500–1.000 tokens con metadatos, dims=768 y norma≈1, SQL híbrido filtra tenant, validación de citas, `NO_EVIDENCE` |
 | Frontend unit | Vitest + Testing Library | `money`, `whatsapp`, `KastLogo`/`KastMascot`, `bodyParams`, limpieza de foto |
@@ -1036,7 +1065,7 @@ Login → tabla de documentos (título, hash corto, páginas, OCR, fragmentos, e
 - [ ] `docker compose up -d --build` deja los 4 servicios `healthy`.
 - [ ] Extensiones `vector`, `pgcrypto`, `unaccent`, `citext` instaladas; configuración `es_unaccent` existe.
 - [ ] `ix_chunks_embedding_hnsw` existe con `vector_cosine_ops` y la columna es `vector(768)`.
-- [ ] Exactamente 10 productos; exactamente 4 con `has_discount` (AF1 166.500, Puma 162.800, NB 574 154.000, Converse 144.500); 90 variantes con SKUs únicos.
+- [ ] Exactamente 15 productos activos (V002, §5.5); exactamente 4 con `has_discount` (AF1 526.400, Puma Suede XL 395.900, NB 530 466.300, Converse 254.900); 135 variantes activas con SKUs únicos. (Línea base histórica del seed: 10 productos / 90 variantes.)
 - [ ] Como `keystreet_app` sin `app.tenant_id`, `SELECT count(*) FROM products` = 0; con el tenant = 10.
 
 ### Fase 2 — Backend Spring Boot + Seguridad Multi-Tenant + Ciclo Efímero de PDF
@@ -1058,7 +1087,7 @@ Login → tabla de documentos (título, hash corto, páginas, OCR, fragmentos, e
 
 ### Fase 4 — Frontend editorial + Identidad Kast + Catálogo + WhatsApp + Chat RAG
 **Aceptación**
-- [ ] Catálogo muestra 10 productos; 4 badges `-X% OFF` con precio tachado; filtros y orden funcionales y sincronizados con URL.
+- [ ] Catálogo muestra 15 productos; 4 badges `-X% OFF` con precio tachado; filtros y orden funcionales y sincronizados con URL.
 - [ ] `KastLogo` en ambas variantes (isotipo en catálogo/móvil, wordmark en detalle); `KastMascot` abre el chat.
 - [ ] Botón WhatsApp abre `https://wa.me/573000000000?text=…` con modelo, talla y precio.
 - [ ] Chat muestra respuesta con chips de cita (documento + página).

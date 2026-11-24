@@ -18,7 +18,7 @@ export function SizeSelector({
   const sorted = [...variants].sort((a, b) => a.sizeEu - b.sizeEu);
 
   return (
-    <div className="grid grid-cols-5 sm:grid-cols-9 lg:grid-cols-5 gap-2" role="group" aria-label="Selector de talla EU">
+    <div className="grid grid-cols-5 sm:grid-cols-9 lg:grid-cols-5 gap-1" role="group" aria-label="Selector de talla EU">
       {sorted.map((v) => {
         const selected = selectedSize === v.sizeEu;
         return (
@@ -30,11 +30,11 @@ export function SizeSelector({
             aria-label={`Talla ${v.sizeEu}${!v.inStock ? " agotada" : ""}`}
             onClick={() => onSelect(v)}
             className={[
-              "h-10 rounded-xl border text-xs font-bold transition-colors cursor-pointer",
-              "disabled:cursor-not-allowed disabled:bg-surface disabled:text-muted/50 disabled:line-through",
+              "h-11 rounded-sm border text-xs font-medium tabular-nums transition-colors cursor-pointer",
+              "disabled:cursor-not-allowed disabled:border-line disabled:bg-transparent disabled:text-gray disabled:line-through",
               selected
-                ? "border-navy bg-navy text-white"
-                : "border-line bg-canvas text-navy hover:border-navy",
+                ? "border-ink bg-ink text-canvas"
+                : "border-line bg-transparent text-ink hover:border-ink",
             ].join(" ")}
           >
             {v.sizeEu}

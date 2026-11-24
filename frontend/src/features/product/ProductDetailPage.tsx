@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Box, CheckCircle2, MessageCircle, Rotate3d } from "lucide-react";
 import { lazy, Suspense, useEffect, useState } from "react";
-import { Link, useParams, useSearchParams } from "react-router";
+import { Link, Navigate, useNavigate, useParams, useSearchParams } from "react-router";
 import { KastLogo } from "@/components/brand/KastLogo";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { Badge } from "@/components/ui/Badge";
@@ -14,7 +14,7 @@ import { ViewerToolbar } from "@/features/fitting/ViewerToolbar";
 import { formatCop } from "@/lib/money";
 import { publicApi, queryKeys } from "@/lib/queries";
 import { useAssistantStore } from "@/stores/assistant";
-import { useCartStore } from "@/stores/cart";
+import { cartImageFor, useCartStore } from "@/stores/cart";
 import { useToastStore } from "@/stores/toast";
 import { PurchasePanel } from "./PurchasePanel";
 import { RelatedCarousel } from "./RelatedCarousel";
@@ -23,24 +23,16 @@ const LazyViewer3D = lazy(() =>
   import("@/features/viewer3d/Viewer3D").then((m) => ({ default: m.Viewer3D })),
 );
 
-const LazyFittingRoom = lazy(() =>
-  import("@/features/fitting/FittingRoom").then((m) => ({
-    default: m.FittingRoom,
-  })),
-);
-
-type ViewerMode = "viewer3d" | "fitting";
 
 export function ProductDetailPage() {
   const { slug = "" } = useParams();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const initialProbador = searchParams.get("modo") === "probador";
+  const [searchParams] = useSearchParams();
+  const legacyProbador = searchParams.get("modo") === "probador";
+  const navigate = useNavigate();
+  const fittingHref = `/producto/${slug}/probador`;
+  const openFitting = () => navigate(fittingHref);
 
-  const [mode, setMode] = useState<ViewerMode>(
-    initialProbador ? "fitting" : "viewer3d",
-  );
-  const [viewerActivated, setViewerActivated] = useState(initialProbador);
-  const [cameraMode, setCameraMode] = useState<"full" | "feet">("full");
+  const [viewerActivated, setViewerActivated] = useState(false);
 
   const [selectionState, setSelectionState] = useState<{
     slug: string;
@@ -50,6 +42,12 @@ export function ProductDetailPage() {
     slug: string;
     message: string | null;
   }>({ slug, message: null });
+
+  const [photoState, setPhotoState] = useState<{ slug: string; index: number }>({
+    slug,
+    index: 0,
+  });
+  const photoIndex = photoState.slug === slug ? photoState.index : 0;
 
   const selectedVariant =
     selectionState.slug === slug ? selectionState.variant : null;
@@ -80,19 +78,12 @@ export function ProductDetailPage() {
     return () => setProductContext(null, null);
   }, [product, setProductContext]);
 
-  const activateViewer = (nextMode: ViewerMode) => {
-    setViewerActivated(true);
-    setMode(nextMode);
-    if (nextMode === "fitting") {
-      setCameraMode("full");
-    }
-    const next = new URLSearchParams(searchParams);
-    if (nextMode === "fitting") {
-      next.set("modo", "probador");
-    } else {
-      next.delete("modo");
-    }
-    setSearchParams(next, { replace: true });
+  const activateViewer = () => setViewerActivated(true);
+
+  /** Vuelve a las fotos (sale del visor 360°) y muestra la foto i. */
+  const showPhoto = (index: number) => {
+    setPhotoState({ slug, index });
+    setViewerActivated(false);
   };
 
   const requireSelectedSize = (): SizeOption | null => {
@@ -145,6 +136,7 @@ export function ProductDetailPage() {
       finalPriceCop: product.finalPriceCop,
       discountPercent: product.discountPercent,
       hasDiscount: product.hasDiscount,
+      image: cartImageFor(product.images),
     });
     pushToast({
       title: "Agregado a tu bolsa",
@@ -153,6 +145,11 @@ export function ProductDetailPage() {
     });
     setBagOpen(true);
   };
+
+  // Enlaces antiguos (?modo=probador) abren el probador a pantalla completa
+  if (legacyProbador) {
+    return <Navigate to={fittingHref} replace />;
+  }
 
   if (isLoading) {
     return (
@@ -166,7 +163,7 @@ export function ProductDetailPage() {
   if (isError || !product) {
     return (
       <div className="mx-auto max-w-3xl px-4 py-16 text-center space-y-4">
-        <h1 className="font-display text-2xl font-bold uppercase text-navy">
+        <h1 className="font-display text-xl font-semibold uppercase tracking-label text-ink">
           Silueta no encontrada
         </h1>
         <p className="text-sm text-muted">
@@ -174,7 +171,7 @@ export function ProductDetailPage() {
         </p>
         <Link
           to="/catalogo"
-          className="inline-flex h-11 items-center rounded-xl bg-navy px-6 font-display text-xs font-bold uppercase tracking-wider text-white"
+          className="inline-flex h-11 items-center bg-ink px-6 font-display text-[11px] font-semibold uppercase tracking-nav text-canvas"
         >
           Volver al catálogo
         </Link>
@@ -186,7 +183,7 @@ export function ProductDetailPage() {
 
   return (
     <div className="pb-20 sm:pb-6">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-6 pb-10">
+      <div className="mx-auto max-w-7xl px-4 pb-10 pt-3 sm:px-6 sm:pt-5 lg:px-8">
         <Breadcrumbs
           items={[
             { label: "Inicio", to: "/" },
@@ -195,20 +192,18 @@ export function ProductDetailPage() {
           ]}
         />
 
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 items-start">
-          {/* Columna izquierda (7 cols): Visor 360° & Probador anatómico lazy */}
-          <div className="lg:col-span-7 space-y-4">
-            <div className="relative aspect-[3/4] w-full overflow-hidden rounded-2xl border border-line bg-surface">
+        <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-12 lg:gap-8">
+          {/* Columna izquierda (7 cols): fija al hacer scroll hasta llegar a "Esto te puede gustar" */}
+          <div className="space-y-3 lg:sticky lg:top-24 lg:col-span-7">
+            <div className="relative aspect-[4/5] w-full overflow-hidden bg-surface lg:aspect-auto lg:h-[min(calc(100svh-17rem),560px)]">
               {/* Toolbar superior fiel a Stitch */}
               <div className="absolute left-3 right-3 top-3 z-20">
                 <ViewerToolbar
-                  mode={mode}
-                  cameraMode={cameraMode}
-                  onSelectMode={(m) => activateViewer(m)}
-                  onSelectCamera={(cam) => {
-                    activateViewer("fitting");
-                    setCameraMode(cam);
-                  }}
+                  viewerActive={viewerActivated}
+                  onToggleViewer={() =>
+                    viewerActivated ? showPhoto(photoIndex) : activateViewer()
+                  }
+                  fittingHref={fittingHref}
                 />
               </div>
 
@@ -218,34 +213,53 @@ export function ProductDetailPage() {
                     <div className="flex h-full items-center justify-center p-8 text-center">
                       <div className="space-y-2">
                         <Skeleton className="mx-auto h-12 w-12 rounded-full" />
-                        <p className="font-display text-xs font-bold uppercase tracking-wider text-muted">
+                        <p className="font-display text-[10px] font-semibold uppercase tracking-nav text-muted">
                           Cargando motor 3D...
                         </p>
                       </div>
                     </div>
                   }
                 >
-                  {mode === "fitting" ? (
-                    <LazyFittingRoom product={product} cameraMode={cameraMode} />
-                  ) : (
-                    <LazyViewer3D
-                      product={product}
-                      onAskKast={(q) => openAssistant({ prefill: q })}
-                    />
-                  )}
+                  <LazyViewer3D
+                    product={product}
+                    onAskKast={(q) => openAssistant({ prefill: q })}
+                  />
                 </Suspense>
+              ) : product.images.ready ? (
+                <div className="relative h-full w-full">
+                  <ProductImage
+                    images={product.images}
+                    alt={product.name}
+                    priority
+                    index={photoIndex}
+                    fit="contain"
+                    className="!aspect-auto h-full w-full"
+                    sizes="(max-width: 1024px) 100vw, 58vw"
+                  />
+                  <div className="absolute inset-x-0 bottom-5 flex flex-wrap justify-center gap-2.5 px-4">
+                    <Button
+                      variant="forest"
+                      size="sm"
+                      onClick={activateViewer}
+                    >
+                      <Rotate3d className="h-4 w-4" aria-hidden="true" />
+                      <span>Activar Visor 3D 360°</span>
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="bg-canvas/90"
+                      onClick={openFitting}
+                    >
+                      <Box className="h-4 w-4" aria-hidden="true" />
+                      <span>Abrir Probador 3D</span>
+                    </Button>
+                  </div>
+                </div>
               ) : (
                 <div className="flex h-full flex-col items-center justify-center p-8 text-center">
-                  {product.images.ready ? (
-                    <ProductImage
-                      images={product.images}
-                      alt={product.name}
-                      priority
-                      className="h-full"
-                    />
-                  ) : (
-                    <>
-                      <div className="text-navy/15">
+                  <>
+                      <div className="text-ink/15">
                         <KastLogo variant="isotype" size={128} title={product.name} />
                       </div>
                       <Badge tone="mint" className="mt-4">
@@ -259,7 +273,7 @@ export function ProductDetailPage() {
                         <Button
                           variant="forest"
                           size="sm"
-                          onClick={() => activateViewer("viewer3d")}
+                          onClick={activateViewer}
                         >
                           <Rotate3d className="h-4 w-4" aria-hidden="true" />
                           <span>Activar Visor 3D 360°</span>
@@ -267,28 +281,52 @@ export function ProductDetailPage() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => activateViewer("fitting")}
+                          onClick={openFitting}
                         >
                           <Box className="h-4 w-4" aria-hidden="true" />
                           <span>Abrir Probador 3D</span>
                         </Button>
                       </div>
                     </>
-                  )}
                 </div>
               )}
 
-              {!viewerActivated || mode === "viewer3d" ? (
-                <div className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-canvas/90 border border-line px-4 py-1 font-display text-[10px] font-bold uppercase tracking-[0.16em] text-navy shadow-xs">
-                  Arrastra para rotar {mode === "fitting" ? "maniquí" : "zapato"}
+              {viewerActivated || !product.images.ready ? (
+                <div className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap bg-canvas/90 px-3 py-1 font-display text-[10px] font-semibold uppercase tracking-nav text-ink">
+                  Arrastra para rotar zapato
                 </div>
               ) : null}
             </div>
 
+            {/* Galería de fotos (solo con imágenes reales) */}
+            {product.images.ready && product.images.files.length > 1 && (
+              <ul
+                className="no-scrollbar flex gap-[var(--ks-grid-gap)] overflow-x-auto"
+                aria-label="Galería de fotos"
+              >
+                {product.images.files.map((file, i) => {
+                  const current = !viewerActivated && photoIndex === i;
+                  return (
+                    <li key={file} className="w-16 shrink-0 sm:w-20">
+                      <button
+                        type="button"
+                        onClick={() => showPhoto(i)}
+                        aria-label={`Ver foto ${i + 1} de ${product.images.files.length}`}
+                        aria-current={current || undefined}
+                        className={`block w-full cursor-pointer transition-opacity ${current ? "opacity-100 outline outline-1 outline-offset-[-1px] outline-ink" : "opacity-70 hover:opacity-100"}`}
+                      >
+                        <ProductImage images={product.images} alt="" index={i} sizes="96px" />
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+
             {/* Franja inferior de material certificado */}
-            <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-line bg-canvas p-4">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line pb-4">
               <div>
-                <p className="text-xs font-bold text-navy">
+                <p className="text-xs font-semibold text-ink">
                   {specs.upper || "Cuero / Textil seleccionado"} ·{" "}
                   {specs.outsole || "Suela de caucho"}
                 </p>
@@ -296,7 +334,7 @@ export function ProductDetailPage() {
                   Especificaciones verificables con Kast mediante fichas PDF indexadas.
                 </p>
               </div>
-              <span className="inline-flex items-center gap-1 font-display text-[10px] font-bold uppercase tracking-[0.16em] text-forest">
+              <span className="inline-flex items-center gap-1 font-display text-[10px] font-semibold uppercase tracking-nav text-sale-text">
                 <CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" />
                 <span>Certificado 2026</span>
               </span>
@@ -315,7 +353,7 @@ export function ProductDetailPage() {
                 setWarningState({ slug, message: null });
               }}
               onOrderWhatsapp={handleOrderWhatsapp}
-              onOpenFitting={() => activateViewer("fitting")}
+              onOpenFitting={openFitting}
               onAddToBag={handleAddToBag}
               onAskKast={(prefill) => openAssistant({ prefill })}
             />
@@ -326,10 +364,10 @@ export function ProductDetailPage() {
       {/* Barra fija inferior móvil con precio + WhatsApp */}
       <div className="fixed inset-x-0 bottom-0 z-30 flex items-center justify-between gap-3 border-t border-line bg-canvas/95 px-4 py-3 backdrop-blur-sm sm:hidden">
         <div>
-          <p className="text-[10px] font-bold uppercase tracking-wider text-muted">
+          <p className="font-display text-[10px] font-semibold uppercase tracking-nav text-muted">
             {selectedVariant ? `Talla ${selectedVariant.sizeEu}` : "Elige talla"}
           </p>
-          <p className="font-display text-sm font-bold text-navy">
+          <p className={`font-display text-sm font-semibold ${product.hasDiscount ? "text-sale-text" : "text-ink"}`}>
             {formatCop(product.finalPriceCop)}
           </p>
         </div>

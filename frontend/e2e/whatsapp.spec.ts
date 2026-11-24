@@ -36,9 +36,9 @@ test.describe("Flujo de pedido por WhatsApp", () => {
     const decodedText =
       new URL(popupUrl).searchParams.get("text") ||
       decodeURIComponent(body.whatsappUrl.split("text=")[1] ?? "");
-    expect(decodedText).toContain("Nike Air Force 1 Low '07");
+    expect(decodedText).toContain("Nike Air Force 1 '07");
     expect(decodedText).toContain("41");
-    expect(decodedText).toContain("$166.500 COP");
+    expect(decodedText).toContain("$526.400 COP");
     await popup.close();
   });
 });

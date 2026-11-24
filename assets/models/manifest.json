@@ -1,0 +1,723 @@
+{
+  "$comment": "Registro de modelos 3D: origen, licencia y validación. Sketchfab (CC0/CC BY) requiere SKETCHFAB_API_TOKEN; sin token, cada producto usa el 3D genérico del proyecto con su paleta.",
+  "version": 1,
+  "conventions": {
+    "up": "+Y",
+    "toe": "+X",
+    "origin": "centro en X/Z, base en y = 0",
+    "lengthM": [
+      0.28,
+      0.3
+    ],
+    "textures": "KTX2 o WebP",
+    "compression": "EXT_meshopt_compression",
+    "maxBytes": 3145728
+  },
+  "models": {
+    "nike-air-force-1-low-07-blanco": {
+      "status": "validado",
+      "url": "/assets/models/nike-air-force-1-low-07-blanco.glb",
+      "kind": "generico",
+      "label": "3D genérico",
+      "source": "Generado por scripts/models/build-generic-glb.mjs a partir del PlaceholderSneaker del proyecto",
+      "author": "Key Street (modelo propio generado)",
+      "license": "Propio del proyecto (sin terceros)",
+      "sourceUrl": null,
+      "palette": {
+        "upper": "#FFFFFF",
+        "accent": "#E4E4E0",
+        "sole": "#F4F4F0"
+      },
+      "silhouette": "LOW",
+      "validatedAt": "2026-11-24",
+      "bytes": 50412,
+      "sizeOk": true,
+      "dimensionsM": [
+        0.29,
+        0.1018,
+        0.0984
+      ],
+      "center": [
+        0,
+        0.0509,
+        0
+      ],
+      "minY": 0,
+      "textures": [],
+      "extensions": [
+        "EXT_meshopt_compression",
+        "KHR_mesh_quantization"
+      ],
+      "checks": {
+        "validatorErrors": 0,
+        "validatorWarnings": 0,
+        "yUpLongestX": true,
+        "toeTowardsPlusX": true,
+        "centeredXZ": true,
+        "baseAtZero": true,
+        "realScale": true,
+        "texturesOk": true,
+        "compressed": true
+      },
+      "ok": true
+    },
+    "adidas-superstar": {
+      "status": "validado",
+      "url": "/assets/models/adidas-superstar.glb",
+      "kind": "generico",
+      "label": "3D genérico",
+      "source": "Generado por scripts/models/build-generic-glb.mjs a partir del PlaceholderSneaker del proyecto",
+      "author": "Key Street (modelo propio generado)",
+      "license": "Propio del proyecto (sin terceros)",
+      "sourceUrl": null,
+      "palette": {
+        "upper": "#FFFFFF",
+        "accent": "#111111",
+        "sole": "#F1F1EF"
+      },
+      "silhouette": "LOW",
+      "validatedAt": "2026-11-24",
+      "bytes": 56276,
+      "sizeOk": true,
+      "dimensionsM": [
+        0.29,
+        0.1018,
+        0.0984
+      ],
+      "center": [
+        0,
+        0.0509,
+        0
+      ],
+      "minY": 0,
+      "textures": [],
+      "extensions": [
+        "EXT_meshopt_compression",
+        "KHR_mesh_quantization"
+      ],
+      "checks": {
+        "validatorErrors": 0,
+        "validatorWarnings": 0,
+        "yUpLongestX": true,
+        "toeTowardsPlusX": true,
+        "centeredXZ": true,
+        "baseAtZero": true,
+        "realScale": true,
+        "texturesOk": true,
+        "compressed": true
+      },
+      "ok": true
+    },
+    "nike-dunk-low-retro-panda": {
+      "status": "validado",
+      "url": "/assets/models/nike-dunk-low-retro-panda.glb",
+      "kind": "generico",
+      "label": "3D genérico",
+      "source": "Generado por scripts/models/build-generic-glb.mjs a partir del PlaceholderSneaker del proyecto",
+      "author": "Key Street (modelo propio generado)",
+      "license": "Propio del proyecto (sin terceros)",
+      "sourceUrl": null,
+      "palette": {
+        "upper": "#FFFFFF",
+        "accent": "#111111",
+        "sole": "#F4F4F0"
+      },
+      "silhouette": "LOW",
+      "validatedAt": "2026-11-24",
+      "bytes": 50604,
+      "sizeOk": true,
+      "dimensionsM": [
+        0.29,
+        0.1018,
+        0.0984
+      ],
+      "center": [
+        0,
+        0.0509,
+        0
+      ],
+      "minY": 0,
+      "textures": [],
+      "extensions": [
+        "EXT_meshopt_compression",
+        "KHR_mesh_quantization"
+      ],
+      "checks": {
+        "validatorErrors": 0,
+        "validatorWarnings": 0,
+        "yUpLongestX": true,
+        "toeTowardsPlusX": true,
+        "centeredXZ": true,
+        "baseAtZero": true,
+        "realScale": true,
+        "texturesOk": true,
+        "compressed": true
+      },
+      "ok": true
+    },
+    "air-jordan-1-low": {
+      "status": "validado",
+      "url": "/assets/models/air-jordan-1-low.glb",
+      "kind": "generico",
+      "label": "3D genérico",
+      "source": "Generado por scripts/models/build-generic-glb.mjs a partir del PlaceholderSneaker del proyecto",
+      "author": "Key Street (modelo propio generado)",
+      "license": "Propio del proyecto (sin terceros)",
+      "sourceUrl": null,
+      "palette": {
+        "upper": "#FFFFFF",
+        "accent": "#1F2A44",
+        "sole": "#F1F1EF"
+      },
+      "silhouette": "LOW",
+      "validatedAt": "2026-11-24",
+      "bytes": 50572,
+      "sizeOk": true,
+      "dimensionsM": [
+        0.29,
+        0.1018,
+        0.0984
+      ],
+      "center": [
+        0,
+        0.0509,
+        0
+      ],
+      "minY": 0,
+      "textures": [],
+      "extensions": [
+        "EXT_meshopt_compression",
+        "KHR_mesh_quantization"
+      ],
+      "checks": {
+        "validatorErrors": 0,
+        "validatorWarnings": 0,
+        "yUpLongestX": true,
+        "toeTowardsPlusX": true,
+        "centeredXZ": true,
+        "baseAtZero": true,
+        "realScale": true,
+        "texturesOk": true,
+        "compressed": true
+      },
+      "ok": true
+    },
+    "vans-old-skool": {
+      "status": "validado",
+      "url": "/assets/models/vans-old-skool.glb",
+      "kind": "generico",
+      "label": "3D genérico",
+      "source": "Generado por scripts/models/build-generic-glb.mjs a partir del PlaceholderSneaker del proyecto",
+      "author": "Key Street (modelo propio generado)",
+      "license": "Propio del proyecto (sin terceros)",
+      "sourceUrl": null,
+      "palette": {
+        "upper": "#1B1B1B",
+        "accent": "#FFFFFF",
+        "sole": "#F4F1EA"
+      },
+      "silhouette": "LOW",
+      "validatedAt": "2026-11-24",
+      "bytes": 52300,
+      "sizeOk": true,
+      "dimensionsM": [
+        0.29,
+        0.1018,
+        0.0926
+      ],
+      "center": [
+        0,
+        0.0509,
+        0
+      ],
+      "minY": 0,
+      "textures": [],
+      "extensions": [
+        "EXT_meshopt_compression",
+        "KHR_mesh_quantization"
+      ],
+      "checks": {
+        "validatorErrors": 0,
+        "validatorWarnings": 0,
+        "yUpLongestX": true,
+        "toeTowardsPlusX": true,
+        "centeredXZ": true,
+        "baseAtZero": true,
+        "realScale": true,
+        "texturesOk": true,
+        "compressed": true
+      },
+      "ok": true
+    },
+    "adidas-samba-og-blanco-negro": {
+      "status": "validado",
+      "url": "/assets/models/adidas-samba-og-blanco-negro.glb",
+      "kind": "generico",
+      "label": "3D genérico",
+      "source": "Generado por scripts/models/build-generic-glb.mjs a partir del PlaceholderSneaker del proyecto",
+      "author": "Key Street (modelo propio generado)",
+      "license": "Propio del proyecto (sin terceros)",
+      "sourceUrl": null,
+      "palette": {
+        "upper": "#FFFFFF",
+        "accent": "#111111",
+        "sole": "#C9A878"
+      },
+      "silhouette": "LOW",
+      "validatedAt": "2026-11-24",
+      "bytes": 56072,
+      "sizeOk": true,
+      "dimensionsM": [
+        0.29,
+        0.1018,
+        0.0926
+      ],
+      "center": [
+        0,
+        0.0509,
+        0
+      ],
+      "minY": 0,
+      "textures": [],
+      "extensions": [
+        "EXT_meshopt_compression",
+        "KHR_mesh_quantization"
+      ],
+      "checks": {
+        "validatorErrors": 0,
+        "validatorWarnings": 0,
+        "yUpLongestX": true,
+        "toeTowardsPlusX": true,
+        "centeredXZ": true,
+        "baseAtZero": true,
+        "realScale": true,
+        "texturesOk": true,
+        "compressed": true
+      },
+      "ok": true
+    },
+    "converse-chuck-taylor-all-star-clasico": {
+      "status": "validado",
+      "url": "/assets/models/converse-chuck-taylor-all-star-clasico.glb",
+      "kind": "generico",
+      "label": "3D genérico",
+      "source": "Generado por scripts/models/build-generic-glb.mjs a partir del PlaceholderSneaker del proyecto",
+      "author": "Key Street (modelo propio generado)",
+      "license": "Propio del proyecto (sin terceros)",
+      "sourceUrl": null,
+      "palette": {
+        "upper": "#F7F7F5",
+        "accent": "#1B1B1B",
+        "sole": "#F4F1EA"
+      },
+      "silhouette": "HIGH",
+      "validatedAt": "2026-11-24",
+      "bytes": 63976,
+      "sizeOk": true,
+      "dimensionsM": [
+        0.29,
+        0.161,
+        0.0984
+      ],
+      "center": [
+        0,
+        0.0805,
+        0
+      ],
+      "minY": 0,
+      "textures": [],
+      "extensions": [
+        "EXT_meshopt_compression",
+        "KHR_mesh_quantization"
+      ],
+      "checks": {
+        "validatorErrors": 0,
+        "validatorWarnings": 0,
+        "yUpLongestX": true,
+        "toeTowardsPlusX": true,
+        "centeredXZ": true,
+        "baseAtZero": true,
+        "realScale": true,
+        "texturesOk": true,
+        "compressed": true
+      },
+      "ok": true
+    },
+    "adidas-stan-smith": {
+      "status": "validado",
+      "url": "/assets/models/adidas-stan-smith.glb",
+      "kind": "generico",
+      "label": "3D genérico",
+      "source": "Generado por scripts/models/build-generic-glb.mjs a partir del PlaceholderSneaker del proyecto",
+      "author": "Key Street (modelo propio generado)",
+      "license": "Propio del proyecto (sin terceros)",
+      "sourceUrl": null,
+      "palette": {
+        "upper": "#FFFFFF",
+        "accent": "#1F6B4A",
+        "sole": "#F1F1EF"
+      },
+      "silhouette": "LOW",
+      "validatedAt": "2026-11-24",
+      "bytes": 46052,
+      "sizeOk": true,
+      "dimensionsM": [
+        0.29,
+        0.1018,
+        0.0984
+      ],
+      "center": [
+        0,
+        0.0509,
+        0
+      ],
+      "minY": 0,
+      "textures": [],
+      "extensions": [
+        "EXT_meshopt_compression",
+        "KHR_mesh_quantization"
+      ],
+      "checks": {
+        "validatorErrors": 0,
+        "validatorWarnings": 0,
+        "yUpLongestX": true,
+        "toeTowardsPlusX": true,
+        "centeredXZ": true,
+        "baseAtZero": true,
+        "realScale": true,
+        "texturesOk": true,
+        "compressed": true
+      },
+      "ok": true
+    },
+    "new-balance-550": {
+      "status": "validado",
+      "url": "/assets/models/new-balance-550.glb",
+      "kind": "generico",
+      "label": "3D genérico",
+      "source": "Generado por scripts/models/build-generic-glb.mjs a partir del PlaceholderSneaker del proyecto",
+      "author": "Key Street (modelo propio generado)",
+      "license": "Propio del proyecto (sin terceros)",
+      "sourceUrl": null,
+      "palette": {
+        "upper": "#FFFFFF",
+        "accent": "#7A1F2B",
+        "sole": "#F1F1EF"
+      },
+      "silhouette": "LOW",
+      "validatedAt": "2026-11-24",
+      "bytes": 49332,
+      "sizeOk": true,
+      "dimensionsM": [
+        0.29,
+        0.1018,
+        0.0984
+      ],
+      "center": [
+        0,
+        0.0509,
+        0
+      ],
+      "minY": 0,
+      "textures": [],
+      "extensions": [
+        "EXT_meshopt_compression",
+        "KHR_mesh_quantization"
+      ],
+      "checks": {
+        "validatorErrors": 0,
+        "validatorWarnings": 0,
+        "yUpLongestX": true,
+        "toeTowardsPlusX": true,
+        "centeredXZ": true,
+        "baseAtZero": true,
+        "realScale": true,
+        "texturesOk": true,
+        "compressed": true
+      },
+      "ok": true
+    },
+    "new-balance-530": {
+      "status": "validado",
+      "url": "/assets/models/new-balance-530.glb",
+      "kind": "generico",
+      "label": "3D genérico",
+      "source": "Generado por scripts/models/build-generic-glb.mjs a partir del PlaceholderSneaker del proyecto",
+      "author": "Key Street (modelo propio generado)",
+      "license": "Propio del proyecto (sin terceros)",
+      "sourceUrl": null,
+      "palette": {
+        "upper": "#E9EBEE",
+        "accent": "#9AA3AD",
+        "sole": "#F4F4F2"
+      },
+      "silhouette": "LOW",
+      "validatedAt": "2026-11-24",
+      "bytes": 49792,
+      "sizeOk": true,
+      "dimensionsM": [
+        0.29,
+        0.1018,
+        0.1003
+      ],
+      "center": [
+        0,
+        0.0509,
+        0
+      ],
+      "minY": 0,
+      "textures": [],
+      "extensions": [
+        "EXT_meshopt_compression",
+        "KHR_mesh_quantization"
+      ],
+      "checks": {
+        "validatorErrors": 0,
+        "validatorWarnings": 0,
+        "yUpLongestX": true,
+        "toeTowardsPlusX": true,
+        "centeredXZ": true,
+        "baseAtZero": true,
+        "realScale": true,
+        "texturesOk": true,
+        "compressed": true
+      },
+      "ok": true
+    },
+    "adidas-campus-00s": {
+      "status": "validado",
+      "url": "/assets/models/adidas-campus-00s.glb",
+      "kind": "generico",
+      "label": "3D genérico",
+      "source": "Generado por scripts/models/build-generic-glb.mjs a partir del PlaceholderSneaker del proyecto",
+      "author": "Key Street (modelo propio generado)",
+      "license": "Propio del proyecto (sin terceros)",
+      "sourceUrl": null,
+      "palette": {
+        "upper": "#7A4A2E",
+        "accent": "#F4F1EA",
+        "sole": "#EDE6D8"
+      },
+      "silhouette": "LOW",
+      "validatedAt": "2026-11-24",
+      "bytes": 52152,
+      "sizeOk": true,
+      "dimensionsM": [
+        0.29,
+        0.1101,
+        0.1081
+      ],
+      "center": [
+        0,
+        0.055,
+        0
+      ],
+      "minY": 0,
+      "textures": [],
+      "extensions": [
+        "EXT_meshopt_compression",
+        "KHR_mesh_quantization"
+      ],
+      "checks": {
+        "validatorErrors": 0,
+        "validatorWarnings": 0,
+        "yUpLongestX": true,
+        "toeTowardsPlusX": true,
+        "centeredXZ": true,
+        "baseAtZero": true,
+        "realScale": true,
+        "texturesOk": true,
+        "compressed": true
+      },
+      "ok": true
+    },
+    "puma-suede-xl": {
+      "status": "validado",
+      "url": "/assets/models/puma-suede-xl.glb",
+      "kind": "generico",
+      "label": "3D genérico",
+      "source": "Generado por scripts/models/build-generic-glb.mjs a partir del PlaceholderSneaker del proyecto",
+      "author": "Key Street (modelo propio generado)",
+      "license": "Propio del proyecto (sin terceros)",
+      "sourceUrl": null,
+      "palette": {
+        "upper": "#1B1B1B",
+        "accent": "#FFFFFF",
+        "sole": "#F1F1EF"
+      },
+      "silhouette": "LOW",
+      "validatedAt": "2026-11-24",
+      "bytes": 47960,
+      "sizeOk": true,
+      "dimensionsM": [
+        0.29,
+        0.1101,
+        0.1081
+      ],
+      "center": [
+        0,
+        0.055,
+        0
+      ],
+      "minY": 0,
+      "textures": [],
+      "extensions": [
+        "EXT_meshopt_compression",
+        "KHR_mesh_quantization"
+      ],
+      "checks": {
+        "validatorErrors": 0,
+        "validatorWarnings": 0,
+        "yUpLongestX": true,
+        "toeTowardsPlusX": true,
+        "centeredXZ": true,
+        "baseAtZero": true,
+        "realScale": true,
+        "texturesOk": true,
+        "compressed": true
+      },
+      "ok": true
+    },
+    "adidas-handball-spezial": {
+      "status": "validado",
+      "url": "/assets/models/adidas-handball-spezial.glb",
+      "kind": "generico",
+      "label": "3D genérico",
+      "source": "Generado por scripts/models/build-generic-glb.mjs a partir del PlaceholderSneaker del proyecto",
+      "author": "Key Street (modelo propio generado)",
+      "license": "Propio del proyecto (sin terceros)",
+      "sourceUrl": null,
+      "palette": {
+        "upper": "#1B1B1B",
+        "accent": "#FFFFFF",
+        "sole": "#A87A4F"
+      },
+      "silhouette": "LOW",
+      "validatedAt": "2026-11-24",
+      "bytes": 56240,
+      "sizeOk": true,
+      "dimensionsM": [
+        0.29,
+        0.1018,
+        0.0926
+      ],
+      "center": [
+        0,
+        0.0509,
+        0
+      ],
+      "minY": 0,
+      "textures": [],
+      "extensions": [
+        "EXT_meshopt_compression",
+        "KHR_mesh_quantization"
+      ],
+      "checks": {
+        "validatorErrors": 0,
+        "validatorWarnings": 0,
+        "yUpLongestX": true,
+        "toeTowardsPlusX": true,
+        "centeredXZ": true,
+        "baseAtZero": true,
+        "realScale": true,
+        "texturesOk": true,
+        "compressed": true
+      },
+      "ok": true
+    },
+    "air-jordan-4": {
+      "status": "validado",
+      "url": "/assets/models/air-jordan-4.glb",
+      "kind": "generico",
+      "label": "3D genérico",
+      "source": "Generado por scripts/models/build-generic-glb.mjs a partir del PlaceholderSneaker del proyecto",
+      "author": "Key Street (modelo propio generado)",
+      "license": "Propio del proyecto (sin terceros)",
+      "sourceUrl": null,
+      "palette": {
+        "upper": "#F5F5F5",
+        "accent": "#8A8D91",
+        "sole": "#F1F1EF"
+      },
+      "silhouette": "MID",
+      "validatedAt": "2026-11-24",
+      "bytes": 49852,
+      "sizeOk": true,
+      "dimensionsM": [
+        0.29,
+        0.1314,
+        0.0984
+      ],
+      "center": [
+        0,
+        0.0657,
+        0
+      ],
+      "minY": 0,
+      "textures": [],
+      "extensions": [
+        "EXT_meshopt_compression",
+        "KHR_mesh_quantization"
+      ],
+      "checks": {
+        "validatorErrors": 0,
+        "validatorWarnings": 0,
+        "yUpLongestX": true,
+        "toeTowardsPlusX": true,
+        "centeredXZ": true,
+        "baseAtZero": true,
+        "realScale": true,
+        "texturesOk": true,
+        "compressed": true
+      },
+      "ok": true
+    },
+    "nike-court-vision-low": {
+      "status": "validado",
+      "url": "/assets/models/nike-court-vision-low.glb",
+      "kind": "generico",
+      "label": "3D genérico",
+      "source": "Generado por scripts/models/build-generic-glb.mjs a partir del PlaceholderSneaker del proyecto",
+      "author": "Key Street (modelo propio generado)",
+      "license": "Propio del proyecto (sin terceros)",
+      "sourceUrl": null,
+      "palette": {
+        "upper": "#FFFFFF",
+        "accent": "#111111",
+        "sole": "#F1F1EF"
+      },
+      "silhouette": "LOW",
+      "validatedAt": "2026-11-24",
+      "bytes": 50416,
+      "sizeOk": true,
+      "dimensionsM": [
+        0.29,
+        0.1018,
+        0.0984
+      ],
+      "center": [
+        0,
+        0.0509,
+        0
+      ],
+      "minY": 0,
+      "textures": [],
+      "extensions": [
+        "EXT_meshopt_compression",
+        "KHR_mesh_quantization"
+      ],
+      "checks": {
+        "validatorErrors": 0,
+        "validatorWarnings": 0,
+        "yUpLongestX": true,
+        "toeTowardsPlusX": true,
+        "centeredXZ": true,
+        "baseAtZero": true,
+        "realScale": true,
+        "texturesOk": true,
+        "compressed": true
+      },
+      "ok": true
+    }
+  }
+}

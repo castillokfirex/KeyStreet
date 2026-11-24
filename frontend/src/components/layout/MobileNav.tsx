@@ -1,6 +1,8 @@
-import { Link } from "react-router";
-import { ShieldCheck } from "lucide-react";
+import { Home, Search, ShieldCheck } from "lucide-react";
+import { useState, type FormEvent } from "react";
+import { Link, useNavigate } from "react-router";
 import { Drawer } from "@/components/ui/Drawer";
+import { MAIN_NAV } from "./navigation";
 
 export function MobileNav({
   open,
@@ -9,47 +11,80 @@ export function MobileNav({
   open: boolean;
   onClose: () => void;
 }) {
+  const navigate = useNavigate();
+  const [query, setQuery] = useState("");
+
+  const handleSearch = (e: FormEvent) => {
+    e.preventDefault();
+    const q = query.trim();
+    navigate(q ? `/catalogo?q=${encodeURIComponent(q)}` : "/catalogo");
+    onClose();
+  };
+
   return (
     <Drawer open={open} onClose={onClose} title="Menú" variant="right">
-      <nav aria-label="Navegación móvil" className="flex flex-col p-5 gap-2">
-        <Link
-          to="/catalogo"
-          onClick={onClose}
-          className="rounded-xl px-4 py-3 font-display text-sm font-bold uppercase tracking-wider text-navy hover:bg-surface"
+      <nav aria-label="Navegación móvil" className="flex flex-col gap-6 p-5">
+        <form
+          onSubmit={handleSearch}
+          role="search"
+          className="flex items-center gap-2 border-b border-ink"
         >
-          Colección completa
-        </Link>
-        <Link
-          to="/catalogo?silhouette=LOW"
-          onClick={onClose}
-          className="rounded-xl px-4 py-3 font-display text-sm font-bold uppercase tracking-wider text-navy hover:bg-surface"
-        >
-          Siluetas Low
-        </Link>
-        <Link
-          to="/catalogo?silhouette=HIGH"
-          onClick={onClose}
-          className="rounded-xl px-4 py-3 font-display text-sm font-bold uppercase tracking-wider text-navy hover:bg-surface"
-        >
-          Caña Alta & Retro
-        </Link>
-        <Link
-          to="/catalogo?discounted=true"
-          onClick={onClose}
-          className="flex items-center justify-between rounded-xl px-4 py-3 font-display text-sm font-bold uppercase tracking-wider text-forest bg-mint/60"
-        >
-          <span>Sale · Ofertas</span>
-          <span className="rounded-full bg-forest px-2 py-0.5 text-[10px] text-white">
-            OFF
-          </span>
-        </Link>
-        <div className="my-3 border-t border-line" />
+          <Search className="h-4 w-4 text-muted" strokeWidth={1.5} aria-hidden="true" />
+          <input
+            type="search"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Modelo, marca o color"
+            aria-label="Buscar en el catálogo"
+            className="h-11 flex-1 bg-transparent text-sm text-ink placeholder:text-muted focus:outline-none"
+          />
+        </form>
+
+        <ul className="flex flex-col">
+          <li>
+            <Link
+              to="/"
+              onClick={onClose}
+              className="flex items-center gap-2 py-3 font-display text-base font-semibold uppercase tracking-label text-ink"
+            >
+              <Home className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
+              <span>Inicio</span>
+            </Link>
+          </li>
+          {MAIN_NAV.map((item) => (
+            <li key={item.label}>
+              <Link
+                to={item.to}
+                onClick={onClose}
+                className={`block py-3 font-display text-base font-semibold uppercase tracking-label ${item.highlight ? "text-sale-text" : "text-ink"}`}
+              >
+                {item.label}
+              </Link>
+              {item.children && (
+                <ul className="mb-2 ml-3 border-l border-line pl-4">
+                  {item.children.map((child) => (
+                    <li key={child.label}>
+                      <Link
+                        to={child.to}
+                        onClick={onClose}
+                        className="block py-2 font-display text-xs font-semibold uppercase tracking-label text-muted hover:text-ink"
+                      >
+                        {item.label} {child.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          ))}
+        </ul>
+
         <Link
           to="/admin/documents"
           onClick={onClose}
-          className="flex items-center gap-2 rounded-xl px-4 py-3 text-xs font-semibold text-muted hover:text-navy hover:bg-surface"
+          className="flex items-center gap-2 border-t border-line pt-4 text-xs font-semibold text-muted hover:text-ink"
         >
-          <ShieldCheck className="h-4 w-4" aria-hidden="true" />
+          <ShieldCheck className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
           <span>Panel Admin / Documentos</span>
         </Link>
       </nav>

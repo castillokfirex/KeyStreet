@@ -13,7 +13,7 @@ test.describe("Probador anatómico 3D con foto efímera", () => {
       }
     });
 
-    await page.goto("/producto/nike-air-force-1-low-07-blanco?modo=probador");
+    await page.goto("/producto/nike-air-force-1-low-07-blanco/probador");
     const fittingRoom = page.getByTestId("fitting-room");
     await expect(fittingRoom).toBeVisible();
     await expect(fittingRoom).toHaveAttribute("data-camera-mode", "full");
@@ -31,14 +31,21 @@ test.describe("Probador anatómico 3D con foto efímera", () => {
     expect(uploadedImageRequests).toEqual([]);
     await expect(page.locator('img[src^="blob:"]')).toHaveCount(0);
 
-    // Prendas básicas de un solo tono
-    const camisetaBtn = page.getByRole("button", { name: "Camiseta" });
-    await camisetaBtn.click();
-    await expect(camisetaBtn).toHaveAttribute("aria-pressed", "true");
+    // Ropa: cada prenda con su propio tipo y color
+    await page.getByRole("tab", { name: /Ropa/ }).click();
+    const hoodieBtn = page.getByRole("button", { name: "Hoodie" });
+    await hoodieBtn.click();
+    await expect(hoodieBtn).toHaveAttribute("aria-pressed", "true");
 
-    const sudaderaBtn = page.getByRole("button", { name: "Sudadera Jogger" });
-    await sudaderaBtn.click();
-    await expect(sudaderaBtn).toHaveAttribute("aria-pressed", "true");
+    const joggerBtn = page.getByRole("button", { name: "Jogger" });
+    await joggerBtn.click();
+    await expect(joggerBtn).toHaveAttribute("aria-pressed", "true");
+
+    await page.getByRole("radiogroup", { name: "Color de la parte de arriba" }).getByRole("radio", { name: "Negro" }).click();
+    await page.getByRole("radiogroup", { name: "Color de la parte de abajo" }).getByRole("radio", { name: "Blanco hueso" }).click();
+    await expect(
+      page.getByRole("radiogroup", { name: "Color de la parte de arriba" }).getByRole("radio", { name: "Negro" }),
+    ).toHaveAttribute("aria-checked", "true");
 
     // Zoom directo a los zapatos
     const zoomFeetBtn = page.getByRole("button", { name: /Zoom pies/i });

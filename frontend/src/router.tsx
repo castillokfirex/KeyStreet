@@ -16,6 +16,12 @@ const ProductDetailPage = lazy(() =>
   })),
 );
 
+const FittingPage = lazy(() =>
+  import("@/features/fitting/FittingPage").then((m) => ({
+    default: m.FittingPage,
+  })),
+);
+
 const LoginPage = lazy(() =>
   import("@/features/admin/LoginPage").then((m) => ({ default: m.LoginPage })),
 );
@@ -67,6 +73,7 @@ export function AppRoutes() {
         <Route index element={<HomePage />} />
         <Route path="catalogo" element={withSuspense(<CatalogPage />)} />
         <Route path="producto/:slug" element={withSuspense(<ProductDetailPage />)} />
+        <Route path="producto/:slug/probador" element={withSuspense(<FittingPage />)} />
       </Route>
       <Route path="/admin/login" element={withSuspense(<LoginPage />)} />
       <Route path="/admin" element={withSuspense(<AdminLayout />)}>

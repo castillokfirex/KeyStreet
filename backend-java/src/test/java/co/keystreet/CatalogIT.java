@@ -16,11 +16,11 @@ import org.springframework.test.web.servlet.MvcResult;
 class CatalogIT extends AbstractIT {
 
   @Test
-  void catalogReturns10ProductsAnd4DiscountedSortedByPrice() throws Exception {
+  void catalogReturns15ProductsAnd4DiscountedSortedByPrice() throws Exception {
     mockMvc
         .perform(get("/api/v1/public/products").header("X-Tenant-Slug", "key-street"))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.totalItems").value(10));
+        .andExpect(jsonPath("$.totalItems").value(15));
 
     mockMvc
         .perform(
@@ -29,7 +29,7 @@ class CatalogIT extends AbstractIT {
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.totalItems").value(4))
         .andExpect(jsonPath("$.items[0].slug").value("converse-chuck-taylor-all-star-clasico"))
-        .andExpect(jsonPath("$.items[0].finalPriceCop").value(144500));
+        .andExpect(jsonPath("$.items[0].finalPriceCop").value(254900));
 
     // Filtro por talla 44 y FTS sin tilde ("clasico")
     mockMvc
@@ -43,7 +43,8 @@ class CatalogIT extends AbstractIT {
         .perform(get("/api/v1/public/products/facets").header("X-Tenant-Slug", "key-street"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.discountedCount").value(4))
-        .andExpect(jsonPath("$.brands.length()").value(5));
+        // Nike, Jordan, Adidas, Puma, New Balance, Converse y Vans (marcas con productos activos)
+        .andExpect(jsonPath("$.brands.length()").value(7));
   }
 
   @Test
@@ -54,7 +55,7 @@ class CatalogIT extends AbstractIT {
                 get("/api/v1/public/products/nike-air-force-1-low-07-blanco")
                     .header("X-Tenant-Slug", "key-street"))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.finalPriceCop").value(166500))
+            .andExpect(jsonPath("$.finalPriceCop").value(526400))
             .andReturn();
 
     JsonNode detail = objectMapper.readTree(detailRes.getResponse().getContentAsString());
@@ -79,16 +80,16 @@ class CatalogIT extends AbstractIT {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(reqBody))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.totalCop").value(166500))
+            .andExpect(jsonPath("$.totalCop").value(526400))
             .andReturn();
 
     JsonNode wa = objectMapper.readTree(waRes.getResponse().getContentAsString());
     String msg = wa.get("message").asText();
     assertThat(msg)
-        .contains("Nike Air Force 1 Low '07 (Blanco)")
+        .contains("Nike Air Force 1 '07 (Blanco)")
         .contains("Talla 41")
         .contains("KS-NIK-AF1-41")
-        .contains("$166.500 COP");
+        .contains("$526.400 COP");
     assertThat(wa.get("whatsappUrl").asText()).startsWith("https://wa.me/573000000000?text=");
   }
 }

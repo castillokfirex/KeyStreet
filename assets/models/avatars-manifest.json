@@ -1,0 +1,29 @@
+{
+  "$comment": "Avatares 3D modulares CC0-1.0 derivados de Quaternius Modular Men & Women.",
+  "license": "CC0-1.0",
+  "author": "Quaternius (Modular Men / Modular Women), normalizado y ensamblado por Key Street",
+  "sourceUrl": "https://quaternius.com",
+  "generatedAt": "2026-11-24",
+  "avatars": {
+    "masculino": {
+      "url": "/assets/avatars/avatar-masculino.glb",
+      "bytes": 360624,
+      "hipY": 0.9821,
+      "neckY": 1.4334,
+      "leftAnkleX": 0.1128,
+      "rightAnkleX": -0.1128,
+      "ankleZ": 0,
+      "validatorErrors": 0
+    },
+    "femenino": {
+      "url": "/assets/avatars/avatar-femenino.glb",
+      "bytes": 343428,
+      "hipY": 1.0795,
+      "neckY": 1.4624,
+      "leftAnkleX": 0.0915,
+      "rightAnkleX": -0.0915,
+      "ankleZ": 0,
+      "validatorErrors": 0
+    }
+  }
+}

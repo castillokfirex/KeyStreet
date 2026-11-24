@@ -1,15 +1,11 @@
-import { ContactShadows, OrbitControls, useGLTF } from "@react-three/drei";
+import { ContactShadows, OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { RotateCw, Sparkles, X } from "lucide-react";
 import { Suspense, useEffect, useRef, useState } from "react";
 import type { ProductDetailDto } from "@/lib/types";
+import { GltfSneaker, PLACEHOLDER_FLOOR_Y } from "./GltfSneaker";
 import { Hotspot3DAnchor, HotspotOverlayPin } from "./Hotspot";
 import { PlaceholderSneaker } from "./PlaceholderSneaker";
-
-function GltfSneaker({ url }: { url: string }) {
-  const gltf = useGLTF(url);
-  return <primitive object={gltf.scene} />;
-}
 
 export function Viewer3D({
   product,
@@ -72,7 +68,9 @@ export function Viewer3D({
         shadows
         dpr={[1, 1.5]}
         frameloop={inView ? (autoRotate ? "always" : "demand") : "never"}
-        camera={{ position: [0.34, 0.2, 0.36], fov: 36 }}
+        // Encuadre para un zapato de ~0,29 m en el contenedor vertical 3:4
+        // (a 0,34/0,2/0,36 el campo horizontal cubría ~0,26 m y la punta se cortaba)
+        camera={{ position: [0.43, 0.25, 0.46], fov: 36 }}
       >
         <color attach="background" args={["#F5F6F8"]} />
         <ambientLight intensity={0.85} />
@@ -81,7 +79,8 @@ export function Viewer3D({
 
         <Suspense fallback={null}>
           {product.model3dReady && product.model3dUrl ? (
-            <GltfSneaker url={product.model3dUrl} />
+            // GLB normalizado (base en y = 0) apoyado sobre el piso del visor
+            <GltfSneaker url={product.model3dUrl} position={[0, PLACEHOLDER_FLOOR_Y, 0]} />
           ) : (
             <PlaceholderSneaker
               silhouette={product.silhouette}
@@ -165,7 +164,7 @@ export function Viewer3D({
                 `¿Qué detalle y cuidados tiene "${activeHotspot.label}"?`,
               )
             }
-            className="mt-3 inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-forest px-3 py-1.5 font-display text-[10px] font-bold uppercase tracking-wider text-white hover:bg-[#1e423b] cursor-pointer"
+            className="mt-3 inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-forest px-3 py-1.5 font-display text-[10px] font-bold uppercase tracking-wider text-white hover:bg-forest-hover cursor-pointer"
           >
             <Sparkles className="h-3 w-3" aria-hidden="true" />
             <span>Preguntar a Kast</span>

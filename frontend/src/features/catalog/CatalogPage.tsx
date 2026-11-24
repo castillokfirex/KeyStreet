@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { ChevronDown } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useSearchParams } from "react-router";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
@@ -7,12 +6,15 @@ import { TrustStrip } from "@/components/layout/TrustStrip";
 import { Button } from "@/components/ui/Button";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { publicApi, queryKeys, type CatalogQueryParams } from "@/lib/queries";
+import { DENSITY_GRID, useCatalogViewStore } from "@/stores/catalogView";
+import { CollectionChips } from "./CollectionChips";
 import { FilterBar, type FilterState } from "./FilterBar";
 import { ProductCard } from "./ProductCard";
 
 export function CatalogPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [pageSize, setPageSize] = useState(24);
+  const density = useCatalogViewStore((s) => s.density);
 
   const filters: FilterState = useMemo(() => {
     const sizeVal = searchParams.get("size");
@@ -26,6 +28,7 @@ export function CatalogPage() {
       maxPrice: maxVal ? Number(maxVal) : undefined,
       discounted: searchParams.get("discounted") === "true" || undefined,
       q: searchParams.get("q") || undefined,
+      tags: searchParams.get("tags") || undefined,
       sort: searchParams.get("sort") || "recommended",
     };
   }, [searchParams]);
@@ -61,6 +64,7 @@ export function CatalogPage() {
       ["maxPrice", merged.maxPrice],
       ["discounted", merged.discounted],
       ["q", merged.q],
+      ["tags", merged.tags],
       ["sort", merged.sort === "recommended" ? undefined : merged.sort],
     ];
 
@@ -80,102 +84,98 @@ export function CatalogPage() {
 
   const items = data?.items ?? [];
   const totalItems = data?.totalItems ?? 0;
+  const gridClass = `grid gap-[var(--ks-grid-gap)] ${DENSITY_GRID[density]}`;
 
   return (
     <div>
-      <div className="mx-auto min-h-[1500px] max-w-7xl px-4 sm:px-6 lg:px-8 pt-6 pb-8">
-        <Breadcrumbs
-          items={[
-            { label: "Inicio", to: "/" },
-            { label: "Catálogo" },
-            { label: "Sneakers & Streetwear" },
-          ]}
-        />
+      <div className="mx-auto min-h-[1500px] max-w-[1680px] pt-5 pb-8">
+        <div className="px-4 sm:px-6 lg:px-8">
+          <Breadcrumbs
+            items={[
+              { label: "Inicio", to: "/" },
+              { label: "Catálogo" },
+            ]}
+          />
 
-        <div className="flex flex-wrap items-end justify-between gap-4 pb-5">
-          <div>
-            <h1 className="font-display text-2xl sm:text-3xl font-bold uppercase tracking-tight text-navy">
+          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 pb-5">
+            <h1 className="font-display text-sm font-semibold uppercase tracking-nav text-ink">
               Colección Sneakers & Streetwear
             </h1>
-            <p className="mt-1 text-xs text-muted">
-              Curaduría en Colombia · Precios en COP · 4 referencias con descuento exclusivo del 10% al 15%
-            </p>
+            <span className="min-w-[110px] text-[11px] text-muted" aria-live="polite">
+              {isLoading ? "Cargando…" : `${totalItems} piezas disponibles`}
+            </span>
           </div>
-          <span className="min-w-[140px] text-right font-display text-[11px] font-bold uppercase tracking-[0.16em] text-muted">
-            {totalItems} piezas disponibles
-          </span>
+
+          <CollectionChips />
+
+          <div className="mt-6">
+            <FilterBar
+              facets={facets}
+              filters={filters}
+              onChange={updateFilters}
+              onClear={clearFilters}
+            />
+          </div>
         </div>
 
-        <FilterBar
-          facets={facets}
-          filters={filters}
-          onChange={updateFilters}
-          onClear={clearFilters}
-        />
-
         {isLoading ? (
-          <div className="mt-6 grid grid-cols-2 gap-3.5 sm:gap-5 md:grid-cols-3 lg:grid-cols-4">
-            {Array.from({ length: 10 }).map((_, idx) => (
-              <div key={idx} className="space-y-3 rounded-2xl border border-line p-2.5">
+          <div className={`mt-[var(--ks-grid-gap)] ${gridClass}`} aria-hidden="true">
+            {Array.from({ length: 8 }).map((_, idx) => (
+              <div key={idx}>
                 <Skeleton className="aspect-[4/5] w-full" />
-                <Skeleton className="h-3 w-20" />
-                <Skeleton className="h-4 w-3/4" />
-                <Skeleton className="h-8 w-full" />
+                <div className="space-y-2 px-3 pb-6 pt-3">
+                  <Skeleton className="h-2.5 w-3/5" />
+                  <Skeleton className="h-2.5 w-1/4" />
+                </div>
               </div>
             ))}
           </div>
         ) : isError ? (
-          <div className="mt-8 rounded-2xl border border-red-200 bg-red-50 p-6 text-center">
-            <p className="text-sm font-bold text-red-900">
+          <div className="mx-4 mt-10 py-16 text-center sm:mx-6 lg:mx-8">
+            <p className="font-display text-xs font-semibold uppercase tracking-nav text-ink">
               No pudimos cargar el catálogo en este momento.
             </p>
-            <Button
-              variant="navy"
-              size="sm"
-              className="mt-3"
-              onClick={() => refetch()}
-            >
+            <Button variant="outline" size="sm" className="mt-4" onClick={() => refetch()}>
               Reintentar
             </Button>
           </div>
         ) : items.length === 0 ? (
-          <div className="mt-8 rounded-2xl border border-line bg-surface/60 p-10 text-center">
-            <p className="font-display text-sm font-bold uppercase tracking-wider text-navy">
+          <div className="mx-4 mt-10 py-16 text-center sm:mx-6 lg:mx-8">
+            <p className="font-display text-xs font-semibold uppercase tracking-nav text-ink">
               Sin coincidencias para estos filtros
             </p>
-            <p className="mt-1 text-xs text-muted">
-              Ajusta las tallas o elimina filtros para ver las 10 siluetas del catálogo.
+            <p className="mt-2 text-xs text-muted">
+              Ajusta las tallas o elimina filtros para ver todas las siluetas del catálogo.
             </p>
-            <Button
-              variant="outline"
-              size="sm"
-              className="mt-4"
-              onClick={clearFilters}
-            >
+            <Button variant="outline" size="sm" className="mt-5" onClick={clearFilters}>
               Ver toda la colección
             </Button>
           </div>
         ) : (
           <>
-            <div className="mt-6 grid grid-cols-2 gap-3.5 sm:gap-5 md:grid-cols-3 lg:grid-cols-4">
-              {items.map((product) => (
-                <ProductCard key={product.id} product={product} />
+            <ul
+              className={`mt-[var(--ks-grid-gap)] ${gridClass}`}
+              aria-label="Productos del catálogo"
+            >
+              {items.map((product, idx) => (
+                <li key={product.id}>
+                  <ProductCard product={product} eager={idx < density} />
+                </li>
               ))}
-            </div>
+            </ul>
 
-            <div className="mt-10 flex flex-col items-center gap-3">
-              <p className="text-xs text-muted">
-                Mostrando <strong className="text-navy">{items.length}</strong> de{" "}
-                <strong className="text-navy">{totalItems}</strong> piezas exclusivas
+            <div className="mt-12 flex flex-col items-center gap-2 px-4">
+              <p className="font-display text-[10px] uppercase tracking-label text-muted">
+                Mostrando {items.length} de {totalItems}
               </p>
               {items.length < totalItems && pageSize < 48 && (
-                <Button
-                  variant="outline"
+                <button
+                  type="button"
                   onClick={() => setPageSize(48)}
+                  className="font-display text-[11px] font-semibold uppercase tracking-nav text-ink underline underline-offset-4 hover:opacity-60 cursor-pointer"
                 >
-                  <span>Cargar más siluetas</span>
-                  <ChevronDown className="h-4 w-4" aria-hidden="true" />
-                </Button>
+                  Cargar más siluetas
+                </button>
               )}
             </div>
           </>

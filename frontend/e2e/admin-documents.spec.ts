@@ -38,7 +38,7 @@ test.describe("Panel Admin — Ingesta efímera y validaciones PDF", () => {
   }) => {
     await page.goto("/admin/login");
     await page.getByLabel("Correo electrónico").fill("admin@keystreet.co");
-    await page.getByLabel("Contraseña").fill("KeyStreet2026!");
+    await page.getByLabel("Contraseña", { exact: true }).fill("KeyStreet2026!");
     await page.getByRole("button", { name: /Ingresar al panel/i }).click();
 
     await expect(page).toHaveURL(/\/admin\/documents/);

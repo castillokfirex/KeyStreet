@@ -16,8 +16,9 @@
     "postinstall": "node scripts/copy-mediapipe-assets.mjs"
   },
   "dependencies": {
-    "@fontsource-variable/plus-jakarta-sans": "^5.3.0",
-    "@fontsource-variable/space-grotesk": "^5.3.0",
+    "@fontsource-variable/archivo": "^5.3.0",
+    "@fontsource-variable/geist": "^5.3.0",
+    "@fontsource-variable/geist-mono": "^5.3.0",
     "@hookform/resolvers": "^7.0.7",
     "@mediapipe/tasks-vision": "^1.2.3",
     "@react-three/drei": "^10.7.9",

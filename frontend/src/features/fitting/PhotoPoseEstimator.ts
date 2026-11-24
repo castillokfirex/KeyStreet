@@ -1,3 +1,4 @@
+import { sampleAppearanceFromImageData } from "./avatarAppearance";
 import { computeParamsFromLandmarks, type PoseLandmarkLike } from "./bodyParams";
 import type { AnatomicalRatios, BodyBuild } from "@/stores/fitProfile";
 
@@ -5,6 +6,8 @@ export interface PoseEstimationResult {
   heightCm: number;
   build: BodyBuild;
   ratios: AnatomicalRatios;
+  skinTone?: string;
+  hairColor?: string;
   ephemeralCleared: true;
 }
 
@@ -115,8 +118,21 @@ export async function estimatePoseFromFile(
     }
 
     const computed = computeParamsFromLandmarks(landmarks, declaredHeightCm);
+    const appearance =
+      ctx &&
+      typeof ctx.getImageData === "function" &&
+      canvas.width > 0 &&
+      canvas.height > 0
+        ? sampleAppearanceFromImageData(
+            (x, y, w, h) => ctx.getImageData(x, y, w, h).data,
+            canvas.width,
+            canvas.height,
+            landmarks,
+          )
+        : {};
     return {
       ...computed,
+      ...appearance,
       ephemeralCleared: true,
     };
   } finally {

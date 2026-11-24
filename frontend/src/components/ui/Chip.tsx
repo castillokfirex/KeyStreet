@@ -17,10 +17,10 @@ export function Chip({
       type={type}
       aria-pressed={active}
       className={[
-        "inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors cursor-pointer",
+        "inline-flex h-9 items-center gap-1.5 rounded-sm border px-3 font-display text-[10px] font-semibold uppercase tracking-nav transition-colors cursor-pointer",
         active
-          ? "bg-navy text-white border border-navy"
-          : "bg-canvas text-navy border border-line hover:border-navy",
+          ? "border-ink bg-ink text-canvas"
+          : "border-line bg-transparent text-ink hover:border-ink",
         className,
       ].join(" ")}
       {...rest}

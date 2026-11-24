@@ -1,6 +1,10 @@
-import { RotateCcw } from "lucide-react";
+import { RotateCcw, X } from "lucide-react";
 import { Chip } from "@/components/ui/Chip";
+import { Dropdown } from "@/components/ui/Dropdown";
+import { formatCop } from "@/lib/money";
 import type { FacetsDto } from "@/lib/types";
+import { collectionLabel } from "./CollectionChips";
+import { DensityToggle } from "./DensityToggle";
 
 export interface FilterState {
   brand?: string;
@@ -10,8 +14,20 @@ export interface FilterState {
   maxPrice?: number;
   discounted?: boolean;
   q?: string;
+  tags?: string;
   sort?: string;
 }
+
+/** Topes de precio acordes al catálogo (pares entre ~$350.000 y ~$1.200.000). */
+const PRICE_CAPS = [400000, 550000, 700000, 1000000];
+
+const SORT_OPTIONS = [
+  { value: "recommended", label: "Recomendados" },
+  { value: "price_asc", label: "Precio: menor a mayor" },
+  { value: "price_desc", label: "Precio: mayor a menor" },
+  { value: "discount_desc", label: "Mayor descuento" },
+  { value: "newest", label: "Más recientes" },
+];
 
 export function FilterBar({
   facets,
@@ -31,81 +47,82 @@ export function FilterBar({
       filters.minPrice !== undefined ||
       filters.maxPrice !== undefined ||
       filters.discounted ||
-      filters.q,
+      filters.q ||
+      filters.tags,
   );
 
   return (
-    <div className="flex flex-col gap-3 rounded-2xl border border-line bg-surface/60 p-4">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap items-center gap-2">
+    <div className="border-y border-line">
+      <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 py-1">
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-1">
+          <DensityToggle />
+
           {/* Tallas */}
-          <select
-            aria-label="Filtrar por talla EU"
-            value={filters.size ?? ""}
-            onChange={(e) =>
-              onChange({
-                size: e.target.value ? Number(e.target.value) : undefined,
-              })
-            }
-            className="h-9 rounded-full border border-line bg-canvas px-3.5 text-xs font-medium text-navy focus:border-navy focus:outline-none cursor-pointer"
-          >
-            <option value="">Tallas: 36 – 44</option>
-            {(facets?.sizes ?? []).map((s) => (
-              <option key={s.sizeEu} value={s.sizeEu}>
-                EU {s.sizeEu} ({s.count})
-              </option>
-            ))}
-          </select>
+          <Dropdown
+            label="Talla"
+            ariaLabel="Filtrar por talla EU"
+            value={filters.size ? String(filters.size) : ""}
+            options={[
+              { value: "", label: "Todas las tallas" },
+              ...(facets?.sizes ?? []).map((s) => ({
+                value: String(s.sizeEu),
+                label: `EU ${s.sizeEu}`,
+                meta: String(s.count),
+              })),
+            ]}
+            onChange={(v) => onChange({ size: v ? Number(v) : undefined })}
+          />
 
           {/* Marcas */}
-          <select
-            aria-label="Filtrar por marca"
+          <Dropdown
+            label="Marca"
+            ariaLabel="Filtrar por marca"
             value={filters.brand ?? ""}
-            onChange={(e) =>
-              onChange({ brand: e.target.value || undefined })
-            }
-            className="h-9 rounded-full border border-line bg-canvas px-3.5 text-xs font-medium text-navy focus:border-navy focus:outline-none cursor-pointer"
-          >
-            <option value="">Todas las marcas</option>
-            {(facets?.brands ?? []).map((b) => (
-              <option key={b.slug} value={b.slug}>
-                {b.name} ({b.count})
-              </option>
-            ))}
-          </select>
+            options={[
+              { value: "", label: "Todas las marcas" },
+              ...(facets?.brands ?? []).map((b) => ({
+                value: b.slug,
+                label: b.name,
+                meta: String(b.count),
+              })),
+            ]}
+            onChange={(v) => onChange({ brand: v || undefined })}
+          />
 
           {/* Silueta */}
-          <select
-            aria-label="Filtrar por silueta"
+          <Dropdown
+            label="Silueta"
+            ariaLabel="Filtrar por silueta"
             value={filters.silhouette ?? ""}
-            onChange={(e) =>
-              onChange({ silhouette: e.target.value || undefined })
-            }
-            className="h-9 rounded-full border border-line bg-canvas px-3.5 text-xs font-medium text-navy focus:border-navy focus:outline-none cursor-pointer"
-          >
-            <option value="">Silueta: Todas</option>
-            {(facets?.silhouettes ?? ["LOW", "HIGH"]).map((sil) => (
-              <option key={sil} value={sil}>
-                {sil === "HIGH" ? "Caña Alta (High)" : "Perfil Bajo (Low)"}
-              </option>
-            ))}
-          </select>
+            options={[
+              { value: "", label: "Todas las siluetas" },
+              ...(facets?.silhouettes ?? ["LOW", "HIGH"]).map((sil) => ({
+                value: sil,
+                label:
+                  sil === "HIGH"
+                    ? "Caña alta (High)"
+                    : sil === "MID"
+                      ? "Caña media (Mid)"
+                      : "Perfil bajo (Low)",
+              })),
+            ]}
+            onChange={(v) => onChange({ silhouette: v || undefined })}
+          />
 
           {/* Rango COP */}
-          <select
-            aria-label="Filtrar por precio en COP"
+          <Dropdown
+            label="Precio"
+            ariaLabel="Filtrar por precio en COP"
             value={filters.maxPrice ? String(filters.maxPrice) : ""}
-            onChange={(e) =>
-              onChange({
-                maxPrice: e.target.value ? Number(e.target.value) : undefined,
-              })
-            }
-            className="h-9 rounded-full border border-line bg-canvas px-3.5 text-xs font-medium text-navy focus:border-navy focus:outline-none cursor-pointer"
-          >
-            <option value="">Precio: Todos</option>
-            <option value="185000">Hasta $185.000 COP</option>
-            <option value="200000">Hasta $200.000 COP</option>
-          </select>
+            options={[
+              { value: "", label: "Cualquier precio" },
+              ...PRICE_CAPS.map((cap) => ({
+                value: String(cap),
+                label: `Hasta ${formatCop(cap)}`,
+              })),
+            ]}
+            onChange={(v) => onChange({ maxPrice: v ? Number(v) : undefined })}
+          />
 
           {/* Solo descuentos */}
           <Chip
@@ -116,7 +133,9 @@ export function FilterBar({
           >
             <span>Solo descuentos</span>
             {facets && (
-              <span className="rounded-full bg-mint px-1.5 py-0.5 text-[10px] font-bold text-forest">
+              <span
+                className={`tabular-nums ${filters.discounted ? "text-canvas/70" : "text-sale-text"}`}
+              >
                 {facets.discountedCount}
               </span>
             )}
@@ -126,7 +145,7 @@ export function FilterBar({
             <button
               type="button"
               onClick={onClear}
-              className="inline-flex items-center gap-1 rounded-full px-3 py-1.5 font-display text-[10px] font-bold uppercase tracking-[0.16em] text-muted hover:text-navy cursor-pointer"
+              className="inline-flex h-10 items-center gap-1 font-display text-[10px] font-semibold uppercase tracking-nav text-muted hover:text-ink cursor-pointer"
             >
               <RotateCcw className="h-3 w-3" aria-hidden="true" />
               <span>Limpiar todo</span>
@@ -135,41 +154,44 @@ export function FilterBar({
         </div>
 
         {/* Orden */}
-        <div className="flex items-center gap-2">
-          <label
-            htmlFor="catalog-sort"
-            className="text-[11px] font-semibold text-muted"
-          >
-            Ordenar:
-          </label>
-          <select
-            id="catalog-sort"
-            aria-label="Ordenar productos"
-            value={filters.sort ?? "recommended"}
-            onChange={(e) => onChange({ sort: e.target.value })}
-            className="h-9 rounded-full border border-line bg-canvas px-3.5 text-xs font-semibold text-navy focus:border-navy focus:outline-none cursor-pointer"
-          >
-            <option value="recommended">Recomendados (Drops & Ofertas)</option>
-            <option value="price_asc">Precio: Menor a mayor</option>
-            <option value="price_desc">Precio: Mayor a menor</option>
-            <option value="discount_desc">Mayor descuento</option>
-            <option value="newest">Más recientes</option>
-          </select>
-        </div>
+        <Dropdown
+          label="Ordenar"
+          prefix="Ordenar"
+          ariaLabel="Ordenar productos"
+          align="right"
+          value={filters.sort ?? "recommended"}
+          options={SORT_OPTIONS}
+          onChange={(v) => onChange({ sort: v })}
+        />
       </div>
 
-      {filters.q && (
-        <div className="flex items-center gap-2 text-xs text-muted">
-          <span>
-            Buscando: <strong className="text-navy">“{filters.q}”</strong>
-          </span>
-          <button
-            type="button"
-            onClick={() => onChange({ q: undefined })}
-            className="underline hover:text-navy cursor-pointer"
-          >
-            Quitar búsqueda
-          </button>
+      {(filters.q || filters.tags) && (
+        <div className="flex flex-wrap items-center gap-4 pb-3 text-xs text-muted">
+          {filters.tags && (
+            <span className="inline-flex items-center gap-1.5">
+              Colección: <strong className="font-semibold uppercase text-ink">{collectionLabel(filters.tags)}</strong>
+              <button
+                type="button"
+                onClick={() => onChange({ tags: undefined })}
+                aria-label={`Quitar colección ${collectionLabel(filters.tags)}`}
+                className="inline-flex h-6 w-6 items-center justify-center hover:text-ink cursor-pointer"
+              >
+                <X className="h-3.5 w-3.5" aria-hidden="true" />
+              </button>
+            </span>
+          )}
+          {filters.q && (
+            <span className="inline-flex items-center gap-2">
+              Buscando: <strong className="text-ink">“{filters.q}”</strong>
+              <button
+                type="button"
+                onClick={() => onChange({ q: undefined })}
+                className="underline hover:text-ink cursor-pointer"
+              >
+                Quitar búsqueda
+              </button>
+            </span>
+          )}
         </div>
       )}
     </div>
