@@ -26,72 +26,76 @@ export function PlaceholderSneaker({
 
   return (
     <group position={position} rotation={rotation} scale={scale}>
-      {/* Suela exterior */}
-      <mesh position={[0, -0.012, 0]} castShadow receiveShadow>
-        <boxGeometry args={[0.27, 0.018, 0.096]} />
-        <meshStandardMaterial color={soleColor} roughness={0.75} metalness={0.05} />
+      {/* Suela exterior redondeada */}
+      <mesh position={[0, -0.011, 0]} rotation={[0, 0, Math.PI / 2]} scale={[1, 1, 2.2]} castShadow receiveShadow>
+        <capsuleGeometry args={[0.02, 0.22, 6, 16]} />
+        <meshStandardMaterial color={soleColor} roughness={0.78} metalness={0.04} />
       </mesh>
 
-      {/* Mediasuela */}
-      <mesh position={[0, 0.006, 0]} castShadow receiveShadow>
-        <boxGeometry args={[0.264, 0.022, 0.092]} />
-        <meshStandardMaterial color="#F8FAFC" roughness={0.55} />
+      {/* Mediasuela curva */}
+      <mesh position={[0, 0.004, 0]} rotation={[0, 0, Math.PI / 2]} scale={[1, 1, 2.15]} castShadow receiveShadow>
+        <capsuleGeometry args={[0.019, 0.215, 6, 16]} />
+        <meshStandardMaterial color="#F7F7F5" roughness={0.55} />
       </mesh>
 
-      {/* Capellada trasera y mediopié */}
-      <mesh position={[-0.03, 0.045, 0]} castShadow receiveShadow>
-        <boxGeometry args={[0.17, 0.062, 0.086]} />
-        <meshStandardMaterial color={upperColor} roughness={0.5} />
+      {/* Cuerpo principal / capellada */}
+      <mesh position={[-0.025, 0.038, 0]} rotation={[0, 0, Math.PI / 2]} scale={[1.15, 1, 1.45]} castShadow receiveShadow>
+        <capsuleGeometry args={[0.028, 0.145, 8, 18]} />
+        <meshStandardMaterial color={upperColor} roughness={0.55} />
       </mesh>
 
-      {/* Puntera redondeada (toebox) */}
-      <mesh position={[0.078, 0.034, 0]} castShadow receiveShadow>
-        <boxGeometry args={[0.1, 0.038, 0.084]} />
-        <meshStandardMaterial color={upperColor} roughness={0.5} />
+      {/* Puntera curva */}
+      <mesh position={[0.068, 0.028, 0]} rotation={[0, 0, Math.PI / 2]} scale={[0.72, 1, 1.38]} castShadow receiveShadow>
+        <capsuleGeometry args={[0.028, 0.07, 8, 18]} />
+        <meshStandardMaterial color={upperColor} roughness={0.52} />
       </mesh>
 
-      {/* Caña alta condicional (HIGH vs LOW) */}
+      {/* Caña (LOW / MID / HIGH) */}
       <mesh
-        position={[-0.075, pick(0.068, 0.082, 0.095), 0]}
+        position={[-0.072, pick(0.068, 0.082, 0.098), 0]}
         castShadow
         receiveShadow
       >
         <cylinderGeometry
-          args={[0.043, 0.045, pick(0.038, 0.062, 0.088), 20]}
+          args={[0.042, 0.045, pick(0.038, 0.064, 0.094), 24]}
         />
         <meshStandardMaterial color={upperColor} roughness={0.55} />
       </mesh>
 
-      {/* Panel lateral / swoosh acento */}
-      <mesh position={[-0.008, 0.044, 0.044]} rotation={[0, 0, -0.18]} castShadow>
-        <boxGeometry args={[0.11, 0.018, 0.006]} />
-        <meshStandardMaterial color={accentColor} roughness={0.4} />
-      </mesh>
-      <mesh position={[-0.008, 0.044, -0.044]} rotation={[0, 0, -0.18]} castShadow>
-        <boxGeometry args={[0.11, 0.018, 0.006]} />
-        <meshStandardMaterial color={accentColor} roughness={0.4} />
-      </mesh>
+      {/* Panel lateral acento */}
+      {[-1, 1].map((side) => (
+        <mesh
+          key={side}
+          position={[-0.01, 0.04, side * 0.043]}
+          rotation={[0, 0, Math.PI / 2 - 0.16]}
+          castShadow
+        >
+          <capsuleGeometry args={[0.006, 0.095, 4, 10]} />
+          <meshStandardMaterial color={accentColor} roughness={0.42} />
+        </mesh>
+      ))}
 
       {/* Contrafuerte del talón */}
-      <mesh position={[-0.116, pick(0.05, 0.061, 0.072), 0]} castShadow>
-        <boxGeometry args={[0.012, pick(0.055, 0.072, 0.09), 0.076]} />
-        <meshStandardMaterial color={accentColor} roughness={0.45} />
+      <mesh position={[-0.112, pick(0.048, 0.06, 0.074), 0]} castShadow>
+        <capsuleGeometry args={[0.028, pick(0.024, 0.04, 0.056), 6, 14]} />
+        <meshStandardMaterial color={accentColor} roughness={0.48} />
       </mesh>
 
-      {/* Lengüeta */}
+      {/* Lengüeta redondeada */}
       <mesh
-        position={[0.01, pick(0.072, 0.086, 0.1), 0]}
-        rotation={[0, 0, -0.42]}
+        position={[0.006, pick(0.072, 0.086, 0.102), 0]}
+        rotation={[0, 0, -0.45]}
+        scale={[0.35, 1, 1.1]}
         castShadow
       >
-        <boxGeometry args={[0.05, 0.055, 0.058]} />
+        <capsuleGeometry args={[0.024, 0.035, 6, 12]} />
         <meshStandardMaterial color={upperColor} roughness={0.6} />
       </mesh>
 
       {/* Cordones */}
-      {[0.025, 0.042, 0.059].map((xPos, i) => (
-        <mesh key={i} position={[xPos, 0.066 - i * 0.006, 0]} castShadow>
-          <cylinderGeometry args={[0.0035, 0.0035, 0.062, 8]} />
+      {[0.022, 0.038, 0.054].map((xPos, i) => (
+        <mesh key={i} position={[xPos, 0.062 - i * 0.006, 0]} rotation={[Math.PI / 2, 0, 0]} castShadow>
+          <capsuleGeometry args={[0.003, 0.054, 4, 8]} />
           <meshStandardMaterial color={accentColor === upperColor ? "#CBD5E1" : accentColor} />
         </mesh>
       ))}

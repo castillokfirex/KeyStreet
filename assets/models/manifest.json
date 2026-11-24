@@ -29,17 +29,17 @@
         "sole": "#F4F4F0"
       },
       "silhouette": "LOW",
-      "validatedAt": "2026-11-21",
-      "bytes": 13576,
+      "validatedAt": "2026-11-24",
+      "bytes": 50412,
       "sizeOk": true,
       "dimensionsM": [
         0.29,
-        0.1378,
-        0.1031
+        0.1018,
+        0.0984
       ],
       "center": [
         0,
-        0.0689,
+        0.0509,
         0
       ],
       "minY": 0,
@@ -76,17 +76,17 @@
         "sole": "#F1F1EF"
       },
       "silhouette": "LOW",
-      "validatedAt": "2026-11-21",
-      "bytes": 13576,
+      "validatedAt": "2026-11-24",
+      "bytes": 56276,
       "sizeOk": true,
       "dimensionsM": [
         0.29,
-        0.1378,
-        0.1031
+        0.1018,
+        0.0984
       ],
       "center": [
         0,
-        0.0689,
+        0.0509,
         0
       ],
       "minY": 0,
@@ -123,17 +123,17 @@
         "sole": "#F4F4F0"
       },
       "silhouette": "LOW",
-      "validatedAt": "2026-11-21",
-      "bytes": 13596,
+      "validatedAt": "2026-11-24",
+      "bytes": 50604,
       "sizeOk": true,
       "dimensionsM": [
         0.29,
-        0.1378,
-        0.1031
+        0.1018,
+        0.0984
       ],
       "center": [
         0,
-        0.0689,
+        0.0509,
         0
       ],
       "minY": 0,
@@ -170,17 +170,17 @@
         "sole": "#F1F1EF"
       },
       "silhouette": "LOW",
-      "validatedAt": "2026-11-21",
-      "bytes": 13572,
+      "validatedAt": "2026-11-24",
+      "bytes": 50572,
       "sizeOk": true,
       "dimensionsM": [
         0.29,
-        0.1378,
-        0.1031
+        0.1018,
+        0.0984
       ],
       "center": [
         0,
-        0.0689,
+        0.0509,
         0
       ],
       "minY": 0,
@@ -217,17 +217,17 @@
         "sole": "#F4F1EA"
       },
       "silhouette": "LOW",
-      "validatedAt": "2026-11-21",
-      "bytes": 13572,
+      "validatedAt": "2026-11-24",
+      "bytes": 52300,
       "sizeOk": true,
       "dimensionsM": [
         0.29,
-        0.1378,
-        0.1031
+        0.1018,
+        0.0926
       ],
       "center": [
         0,
-        0.0689,
+        0.0509,
         0
       ],
       "minY": 0,
@@ -264,17 +264,17 @@
         "sole": "#C9A878"
       },
       "silhouette": "LOW",
-      "validatedAt": "2026-11-21",
-      "bytes": 13604,
+      "validatedAt": "2026-11-24",
+      "bytes": 56072,
       "sizeOk": true,
       "dimensionsM": [
         0.29,
-        0.1378,
-        0.1031
+        0.1018,
+        0.0926
       ],
       "center": [
         0,
-        0.0689,
+        0.0509,
         0
       ],
       "minY": 0,
@@ -311,17 +311,17 @@
         "sole": "#F4F1EA"
       },
       "silhouette": "HIGH",
-      "validatedAt": "2026-11-21",
-      "bytes": 13888,
+      "validatedAt": "2026-11-24",
+      "bytes": 63976,
       "sizeOk": true,
       "dimensionsM": [
         0.29,
-        0.1719,
-        0.1031
+        0.161,
+        0.0984
       ],
       "center": [
         0,
-        0.0859,
+        0.0805,
         0
       ],
       "minY": 0,
@@ -358,17 +358,17 @@
         "sole": "#F1F1EF"
       },
       "silhouette": "LOW",
-      "validatedAt": "2026-11-21",
-      "bytes": 13572,
+      "validatedAt": "2026-11-24",
+      "bytes": 46052,
       "sizeOk": true,
       "dimensionsM": [
         0.29,
-        0.1378,
-        0.1031
+        0.1018,
+        0.0984
       ],
       "center": [
         0,
-        0.0689,
+        0.0509,
         0
       ],
       "minY": 0,
@@ -405,17 +405,17 @@
         "sole": "#F1F1EF"
       },
       "silhouette": "LOW",
-      "validatedAt": "2026-11-21",
-      "bytes": 13568,
+      "validatedAt": "2026-11-24",
+      "bytes": 49332,
       "sizeOk": true,
       "dimensionsM": [
         0.29,
-        0.1378,
-        0.1031
+        0.1018,
+        0.0984
       ],
       "center": [
         0,
-        0.0689,
+        0.0509,
         0
       ],
       "minY": 0,
@@ -452,17 +452,17 @@
         "sole": "#F4F4F2"
       },
       "silhouette": "LOW",
-      "validatedAt": "2026-11-21",
-      "bytes": 13788,
+      "validatedAt": "2026-11-24",
+      "bytes": 49792,
       "sizeOk": true,
       "dimensionsM": [
         0.29,
-        0.1378,
-        0.1031
+        0.1018,
+        0.1003
       ],
       "center": [
         0,
-        0.0689,
+        0.0509,
         0
       ],
       "minY": 0,
@@ -499,17 +499,17 @@
         "sole": "#EDE6D8"
       },
       "silhouette": "LOW",
-      "validatedAt": "2026-11-21",
-      "bytes": 13800,
+      "validatedAt": "2026-11-24",
+      "bytes": 52152,
       "sizeOk": true,
       "dimensionsM": [
         0.29,
-        0.1378,
-        0.1031
+        0.1101,
+        0.1081
       ],
       "center": [
         0,
-        0.0689,
+        0.055,
         0
       ],
       "minY": 0,
@@ -546,17 +546,17 @@
         "sole": "#F1F1EF"
       },
       "silhouette": "LOW",
-      "validatedAt": "2026-11-21",
-      "bytes": 13572,
+      "validatedAt": "2026-11-24",
+      "bytes": 47960,
       "sizeOk": true,
       "dimensionsM": [
         0.29,
-        0.1378,
-        0.1031
+        0.1101,
+        0.1081
       ],
       "center": [
         0,
-        0.0689,
+        0.055,
         0
       ],
       "minY": 0,
@@ -593,17 +593,17 @@
         "sole": "#A87A4F"
       },
       "silhouette": "LOW",
-      "validatedAt": "2026-11-21",
-      "bytes": 13596,
+      "validatedAt": "2026-11-24",
+      "bytes": 56240,
       "sizeOk": true,
       "dimensionsM": [
         0.29,
-        0.1378,
-        0.1031
+        0.1018,
+        0.0926
       ],
       "center": [
         0,
-        0.0689,
+        0.0509,
         0
       ],
       "minY": 0,
@@ -640,17 +640,17 @@
         "sole": "#F1F1EF"
       },
       "silhouette": "MID",
-      "validatedAt": "2026-11-21",
-      "bytes": 13808,
+      "validatedAt": "2026-11-24",
+      "bytes": 49852,
       "sizeOk": true,
       "dimensionsM": [
         0.29,
-        0.1528,
-        0.1031
+        0.1314,
+        0.0984
       ],
       "center": [
         0,
-        0.0764,
+        0.0657,
         0
       ],
       "minY": 0,
@@ -687,17 +687,17 @@
         "sole": "#F1F1EF"
       },
       "silhouette": "LOW",
-      "validatedAt": "2026-11-21",
-      "bytes": 13588,
+      "validatedAt": "2026-11-24",
+      "bytes": 50416,
       "sizeOk": true,
       "dimensionsM": [
         0.29,
-        0.1378,
-        0.1031
+        0.1018,
+        0.0984
       ],
       "center": [
         0,
-        0.0689,
+        0.0509,
         0
       ],
       "minY": 0,
