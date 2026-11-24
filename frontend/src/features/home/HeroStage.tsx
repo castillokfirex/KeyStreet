@@ -7,7 +7,7 @@ import {
   useSpring,
   useTransform,
 } from "motion/react";
-import { useCallback, useEffect, useId, useRef, useState, type PointerEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type PointerEvent } from "react";
 import { Link } from "react-router";
 import { MotionScope } from "@/components/motion/MotionScope";
 import { formatCop } from "@/lib/money";
@@ -46,33 +46,6 @@ const pad = (n: number) => String(n).padStart(2, "0");
 export function brandFontSize(word: string): string {
   const letters = Math.max(3, word.replace(/\s/g, "").length + word.split(" ").length - 1);
   return `min(10rem, ${(94 / (letters * 0.95)).toFixed(2)}cqw)`;
-}
-
-/** Sticker circular con texto que gira (estética de etiqueta streetwear). */
-function SpinSticker({ center, sub }: { center: string; sub: string }) {
-  const uid = useId().replace(/[^a-zA-Z0-9_-]/g, "");
-  const path = `sticker-${uid}`;
-  return (
-    <div className="relative h-[92px] w-[92px] sm:h-[108px] sm:w-[108px]" aria-hidden="true">
-      <svg viewBox="0 0 120 120" className="ks-spin absolute inset-0 h-full w-full">
-        <defs>
-          <path id={path} d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0" />
-        </defs>
-        <circle cx="60" cy="60" r="58" fill="#111111" />
-        <text className="fill-white font-mono text-[10.5px] uppercase" letterSpacing="2.2">
-          <textPath href={`#${path}`}>Key Street · Originales · 2026 ·</textPath>
-        </text>
-      </svg>
-      <div className="absolute inset-[24%] flex flex-col items-center justify-center rounded-full bg-[#c9e265] text-ink">
-        <span className="font-display font-expanded text-[15px] font-black leading-none sm:text-lg">
-          {center}
-        </span>
-        <span className="mt-0.5 font-mono text-[7px] uppercase tracking-[0.14em] sm:text-[8px]">
-          {sub}
-        </span>
-      </div>
-    </div>
-  );
 }
 
 /* ---------------------------------------------------------------------------
@@ -157,7 +130,7 @@ function Stage({ products }: { products: ProductSummaryDto[] }) {
   return (
     <div
       ref={stageRef}
-      className="@container relative flex h-full min-h-[440px] w-full flex-col sm:min-h-[520px]"
+      className="@container relative flex h-full min-h-[340px] w-full flex-col sm:min-h-[400px] lg:min-h-[min(calc(100svh-var(--ks-header-h)-3.5rem),540px)] xl:min-h-[min(calc(100svh-var(--ks-header-h)-4rem),600px)]"
       onPointerMove={onPointerMove}
       onPointerLeave={onPointerLeave}
       onMouseEnter={() => setPaused(true)}
@@ -199,7 +172,7 @@ function Stage({ products }: { products: ProductSummaryDto[] }) {
       <div className="relative flex flex-1 items-center justify-center [perspective:1200px]">
         <m.div
           aria-hidden="true"
-          className="pointer-events-none absolute left-1/2 top-1/2 aspect-square w-[min(74%,520px)] -translate-x-1/2 -translate-y-1/2"
+          className="pointer-events-none absolute left-1/2 top-1/2 aspect-square w-[min(64%,400px)] -translate-x-1/2 -translate-y-1/2 xl:w-[min(72%,480px)]"
           style={{ x: discX }}
         >
           <div
@@ -213,7 +186,7 @@ function Stage({ products }: { products: ProductSummaryDto[] }) {
         </m.div>
 
         <m.div
-          className="relative w-[min(96%,680px)]"
+          className="relative w-[min(90%,540px)] xl:w-[min(94%,640px)]"
           style={{ rotateX, rotateY, x: shoeX, transformStyle: "preserve-3d" }}
         >
           <AnimatePresence mode="wait" initial={false}>
@@ -255,7 +228,7 @@ function Stage({ products }: { products: ProductSummaryDto[] }) {
                     fetchPriority={index === 0 ? "high" : "auto"}
                     decoding="async"
                     draggable={false}
-                    className="pointer-events-none mx-auto aspect-[16/10] w-full -rotate-[7deg] select-none object-cover mix-blend-multiply [mask-image:radial-gradient(ellipse_58%_52%_at_50%_52%,#000_70%,transparent_100%)]"
+                    className="pointer-events-none mx-auto aspect-[16/10] max-h-[42svh] w-full -rotate-[7deg] select-none object-cover mix-blend-multiply [mask-image:radial-gradient(ellipse_58%_52%_at_50%_52%,#000_70%,transparent_100%)] lg:max-h-[46svh] xl:max-h-[52svh]"
                   />
                 </picture>
               </m.div>
@@ -269,24 +242,6 @@ function Stage({ products }: { products: ProductSummaryDto[] }) {
             animate={shadowAnim}
           />
         </m.div>
-
-        {/* Sticker giratorio: descuento o sello de originalidad */}
-        <AnimatePresence mode="wait" initial={false}>
-          <m.div
-            key={product.id}
-            className="absolute right-[3%] top-[18%] z-10"
-            initial={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.4, rotate: -40 }}
-            animate={{ opacity: 1, scale: 1, rotate: 0 }}
-            exit={{ opacity: 0, scale: 0.6, transition: { duration: 0.15 } }}
-            transition={{ type: "spring", stiffness: 220, damping: 14, delay: reduceMotion ? 0 : 0.35 }}
-          >
-            {product.hasDiscount ? (
-              <SpinSticker center={`−${product.discountPercent}%`} sub="Oferta" />
-            ) : (
-              <SpinSticker center="100%" sub="Original" />
-            )}
-          </m.div>
-        </AnimatePresence>
       </div>
 
       {/* Ficha del par + progreso */}
@@ -302,10 +257,15 @@ function Stage({ products }: { products: ProductSummaryDto[] }) {
             <p className="mt-1 truncate font-display text-lg font-bold uppercase leading-tight text-ink sm:text-xl">
               {product.name}
             </p>
-            <p className="mt-0.5 flex items-baseline gap-2 font-mono text-sm text-ink">
-              {formatCop(product.finalPriceCop)}
+            <p className="mt-0.5 flex flex-wrap items-center gap-2 font-mono text-sm text-ink">
+              <span>{formatCop(product.finalPriceCop)}</span>
               {product.hasDiscount && (
-                <span className="text-xs text-gray line-through">{formatCop(product.originalPriceCop)}</span>
+                <>
+                  <span className="text-xs text-gray line-through">{formatCop(product.originalPriceCop)}</span>
+                  <span className="bg-[#c9e265] px-1.5 py-0.5 font-mono text-[10px] font-semibold text-ink">
+                    −{product.discountPercent}%
+                  </span>
+                </>
               )}
             </p>
           </div>

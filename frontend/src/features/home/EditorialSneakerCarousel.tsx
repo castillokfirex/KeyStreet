@@ -187,10 +187,10 @@ function CarouselInner({ products }: { products: ProductSummaryDto[] }) {
       onFocusCapture={() => setPaused(true)}
       onBlurCapture={handleBlurCapture}
       onKeyDown={handleKeyDown}
-      className="mx-auto max-w-[1680px] px-4 pt-14 sm:px-6 lg:px-8"
+      className="mx-auto max-w-[1680px] px-4 pt-8 sm:px-6 sm:pt-10 lg:px-8 lg:pt-12"
     >
       {/* Encabezado de sección */}
-      <div className="mb-5 flex items-end justify-between gap-4">
+      <div className="mb-4 flex items-end justify-between gap-4">
         <div>
           <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted">
             Colección de la semana
@@ -232,11 +232,11 @@ function CarouselInner({ products }: { products: ProductSummaryDto[] }) {
           </m.span>
         </AnimatePresence>
 
-        <div className="relative grid min-h-[600px] grid-cols-1 items-center gap-8 px-6 py-10 sm:px-10 lg:min-h-[560px] lg:grid-cols-12 lg:gap-6 lg:px-14 lg:py-12">
+        <div className="relative grid min-h-[460px] grid-cols-1 items-center gap-6 px-5 py-7 sm:min-h-[480px] sm:px-8 sm:py-8 lg:min-h-[min(calc(100svh-11.5rem),520px)] lg:grid-cols-12 lg:gap-6 lg:px-12 lg:py-8 xl:px-14 xl:py-10">
           {/* Texto */}
           <div className="order-2 lg:order-1 lg:col-span-6">
             <AnimatePresence mode="wait" initial={false}>
-              <m.div key={current.id} {...textMotion} className="space-y-5">
+              <m.div key={current.id} {...textMotion} className="space-y-3.5 xl:space-y-5">
                 <p className="flex flex-wrap items-center gap-3 font-mono text-[11px] uppercase tracking-[0.14em] text-white/60">
                   <span className="tabular-nums text-white">{`${pad(safeIndex + 1)} / ${pad(count)}`}</span>
                   <span aria-hidden="true" className="h-3 w-px bg-white/25" />
@@ -249,7 +249,7 @@ function CarouselInner({ products }: { products: ProductSummaryDto[] }) {
                   <p className="font-mono text-xs uppercase tracking-[0.16em] text-[#c9e265]">
                     {current.brand}
                   </p>
-                  <h3 className="mt-2 max-w-xl font-display font-expanded text-3xl font-black uppercase leading-[0.95] tracking-[-0.02em] sm:text-4xl lg:text-[2.9rem]">
+                  <h3 className="mt-1.5 max-w-xl font-display font-expanded text-2xl font-black uppercase leading-[0.95] tracking-[-0.02em] sm:text-3xl lg:text-[clamp(1.7rem,2.8vw,2.75rem)]">
                     {current.name}
                   </h3>
                 </div>
@@ -295,7 +295,7 @@ function CarouselInner({ products }: { products: ProductSummaryDto[] }) {
           {/* Foto dentro de un arco del mismo gris que el fondo de la foto */}
           <div className="order-1 flex justify-center lg:order-2 lg:col-span-6 lg:justify-end">
             <div
-              className="relative aspect-[4/5] w-[min(78vw,380px)] overflow-hidden rounded-t-[999px] lg:w-[min(32vw,420px)]"
+              className="relative aspect-[4/5] w-[min(64vw,270px)] overflow-hidden rounded-t-[999px] sm:w-[min(52vw,310px)] lg:w-[min(27vw,330px)] xl:w-[min(30vw,390px)]"
               style={{ backgroundColor: PHOTO_BG }}
             >
               <AnimatePresence initial={false} mode="popLayout">
@@ -336,59 +336,47 @@ function CarouselInner({ products }: { products: ProductSummaryDto[] }) {
         </div>
       </div>
 
-      {/* Miniaturas con progreso */}
-      <div
-        role="tablist"
-        aria-label="Elegir silueta"
-        className="no-scrollbar mt-3 flex gap-2 overflow-x-auto"
-      >
-        {products.map((p, i) => {
-          const selected = i === safeIndex;
-          const thumb = photoSrc(p, 480);
-          return (
-            <button
-              key={p.id}
-              type="button"
-              role="tab"
-              aria-selected={selected}
-              aria-label={`Ver ${p.name}`}
-              onClick={() => goTo(i)}
-              className={`group relative flex min-w-[10.5rem] flex-1 cursor-pointer items-center gap-3 border p-2 text-left transition-colors ${
-                selected ? "border-ink bg-white" : "border-line bg-white/50 hover:border-ink/40"
-              }`}
-            >
-              <span
-                className="h-12 w-10 shrink-0 overflow-hidden"
-                style={{ backgroundColor: PHOTO_BG }}
+      {/* Indicadores tipo rayitas pequeñas de carga */}
+      {count > 1 && (
+        <div
+          role="tablist"
+          aria-label="Elegir silueta"
+          className="mx-auto mt-3 flex max-w-xs items-center justify-center gap-2 sm:max-w-sm"
+        >
+          {products.map((p, i) => {
+            const selected = i === safeIndex;
+            return (
+              <button
+                key={p.id}
+                type="button"
+                role="tab"
+                aria-selected={selected}
+                aria-label={`Ver ${p.name}`}
+                onClick={() => goTo(i)}
+                className="group relative h-6 flex-1 cursor-pointer"
               >
-                {thumb && (
-                  <img src={thumb.src} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                <span className="absolute inset-x-0 top-1/2 h-[3px] -translate-y-1/2 rounded-full bg-ink/15 transition-colors group-hover:bg-ink/30" />
+                {i < safeIndex && (
+                  <span className="absolute inset-x-0 top-1/2 h-[3px] -translate-y-1/2 rounded-full bg-ink/45" />
                 )}
-              </span>
-              <span className="min-w-0">
-                <span className="block font-mono text-[9px] uppercase tracking-[0.12em] text-muted">
-                  {pad(i + 1)} · {p.brand}
-                </span>
-                <span className="block truncate text-[11px] font-semibold text-ink">
-                  {p.name.replace(/\s*\(.*\)$/, "")}
-                </span>
-              </span>
-              {selected && (
-                <span
-                  key={`bar-${safeIndex}`}
-                  aria-hidden="true"
-                  className="absolute inset-x-0 bottom-0 h-0.5 origin-left bg-ink"
-                  style={{
-                    animation: reducedMotion ? undefined : `ks-progress ${AUTOPLAY_MS}ms linear forwards`,
-                    animationPlayState: running ? "running" : "paused",
-                  }}
-                  onAnimationEnd={handleNext}
-                />
-              )}
-            </button>
-          );
-        })}
-      </div>
+                {selected && (
+                  <span
+                    key={`bar-${safeIndex}`}
+                    aria-hidden="true"
+                    className="absolute inset-x-0 top-1/2 h-[3px] -translate-y-1/2 origin-left rounded-full"
+                    style={{
+                      backgroundColor: tone,
+                      animation: reducedMotion ? undefined : `ks-progress ${AUTOPLAY_MS}ms linear forwards`,
+                      animationPlayState: running ? "running" : "paused",
+                    }}
+                    onAnimationEnd={handleNext}
+                  />
+                )}
+              </button>
+            );
+          })}
+        </div>
+      )}
     </section>
   );
 }

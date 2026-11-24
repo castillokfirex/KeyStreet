@@ -113,6 +113,14 @@
   }
 }
 
+/* Pantallas de portátil y MacBook con menor altura vertical */
+@media (min-width: 768px) and (max-height: 780px) {
+  :root {
+    --ks-header-h: 3.875rem;
+    --ks-header-h-compact: 3.25rem;
+  }
+}
+
 @keyframes kast-breathe {
   0%,
   100% {

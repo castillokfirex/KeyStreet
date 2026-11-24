@@ -23,9 +23,9 @@ function CarouselFallback() {
   return (
     <section
       aria-hidden="true"
-      className="mx-auto max-w-[1680px] px-4 pt-12 sm:px-6 lg:px-8"
+      className="mx-auto max-w-[1680px] px-4 pt-8 sm:px-6 sm:pt-10 lg:px-8 lg:pt-12"
     >
-      <Skeleton className="min-h-[580px] w-full rounded-2xl lg:min-h-[520px]" />
+      <Skeleton className="min-h-[460px] w-full rounded-2xl lg:min-h-[min(calc(100svh-11.5rem),520px)]" />
     </section>
   );
 }
@@ -89,7 +89,7 @@ export function HomePage() {
       </section>
 
       {/* Muro negro de pósters: frases, marcas y escenas de Kast */}
-      <Suspense fallback={<div className="mt-16 h-[640px] bg-ink" aria-hidden="true" />}>
+      <Suspense fallback={<div className="mt-10 h-[520px] bg-ink sm:mt-14" aria-hidden="true" />}>
         <LazyStyleWall />
       </Suspense>
 

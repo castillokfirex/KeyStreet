@@ -48,7 +48,7 @@ export function PurchasePanel({
     selectedVariant?.sku || sizeOptions[0]?.sku || product.modelCode;
 
   return (
-    <div className="space-y-6 lg:sticky lg:top-28 lg:max-w-[30rem]">
+    <div className="space-y-4 lg:max-w-[30rem] xl:space-y-5">
       {/* Encabezado ficha técnica */}
       <div className="flex flex-wrap items-center justify-between gap-2">
         <button
@@ -71,7 +71,7 @@ export function PurchasePanel({
         <p className="font-display text-[10px] font-semibold uppercase tracking-nav text-muted">
           SKU {activeSku} · {product.brand}
         </p>
-        <h1 className="mt-2 font-display text-2xl font-semibold uppercase leading-tight tracking-label text-ink sm:text-[1.75rem]">
+        <h1 className="mt-1.5 font-display text-xl font-semibold uppercase leading-tight tracking-label text-ink sm:text-2xl xl:text-[1.75rem]">
           {product.name}
         </h1>
         {product.colorway && (

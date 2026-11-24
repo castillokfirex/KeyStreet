@@ -261,20 +261,20 @@ export function LoginPage() {
 
   return (
     <MotionScope>
-      <div className="grid min-h-screen grid-cols-[minmax(0,1fr)] bg-canvas lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
+      <div className="grid min-h-svh grid-cols-[minmax(0,1fr)] bg-canvas lg:h-svh lg:min-h-[580px] lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
         {/* Vitrina: escenas de Kast en movimiento continuo */}
         <aside className="relative hidden overflow-hidden bg-ink lg:block">
           <KastShowcase />
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-ink/90 to-transparent" />
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[45%] bg-gradient-to-t from-ink via-ink/80 to-transparent" />
-          <div className="absolute left-8 top-7 text-white">
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-ink/90 to-transparent" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[48%] bg-gradient-to-t from-ink via-ink/85 to-transparent" />
+          <div className="absolute left-6 top-5 text-white xl:left-8 xl:top-7">
             <KastLogo variant="wordmark" size={28} title="Key Street" />
           </div>
-          <div className="pointer-events-none absolute bottom-10 left-8 right-8 text-white">
+          <div className="pointer-events-none absolute bottom-6 left-6 right-6 text-white xl:bottom-10 xl:left-8 xl:right-8">
             <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/60">
               Key Street · Drop 2026
             </p>
-            <p className="mt-3 font-display font-expanded text-[clamp(2.4rem,4.2vw,4.4rem)] font-black uppercase leading-[0.9] tracking-[-0.03em]">
+            <p className="mt-2 font-display font-expanded text-[clamp(1.85rem,min(3.5vw,5.5vh),4rem)] font-black uppercase leading-[0.9] tracking-[-0.03em] xl:mt-3">
               <span className="ks-rise block" style={{ animationDelay: "80ms" }}>
                 Tu estilo
               </span>
@@ -295,13 +295,13 @@ export function LoginPage() {
               </span>
             </p>
             <p
-              className="ks-rise mt-5 max-w-sm text-sm leading-relaxed text-white/75"
+              className="ks-rise mt-3 max-w-sm text-xs leading-relaxed text-white/75 xl:mt-5 xl:text-sm"
               style={{ animationDelay: "320ms" }}
             >
               Cada par cuenta quién eres. Elígelo, pruébatelo en 3D y sal a la
               calle a tu manera.
             </p>
-            <ul className="mt-5 flex flex-wrap gap-2" aria-label="Estilos">
+            <ul className="mt-3.5 flex flex-wrap gap-2 xl:mt-5" aria-label="Estilos">
               {["Clásico", "Urbano", "Deportivo", "Elegante"].map((style, i) => (
                 <li
                   key={style}
@@ -316,8 +316,8 @@ export function LoginPage() {
         </aside>
 
         {/* Formulario */}
-        <main className="relative flex min-w-0 flex-col">
-          <div className="flex items-center justify-between px-5 pt-5 sm:px-8 sm:pt-7">
+        <main className="relative flex min-w-0 flex-col lg:overflow-y-auto">
+          <div className="flex items-center justify-between px-5 pt-4 sm:px-8 sm:pt-5 xl:pt-7">
             <Link
               to="/"
               className="text-ink lg:invisible"
@@ -340,18 +340,18 @@ export function LoginPage() {
             </Link>
           </div>
 
-          <div className="mt-5 lg:hidden">
+          <div className="mt-4 lg:hidden">
             <KastStrip />
           </div>
 
-          <div className="flex flex-1 items-center justify-center px-5 py-10 sm:px-8">
+          <div className="flex flex-1 items-center justify-center px-5 py-4 sm:px-8 sm:py-6">
             <div className="w-full max-w-[400px]">
               {/* Kast reacciona al formulario */}
-              <div className="flex items-center gap-4">
-                <div className="flex h-[84px] w-[84px] items-center justify-center bg-surface text-ink">
+              <div className="flex items-center gap-3.5 xl:gap-4">
+                <div className="flex h-16 w-16 items-center justify-center bg-surface text-ink xl:h-[80px] xl:w-[80px]">
                   <KastMascot
                     state={kast.state}
-                    size={68}
+                    size={54}
                     title="Kast, asistente de Key Street"
                   />
                 </div>
@@ -366,12 +366,12 @@ export function LoginPage() {
                 </p>
               </div>
 
-              <h1 className="mt-8 font-display font-expanded text-[clamp(2rem,4vw,2.6rem)] font-extrabold uppercase leading-[0.95] tracking-[-0.02em] text-ink">
+              <h1 className="mt-4 font-display font-expanded text-[clamp(1.75rem,3.4vw,2.5rem)] font-extrabold uppercase leading-[0.95] tracking-[-0.02em] text-ink xl:mt-6">
                 Hola de
                 <br />
                 <span className="text-forest">nuevo.</span>
               </h1>
-              <p className="mt-3 text-sm leading-relaxed text-muted">
+              <p className="mt-2 text-xs leading-relaxed text-muted sm:text-sm xl:mt-3">
                 Panel administrativo: fichas PDF, catálogo en COP y auditoría de
                 Kast.
               </p>
@@ -380,7 +380,7 @@ export function LoginPage() {
                 ref={formRef}
                 noValidate
                 onSubmit={(e) => void handleSubmit(onSubmit)(e)}
-                className="mt-8 space-y-5"
+                className="mt-4 space-y-3.5 xl:mt-7 xl:space-y-5"
                 aria-describedby={
                   serverError ? "login-server-error" : undefined
                 }
@@ -522,7 +522,7 @@ export function LoginPage() {
                   disabled={busy || locked}
                   aria-busy={status === "submitting"}
                   data-status={status}
-                  className="group relative isolate flex h-[52px] w-full cursor-pointer items-center justify-center gap-2.5 overflow-hidden bg-ink font-display text-[12px] font-semibold uppercase tracking-nav text-canvas transition-[transform,background-color] duration-300 active:scale-[0.98] disabled:cursor-not-allowed data-[status=success]:bg-forest"
+                  className="group relative isolate flex h-11 w-full cursor-pointer items-center justify-center gap-2.5 overflow-hidden bg-ink font-display text-[12px] font-semibold uppercase tracking-nav text-canvas transition-[transform,background-color] duration-300 active:scale-[0.98] disabled:cursor-not-allowed data-[status=success]:bg-forest xl:h-[52px]"
                 >
                   <span
                     aria-hidden="true"
@@ -536,7 +536,7 @@ export function LoginPage() {
                 </button>
               </form>
 
-              <p className="mt-8 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.14em] text-muted">
+              <p className="mt-4 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.14em] text-muted xl:mt-6">
                 <ShieldCheck
                   className="h-3.5 w-3.5 text-sale-text"
                   aria-hidden="true"

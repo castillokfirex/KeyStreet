@@ -10,7 +10,7 @@ const HeroStage = lazy(() => import("./HeroStage"));
 const HERO_LIMIT = 8;
 
 const CTA_BASE =
-  "inline-flex h-12 items-center gap-2 px-6 font-display text-[11px] font-semibold uppercase tracking-nav transition-colors";
+  "inline-flex h-10 items-center gap-2 px-5 font-display text-[11px] font-semibold uppercase tracking-nav transition-colors sm:h-11 xl:h-12 xl:px-6";
 
 /** Solo pares con foto real: el hero vive de la imagen del producto. */
 export function pickHeroProducts(
@@ -76,21 +76,10 @@ export function HeroShowcase({
           className="bg-grain pointer-events-none absolute inset-0 -z-10 opacity-[0.07] mix-blend-multiply"
         />
 
-        <div className="mx-auto grid max-w-[1680px] items-center gap-6 px-4 pb-10 pt-4 sm:px-6 sm:pt-10 lg:min-h-[min(calc(100svh-var(--ks-header-h)),880px)] lg:grid-cols-[minmax(0,1fr)_minmax(0,1.08fr)] lg:gap-10 lg:px-8 lg:pb-10 lg:pt-8">
+        <div className="mx-auto grid max-w-[1680px] items-center gap-4 px-4 pb-6 pt-3 sm:px-6 sm:pt-6 lg:min-h-[min(calc(100svh-var(--ks-header-h)),820px)] lg:grid-cols-[minmax(0,1fr)_minmax(0,1.08fr)] lg:gap-8 lg:px-8 lg:pb-6 lg:pt-5 xl:gap-10 xl:pb-10 xl:pt-8">
           {/* Mensaje */}
           <div className="relative z-10">
-            <p
-              className="ks-rise inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-muted"
-              style={{ animationDelay: "0ms" }}
-            >
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full rounded-full bg-sale opacity-60 motion-safe:animate-ping" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-sale" />
-              </span>
-              Drop Colombia 2026 · En stock
-            </p>
-
-            <h1 className="mt-5 font-display font-expanded text-[clamp(2.6rem,6.2vw,6.4rem)] font-black uppercase leading-[0.88] tracking-[-0.035em] text-ink">
+            <h1 className="font-display font-expanded text-[clamp(2.25rem,min(5.2vw,8.2vh),6rem)] font-black uppercase leading-[0.88] tracking-[-0.035em] text-ink">
               <span className="ks-rise block" style={{ animationDelay: "80ms" }}>
                 Pisa fuerte.
               </span>
@@ -107,7 +96,7 @@ export function HeroShowcase({
             </h1>
 
             <p
-              className="ks-rise mt-6 max-w-md text-base leading-relaxed text-muted"
+              className="ks-rise mt-3.5 max-w-md text-sm leading-relaxed text-muted lg:mt-4 xl:mt-6 xl:text-base"
               style={{ animationDelay: "400ms" }}
             >
               Los pares que todos miran, originales y en pesos colombianos.
@@ -115,7 +104,7 @@ export function HeroShowcase({
             </p>
 
             <div
-              className="ks-rise mt-8 flex flex-wrap items-center gap-2"
+              className="ks-rise mt-5 flex flex-wrap items-center gap-2 lg:mt-6 xl:mt-8"
               style={{ animationDelay: "500ms" }}
             >
               <Link
@@ -138,7 +127,7 @@ export function HeroShowcase({
             </div>
 
             <dl
-              className="ks-rise mt-10 hidden max-w-md grid-cols-3 border-t border-line pt-5 sm:grid"
+              className="ks-rise mt-5 hidden max-w-md grid-cols-3 border-t border-line pt-3.5 sm:grid lg:mt-6 lg:pt-4 xl:mt-10 xl:pt-5"
               style={{ animationDelay: "600ms" }}
             >
               {[

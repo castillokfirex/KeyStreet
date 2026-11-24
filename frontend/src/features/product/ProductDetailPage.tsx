@@ -183,7 +183,7 @@ export function ProductDetailPage() {
 
   return (
     <div className="pb-20 sm:pb-6">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-6 pb-10">
+      <div className="mx-auto max-w-7xl px-4 pb-10 pt-3 sm:px-6 sm:pt-5 lg:px-8">
         <Breadcrumbs
           items={[
             { label: "Inicio", to: "/" },
@@ -192,10 +192,10 @@ export function ProductDetailPage() {
           ]}
         />
 
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 items-start">
-          {/* Columna izquierda (7 cols): Visor 360° & Probador anatómico lazy */}
-          <div className="lg:col-span-7 space-y-4">
-            <div className="relative aspect-[3/4] w-full overflow-hidden bg-surface">
+        <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-12 lg:gap-8">
+          {/* Columna izquierda (7 cols): fija al hacer scroll hasta llegar a "Esto te puede gustar" */}
+          <div className="space-y-3 lg:sticky lg:top-24 lg:col-span-7">
+            <div className="relative aspect-[4/5] w-full overflow-hidden bg-surface lg:aspect-auto lg:h-[min(calc(100svh-17rem),560px)]">
               {/* Toolbar superior fiel a Stitch */}
               <div className="absolute left-3 right-3 top-3 z-20">
                 <ViewerToolbar
@@ -232,7 +232,8 @@ export function ProductDetailPage() {
                     alt={product.name}
                     priority
                     index={photoIndex}
-                    className="h-full"
+                    fit="contain"
+                    className="!aspect-auto h-full w-full"
                     sizes="(max-width: 1024px) 100vw, 58vw"
                   />
                   <div className="absolute inset-x-0 bottom-5 flex flex-wrap justify-center gap-2.5 px-4">
@@ -306,7 +307,7 @@ export function ProductDetailPage() {
                 {product.images.files.map((file, i) => {
                   const current = !viewerActivated && photoIndex === i;
                   return (
-                    <li key={file} className="w-20 shrink-0 sm:w-24">
+                    <li key={file} className="w-16 shrink-0 sm:w-20">
                       <button
                         type="button"
                         onClick={() => showPhoto(i)}

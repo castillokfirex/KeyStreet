@@ -40,7 +40,7 @@ function QuotePoster({
     >
       <div className="absolute inset-0 flex flex-col justify-between p-5 transition-transform duration-[900ms] ease-editorial group-hover:scale-[1.06]">
         <span className="font-mono text-[9px] uppercase tracking-[0.18em] opacity-70">Key Street · 2026</span>
-        <p className="font-display font-expanded text-[1.7rem] font-black uppercase leading-[0.92] tracking-[-0.02em]">
+        <p className="font-display font-expanded text-[1.2rem] font-black uppercase leading-[0.92] tracking-[-0.02em] xl:text-[1.6rem]">
           {lines.map((line, i) => (
             <span key={line} className="block" style={i === accentLine ? { color: accent } : undefined}>
               {line}
@@ -92,7 +92,7 @@ function RelaxScene() {
       <div className="absolute -right-6 -top-6 h-28 w-28 rounded-full bg-[#ffd84d] opacity-90" />
       <div className="absolute inset-x-0 bottom-0 h-[30%] bg-[#f2d6a2]" />
       <div className="absolute inset-x-0 bottom-[30%] h-[9%] bg-[#3a9fd8]" />
-      <p className="absolute left-4 top-5 z-10 font-display font-expanded text-[1.55rem] font-black uppercase leading-[0.9] text-white [text-shadow:0_3px_0_#111]">
+      <p className="absolute left-4 top-5 z-10 font-display font-expanded text-[1.15rem] font-black uppercase leading-[0.9] text-white [text-shadow:0_3px_0_#111] xl:text-[1.5rem]">
         Con estilo
         <br />
         que te
@@ -179,7 +179,7 @@ function MarqueeRow({ items, reverse, duration }: { items: ReactNode[]; reverse?
   const cells = (hidden: boolean) => (
     <div className="flex gap-3 pr-3" aria-hidden={hidden || undefined} inert={hidden || undefined}>
       {items.map((node, i) => (
-        <div key={i} className="w-52 shrink-0 sm:w-60 [&>figure]:!aspect-[4/5]">
+        <div key={i} className="w-40 shrink-0 sm:w-48 lg:w-44 xl:w-56 [&>figure]:!aspect-[4/5]">
           {node}
         </div>
       ))}
@@ -200,15 +200,15 @@ function MarqueeRow({ items, reverse, duration }: { items: ReactNode[]; reverse?
 
 export function StyleWall() {
   return (
-    <section aria-labelledby="style-wall-title" className="mt-16 bg-ink py-14 text-white sm:py-20">
-      <div className="mx-auto mb-10 flex max-w-[1680px] flex-wrap items-end justify-between gap-6 px-4 sm:px-6 lg:px-8">
+    <section aria-labelledby="style-wall-title" className="mt-10 bg-ink py-10 text-white sm:mt-14 sm:py-12 lg:py-14">
+      <div className="mx-auto mb-6 flex max-w-[1680px] flex-wrap items-end justify-between gap-4 px-4 sm:mb-8 sm:px-6 lg:px-8">
         <div>
           <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#c9e265]">
             Cultura Key Street
           </p>
           <h2
             id="style-wall-title"
-            className="mt-2 font-display font-expanded text-3xl font-black uppercase leading-[0.92] tracking-[-0.02em] sm:text-5xl"
+            className="mt-2 font-display font-expanded text-2xl font-black uppercase leading-[0.92] tracking-[-0.02em] sm:text-4xl xl:text-5xl"
           >
             Más que tenis,
             <br />

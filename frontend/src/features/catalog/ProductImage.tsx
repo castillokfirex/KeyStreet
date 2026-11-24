@@ -27,6 +27,7 @@ export function ProductImage({
   view = "primary",
   index,
   sizes = DEFAULT_SIZES,
+  fit = "cover",
 }: {
   images: ProductImages;
   alt: string;
@@ -35,6 +36,7 @@ export function ProductImage({
   view?: "primary" | "secondary";
   index?: number;
   sizes?: string;
+  fit?: "cover" | "contain";
 }) {
   const position = index ?? (view === "secondary" ? 1 : 0);
   const secondary = position > 0;
@@ -79,7 +81,7 @@ export function ProductImage({
     decoding: "async" as const,
     width: 960,
     height: 1200,
-    className: "h-full w-full object-cover",
+    className: `h-full w-full ${fit === "contain" ? "object-contain" : "object-cover"}`,
   };
 
   return (
