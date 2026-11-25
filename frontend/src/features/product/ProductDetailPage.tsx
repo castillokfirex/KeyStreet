@@ -236,25 +236,6 @@ export function ProductDetailPage() {
                     className="!aspect-auto h-full w-full"
                     sizes="(max-width: 1024px) 100vw, 58vw"
                   />
-                  <div className="absolute inset-x-0 bottom-5 flex flex-wrap justify-center gap-2.5 px-4">
-                    <Button
-                      variant="forest"
-                      size="sm"
-                      onClick={activateViewer}
-                    >
-                      <Rotate3d className="h-4 w-4" aria-hidden="true" />
-                      <span>Activar Visor 3D 360°</span>
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="bg-canvas/90"
-                      onClick={openFitting}
-                    >
-                      <Box className="h-4 w-4" aria-hidden="true" />
-                      <span>Abrir Probador 3D</span>
-                    </Button>
-                  </div>
                 </div>
               ) : (
                 <div className="flex h-full flex-col items-center justify-center p-8 text-center">

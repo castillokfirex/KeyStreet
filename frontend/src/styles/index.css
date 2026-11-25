@@ -532,3 +532,29 @@
     animation: ks-marker 700ms 450ms var(--ease-editorial) both;
   }
 }
+
+@keyframes ks-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.ks-promo-track {
+  display: flex;
+  width: max-content;
+  animation: ks-marquee 34s linear infinite;
+  will-change: transform;
+}
+
+.ks-promo-track:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ks-promo-track {
+    animation: none;
+  }
+}

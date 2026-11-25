@@ -11,15 +11,15 @@ export interface NavItem {
 }
 
 export const MAIN_NAV: NavItem[] = [
-  { label: "Hombre", to: "/catalogo?silhouette=HIGH" },
-  { label: "Mujer", to: "/catalogo?silhouette=LOW" },
+  { label: "Hombre", to: "/catalogo" },
+  { label: "Mujer", to: "/catalogo" },
   {
     label: "Sale",
     to: "/catalogo?discounted=true",
     highlight: true,
     children: [
-      { label: "Hombre", to: "/catalogo?discounted=true&silhouette=HIGH" },
-      { label: "Mujer", to: "/catalogo?discounted=true&silhouette=LOW" },
+      { label: "Hombre", to: "/catalogo?discounted=true" },
+      { label: "Mujer", to: "/catalogo?discounted=true" },
     ],
   },
 ];
