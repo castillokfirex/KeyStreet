@@ -89,6 +89,10 @@
 
   /* Movimiento */
   --ease-editorial: cubic-bezier(0.2, 0, 0, 1);
+  /* Curvas fuertes (Emil Kowalski): las de CSS por defecto se quedan cortas */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
   --animate-kast-breathe: kast-breathe 3.4s ease-in-out infinite;
 }
 
@@ -433,16 +437,16 @@
 }
 
 .ks-drawer-in {
-  animation: ks-drawer-in 480ms var(--ease-editorial) both;
+  animation: ks-drawer-in 420ms var(--ease-drawer) both;
 }
 .ks-drawer-out {
-  animation: ks-drawer-out 320ms cubic-bezier(0.4, 0, 1, 1) both;
+  animation: ks-drawer-out 260ms var(--ease-out) both;
 }
 .ks-sheet-in {
-  animation: ks-sheet-in-y 480ms var(--ease-editorial) both;
+  animation: ks-sheet-in-y 420ms var(--ease-drawer) both;
 }
 .ks-sheet-out {
-  animation: ks-sheet-out-y 320ms cubic-bezier(0.4, 0, 1, 1) both;
+  animation: ks-sheet-out-y 260ms var(--ease-out) both;
 }
 @media (min-width: 640px) {
   .ks-sheet-in {
@@ -456,7 +460,7 @@
   animation: ks-fade-in 400ms ease-out both;
 }
 .ks-fade-out {
-  animation: ks-fade-out 320ms ease-in both;
+  animation: ks-fade-out 220ms ease both;
 }
 .ks-slide-in {
   animation: ks-slide-in 520ms var(--ease-editorial) both;
@@ -490,7 +494,7 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .ks-dropdown-in {
-    animation: ks-dropdown-in 220ms var(--ease-editorial) both;
+    animation: ks-dropdown-in 180ms var(--ease-out) both;
   }
 }
 
@@ -556,5 +560,34 @@
 @media (prefers-reduced-motion: reduce) {
   .ks-promo-track {
     animation: none;
+  }
+}
+
+/* ---- Panel admin: entrada de cifras clave ----------------------------- */
+@keyframes ks-stat-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ks-stat {
+    animation: ks-stat-in 260ms var(--ease-out) both;
+  }
+}
+
+/* Cambio de texto en un botón: desenfoque corto en vez de dos textos superpuestos */
+@keyframes ks-swap {
+  from {
+    opacity: 0;
+    filter: blur(2px);
+    transform: translateY(2px);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ks-swap {
+    animation: ks-swap 180ms var(--ease-out) both;
   }
 }

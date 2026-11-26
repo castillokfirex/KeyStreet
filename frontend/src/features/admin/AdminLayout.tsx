@@ -28,8 +28,8 @@ export function AdminLayout() {
 
   return (
     <AdminGuard>
-      <div className="min-h-screen bg-surface text-navy">
-        <header className="border-b border-line bg-canvas">
+      <div className="min-h-screen bg-canvas text-navy">
+        <header className="sticky top-0 z-30 border-b border-line bg-canvas/95 backdrop-blur-sm">
           <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-6">
               <Link to="/admin/documents" className="text-navy">
@@ -44,7 +44,7 @@ export function AdminLayout() {
                       to={item.to}
                       className={({ isActive }) =>
                         [
-                          "inline-flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-semibold transition-colors",
+                          "inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold transition-[background-color,color,transform] duration-150 ease-out active:scale-[0.97]",
                           isActive
                             ? "bg-forest text-white"
                             : "text-muted hover:bg-surface hover:text-navy",
@@ -60,12 +60,15 @@ export function AdminLayout() {
             </div>
 
             <div className="flex items-center gap-3">
-              <span className="hidden sm:inline text-xs text-muted">
-                {user?.email}
+              <span className="hidden text-right leading-tight sm:block">
+                <span className="block text-xs font-medium text-ink">{user?.email}</span>
+                <span className="block font-mono text-[9px] uppercase tracking-[0.14em] text-muted">
+                  Administrador
+                </span>
               </span>
               <Link
                 to="/catalogo"
-                className="inline-flex items-center gap-1.5 rounded-xl border border-line px-3 py-1.5 text-xs font-semibold text-navy hover:bg-surface"
+                className="inline-flex items-center gap-1.5 border border-line px-3 py-1.5 text-xs font-semibold text-navy transition-[background-color,transform] duration-150 ease-out hover:bg-surface active:scale-[0.97]"
               >
                 <Store className="h-3.5 w-3.5" aria-hidden="true" />
                 <span>Ver tienda</span>
@@ -73,7 +76,7 @@ export function AdminLayout() {
               <button
                 type="button"
                 onClick={handleLogout}
-                className="inline-flex items-center gap-1.5 rounded-xl border border-line px-3 py-1.5 text-xs font-semibold text-navy hover:bg-red-50 hover:text-red-700 cursor-pointer"
+                className="inline-flex cursor-pointer items-center gap-1.5 border border-line px-3 py-1.5 text-xs font-semibold text-navy transition-[background-color,color,border-color,transform] duration-150 ease-out hover:border-kast-error/40 hover:text-kast-error active:scale-[0.97]"
               >
                 <LogOut className="h-3.5 w-3.5" aria-hidden="true" />
                 <span>Salir</span>
@@ -87,7 +90,7 @@ export function AdminLayout() {
                 key={item.to}
                 to={item.to}
                 className={({ isActive }) =>
-                  `shrink-0 rounded-xl px-3 py-1.5 text-xs font-semibold ${
+                  `shrink-0 px-3 py-1.5 text-xs font-semibold transition-colors duration-150 ${
                     isActive ? "bg-forest text-white" : "bg-surface text-navy"
                   }`
                 }
@@ -98,7 +101,7 @@ export function AdminLayout() {
           </div>
         </header>
 
-        <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+        <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
           <Outlet />
         </main>
         <ToastViewport />

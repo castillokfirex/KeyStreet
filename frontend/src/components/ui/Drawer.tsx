@@ -14,7 +14,7 @@ interface DrawerProps {
 }
 
 /** Duración de la salida; también es el respaldo si no llega `animationend`. */
-const EXIT_MS = 320;
+const EXIT_MS = 260;
 
 export function Drawer({
   open,

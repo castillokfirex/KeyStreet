@@ -44,8 +44,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       type={type}
       disabled={disabled}
       className={[
-        "inline-flex items-center justify-center gap-2 rounded-sm font-display font-semibold uppercase transition-colors duration-150",
-        "disabled:opacity-45 disabled:cursor-not-allowed cursor-pointer select-none",
+        "inline-flex items-center justify-center gap-2 rounded-sm font-display font-semibold uppercase transition-[color,background-color,border-color,transform] duration-150 ease-out",
+        // Respuesta al presionar: el botón "escucha" al usuario
+        "active:scale-[0.97] disabled:active:scale-100 disabled:opacity-45 disabled:cursor-not-allowed cursor-pointer select-none",
         VARIANT_CLASSES[variant],
         SIZE_CLASSES[size],
         fullWidth ? "w-full" : "",
