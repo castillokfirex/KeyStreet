@@ -1,6 +1,6 @@
 # Créditos y licencias de los modelos 3D
 
-Generado por `scripts/models/validate-models.mjs` el 2026-11-24. Detalle técnico en [`assets/models/manifest.json`](../assets/models/manifest.json).
+Generado por `scripts/models/validate-models.mjs` el 2026-11-26. Detalle técnico en [`assets/models/manifest.json`](../assets/models/manifest.json).
 
 ## Origen de los modelos
 
@@ -17,12 +17,12 @@ Pasos de normalización con `@gltf-transform/cli`: `gltf-transform center <in> <
 
 | Producto | Tipo | Autor | Licencia | Peso · largo | Validación |
 |---|---|---|---|---|---|
-| `nike-air-force-1-low-07-blanco` | 3D genérico | Key Street (modelo propio generado) | Propio del proyecto (sin terceros) | 49.2 KB · 0.29 m | validado |
-| `adidas-superstar` | 3D genérico | Key Street (modelo propio generado) | Propio del proyecto (sin terceros) | 55.0 KB · 0.29 m | validado |
-| `nike-dunk-low-retro-panda` | 3D genérico | Key Street (modelo propio generado) | Propio del proyecto (sin terceros) | 49.4 KB · 0.29 m | validado |
+| `nike-air-force-1-low-07-blanco` | 3D generado con IA a partir de fotos propias | Key Street (fotos propias) + generación con IA | Propio del proyecto (fotos propias; modelo generado) | 858.0 KB · 0.29 m | validado |
+| `adidas-superstar` | 3D generado con IA a partir de fotos propias | Key Street (fotos propias) + generación con IA | Propio del proyecto (fotos propias; modelo generado) | 918.0 KB · 0.29 m | validado |
+| `nike-dunk-low-retro-panda` | 3D generado con IA a partir de fotos propias | Key Street (fotos propias) + generación con IA | Propio del proyecto (fotos propias; modelo generado) | 868.6 KB · 0.29 m | validado |
 | `air-jordan-1-low` | 3D genérico | Key Street (modelo propio generado) | Propio del proyecto (sin terceros) | 49.4 KB · 0.29 m | validado |
-| `vans-old-skool` | 3D genérico | Key Street (modelo propio generado) | Propio del proyecto (sin terceros) | 51.1 KB · 0.29 m | validado |
-| `adidas-samba-og-blanco-negro` | 3D genérico | Key Street (modelo propio generado) | Propio del proyecto (sin terceros) | 54.8 KB · 0.29 m | validado |
+| `vans-old-skool` | 3D generado con IA a partir de fotos propias | Key Street (fotos propias) + generación con IA | Propio del proyecto (fotos propias; modelo generado) | 905.2 KB · 0.29 m | validado |
+| `adidas-samba-og-blanco-negro` | 3D generado con IA a partir de fotos propias | Key Street (fotos propias) + generación con IA | Propio del proyecto (fotos propias; modelo generado) | 838.4 KB · 0.29 m | validado |
 | `converse-chuck-taylor-all-star-clasico` | 3D genérico | Key Street (modelo propio generado) | Propio del proyecto (sin terceros) | 62.5 KB · 0.29 m | validado |
 | `adidas-stan-smith` | 3D genérico | Key Street (modelo propio generado) | Propio del proyecto (sin terceros) | 45.0 KB · 0.29 m | validado |
 | `new-balance-550` | 3D genérico | Key Street (modelo propio generado) | Propio del proyecto (sin terceros) | 48.2 KB · 0.29 m | validado |

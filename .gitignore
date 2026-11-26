@@ -24,3 +24,7 @@ desktop.ini
 
 # Caché de herramientas del catálogo (originales descargados, miniaturas, rembg)
 scripts/.cache/
+
+# Carpeta de trabajo de la generación 3D con IA
+.ai3d/
+.venv-ai3d/

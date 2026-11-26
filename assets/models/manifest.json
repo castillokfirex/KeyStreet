@@ -17,11 +17,11 @@
     "nike-air-force-1-low-07-blanco": {
       "status": "validado",
       "url": "/assets/models/nike-air-force-1-low-07-blanco.glb",
-      "kind": "generico",
-      "label": "3D genérico",
-      "source": "Generado por scripts/models/build-generic-glb.mjs a partir del PlaceholderSneaker del proyecto",
-      "author": "Key Street (modelo propio generado)",
-      "license": "Propio del proyecto (sin terceros)",
+      "kind": "ia-multivista",
+      "label": "3D generado con IA a partir de fotos propias",
+      "source": "TRELLIS (Space gratuito de Hugging Face) a partir de las fotos propias de assets/models/references/nike-air-force-1-low-07-blanco/",
+      "author": "Key Street (fotos propias) + generación con IA",
+      "license": "Propio del proyecto (fotos propias; modelo generado)",
       "sourceUrl": null,
       "palette": {
         "upper": "#FFFFFF",
@@ -29,23 +29,26 @@
         "sole": "#F4F4F0"
       },
       "silhouette": "LOW",
-      "validatedAt": "2026-11-24",
-      "bytes": 50412,
+      "validatedAt": "2026-11-26",
+      "bytes": 878552,
       "sizeOk": true,
       "dimensionsM": [
         0.29,
-        0.1018,
-        0.0984
+        0.1374,
+        0.1204
       ],
       "center": [
         0,
-        0.0509,
+        0.0687,
         0
       ],
       "minY": 0,
-      "textures": [],
+      "textures": [
+        "image/webp"
+      ],
       "extensions": [
         "EXT_meshopt_compression",
+        "EXT_texture_webp",
         "KHR_mesh_quantization"
       ],
       "checks": {
@@ -64,11 +67,11 @@
     "adidas-superstar": {
       "status": "validado",
       "url": "/assets/models/adidas-superstar.glb",
-      "kind": "generico",
-      "label": "3D genérico",
-      "source": "Generado por scripts/models/build-generic-glb.mjs a partir del PlaceholderSneaker del proyecto",
-      "author": "Key Street (modelo propio generado)",
-      "license": "Propio del proyecto (sin terceros)",
+      "kind": "ia-multivista",
+      "label": "3D generado con IA a partir de fotos propias",
+      "source": "TRELLIS (Space gratuito de Hugging Face) a partir de las fotos propias de assets/models/references/adidas-superstar/",
+      "author": "Key Street (fotos propias) + generación con IA",
+      "license": "Propio del proyecto (fotos propias; modelo generado)",
       "sourceUrl": null,
       "palette": {
         "upper": "#FFFFFF",
@@ -76,23 +79,26 @@
         "sole": "#F1F1EF"
       },
       "silhouette": "LOW",
-      "validatedAt": "2026-11-24",
-      "bytes": 56276,
+      "validatedAt": "2026-11-26",
+      "bytes": 940036,
       "sizeOk": true,
       "dimensionsM": [
         0.29,
-        0.1018,
-        0.0984
+        0.1307,
+        0.1272
       ],
       "center": [
         0,
-        0.0509,
+        0.0653,
         0
       ],
       "minY": 0,
-      "textures": [],
+      "textures": [
+        "image/webp"
+      ],
       "extensions": [
         "EXT_meshopt_compression",
+        "EXT_texture_webp",
         "KHR_mesh_quantization"
       ],
       "checks": {
@@ -111,11 +117,11 @@
     "nike-dunk-low-retro-panda": {
       "status": "validado",
       "url": "/assets/models/nike-dunk-low-retro-panda.glb",
-      "kind": "generico",
-      "label": "3D genérico",
-      "source": "Generado por scripts/models/build-generic-glb.mjs a partir del PlaceholderSneaker del proyecto",
-      "author": "Key Street (modelo propio generado)",
-      "license": "Propio del proyecto (sin terceros)",
+      "kind": "ia-multivista",
+      "label": "3D generado con IA a partir de fotos propias",
+      "source": "TRELLIS (Space gratuito de Hugging Face) a partir de las fotos propias de assets/models/references/nike-dunk-low-retro-panda/",
+      "author": "Key Street (fotos propias) + generación con IA",
+      "license": "Propio del proyecto (fotos propias; modelo generado)",
       "sourceUrl": null,
       "palette": {
         "upper": "#FFFFFF",
@@ -123,23 +129,26 @@
         "sole": "#F4F4F0"
       },
       "silhouette": "LOW",
-      "validatedAt": "2026-11-24",
-      "bytes": 50604,
+      "validatedAt": "2026-11-26",
+      "bytes": 889396,
       "sizeOk": true,
       "dimensionsM": [
         0.29,
-        0.1018,
-        0.0984
+        0.1506,
+        0.1135
       ],
       "center": [
         0,
-        0.0509,
+        0.0753,
         0
       ],
       "minY": 0,
-      "textures": [],
+      "textures": [
+        "image/webp"
+      ],
       "extensions": [
         "EXT_meshopt_compression",
+        "EXT_texture_webp",
         "KHR_mesh_quantization"
       ],
       "checks": {
@@ -170,7 +179,7 @@
         "sole": "#F1F1EF"
       },
       "silhouette": "LOW",
-      "validatedAt": "2026-11-24",
+      "validatedAt": "2026-11-26",
       "bytes": 50572,
       "sizeOk": true,
       "dimensionsM": [
@@ -205,11 +214,11 @@
     "vans-old-skool": {
       "status": "validado",
       "url": "/assets/models/vans-old-skool.glb",
-      "kind": "generico",
-      "label": "3D genérico",
-      "source": "Generado por scripts/models/build-generic-glb.mjs a partir del PlaceholderSneaker del proyecto",
-      "author": "Key Street (modelo propio generado)",
-      "license": "Propio del proyecto (sin terceros)",
+      "kind": "ia-multivista",
+      "label": "3D generado con IA a partir de fotos propias",
+      "source": "TRELLIS (Space gratuito de Hugging Face) a partir de las fotos propias de assets/models/references/vans-old-skool/",
+      "author": "Key Street (fotos propias) + generación con IA",
+      "license": "Propio del proyecto (fotos propias; modelo generado)",
       "sourceUrl": null,
       "palette": {
         "upper": "#1B1B1B",
@@ -217,23 +226,26 @@
         "sole": "#F4F1EA"
       },
       "silhouette": "LOW",
-      "validatedAt": "2026-11-24",
-      "bytes": 52300,
+      "validatedAt": "2026-11-26",
+      "bytes": 926952,
       "sizeOk": true,
       "dimensionsM": [
         0.29,
-        0.1018,
-        0.0926
+        0.1323,
+        0.1071
       ],
       "center": [
         0,
-        0.0509,
+        0.0662,
         0
       ],
       "minY": 0,
-      "textures": [],
+      "textures": [
+        "image/webp"
+      ],
       "extensions": [
         "EXT_meshopt_compression",
+        "EXT_texture_webp",
         "KHR_mesh_quantization"
       ],
       "checks": {
@@ -252,11 +264,11 @@
     "adidas-samba-og-blanco-negro": {
       "status": "validado",
       "url": "/assets/models/adidas-samba-og-blanco-negro.glb",
-      "kind": "generico",
-      "label": "3D genérico",
-      "source": "Generado por scripts/models/build-generic-glb.mjs a partir del PlaceholderSneaker del proyecto",
-      "author": "Key Street (modelo propio generado)",
-      "license": "Propio del proyecto (sin terceros)",
+      "kind": "ia-multivista",
+      "label": "3D generado con IA a partir de fotos propias",
+      "source": "TRELLIS (Space gratuito de Hugging Face) a partir de las fotos propias de assets/models/references/adidas-samba-og-blanco-negro/",
+      "author": "Key Street (fotos propias) + generación con IA",
+      "license": "Propio del proyecto (fotos propias; modelo generado)",
       "sourceUrl": null,
       "palette": {
         "upper": "#FFFFFF",
@@ -264,23 +276,26 @@
         "sole": "#C9A878"
       },
       "silhouette": "LOW",
-      "validatedAt": "2026-11-24",
-      "bytes": 56072,
+      "validatedAt": "2026-11-26",
+      "bytes": 858500,
       "sizeOk": true,
       "dimensionsM": [
         0.29,
-        0.1018,
-        0.0926
+        0.132,
+        0.1102
       ],
       "center": [
         0,
-        0.0509,
+        0.066,
         0
       ],
       "minY": 0,
-      "textures": [],
+      "textures": [
+        "image/webp"
+      ],
       "extensions": [
         "EXT_meshopt_compression",
+        "EXT_texture_webp",
         "KHR_mesh_quantization"
       ],
       "checks": {
@@ -311,7 +326,7 @@
         "sole": "#F4F1EA"
       },
       "silhouette": "HIGH",
-      "validatedAt": "2026-11-24",
+      "validatedAt": "2026-11-26",
       "bytes": 63976,
       "sizeOk": true,
       "dimensionsM": [
@@ -358,7 +373,7 @@
         "sole": "#F1F1EF"
       },
       "silhouette": "LOW",
-      "validatedAt": "2026-11-24",
+      "validatedAt": "2026-11-26",
       "bytes": 46052,
       "sizeOk": true,
       "dimensionsM": [
@@ -405,7 +420,7 @@
         "sole": "#F1F1EF"
       },
       "silhouette": "LOW",
-      "validatedAt": "2026-11-24",
+      "validatedAt": "2026-11-26",
       "bytes": 49332,
       "sizeOk": true,
       "dimensionsM": [
@@ -452,7 +467,7 @@
         "sole": "#F4F4F2"
       },
       "silhouette": "LOW",
-      "validatedAt": "2026-11-24",
+      "validatedAt": "2026-11-26",
       "bytes": 49792,
       "sizeOk": true,
       "dimensionsM": [
@@ -499,7 +514,7 @@
         "sole": "#EDE6D8"
       },
       "silhouette": "LOW",
-      "validatedAt": "2026-11-24",
+      "validatedAt": "2026-11-26",
       "bytes": 52152,
       "sizeOk": true,
       "dimensionsM": [
@@ -546,7 +561,7 @@
         "sole": "#F1F1EF"
       },
       "silhouette": "LOW",
-      "validatedAt": "2026-11-24",
+      "validatedAt": "2026-11-26",
       "bytes": 47960,
       "sizeOk": true,
       "dimensionsM": [
@@ -593,7 +608,7 @@
         "sole": "#A87A4F"
       },
       "silhouette": "LOW",
-      "validatedAt": "2026-11-24",
+      "validatedAt": "2026-11-26",
       "bytes": 56240,
       "sizeOk": true,
       "dimensionsM": [
@@ -640,7 +655,7 @@
         "sole": "#F1F1EF"
       },
       "silhouette": "MID",
-      "validatedAt": "2026-11-24",
+      "validatedAt": "2026-11-26",
       "bytes": 49852,
       "sizeOk": true,
       "dimensionsM": [
@@ -687,7 +702,7 @@
         "sole": "#F1F1EF"
       },
       "silhouette": "LOW",
-      "validatedAt": "2026-11-24",
+      "validatedAt": "2026-11-26",
       "bytes": 50416,
       "sizeOk": true,
       "dimensionsM": [

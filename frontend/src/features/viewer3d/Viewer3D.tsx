@@ -1,7 +1,8 @@
-import { ContactShadows, OrbitControls } from "@react-three/drei";
+import { ContactShadows, Environment, Lightformer, OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { RotateCw, Sparkles, X } from "lucide-react";
 import { Suspense, useEffect, useRef, useState } from "react";
+import { NeutralToneMapping } from "three";
 import type { ProductDetailDto } from "@/lib/types";
 import { GltfSneaker, PLACEHOLDER_FLOOR_Y } from "./GltfSneaker";
 import { Hotspot3DAnchor, HotspotOverlayPin } from "./Hotspot";
@@ -71,11 +72,19 @@ export function Viewer3D({
         // Encuadre para un zapato de ~0,29 m en el contenedor vertical 3:4
         // (a 0,34/0,2/0,36 el campo horizontal cubría ~0,26 m y la punta se cortaba)
         camera={{ position: [0.43, 0.25, 0.46], fov: 36 }}
+        gl={{ toneMapping: NeutralToneMapping, toneMappingExposure: 1.05 }}
       >
         <color attach="background" args={["#F5F6F8"]} />
-        <ambientLight intensity={0.85} />
-        <directionalLight position={[2.2, 3.5, 2.8]} intensity={1.15} castShadow />
-        <directionalLight position={[-2, 1.5, -2]} intensity={0.45} />
+        <ambientLight intensity={0.35} />
+        <directionalLight position={[2.2, 3.5, 2.8]} intensity={1.1} castShadow />
+        <directionalLight position={[-2, 1.5, -2]} intensity={0.4} />
+        {/* Luz de estudio procedural (sin descargar HDR): colores fieles en las texturas de foto */}
+        <Environment resolution={128} frames={1}>
+          <Lightformer form="rect" intensity={2.2} position={[0, 3, 1]} scale={[6, 2, 1]} />
+          <Lightformer form="rect" intensity={1.2} position={[-3, 1, 2]} rotation-y={Math.PI / 3} scale={[3, 2, 1]} />
+          <Lightformer form="rect" intensity={1.2} position={[3, 1, -2]} rotation-y={-Math.PI / 3} scale={[3, 2, 1]} />
+          <Lightformer form="ring" intensity={0.8} position={[0, -2, 0]} scale={4} />
+        </Environment>
 
         <Suspense fallback={null}>
           {product.model3dReady && product.model3dUrl ? (
