@@ -20,6 +20,7 @@ export function ViewerToolbar({
         type="button"
         onClick={onToggleViewer}
         aria-pressed={viewerActive}
+        aria-label={viewerActive ? "Ver fotos del producto" : "Activar Visor 3D 360°"}
         className={`${BASE} ${
           viewerActive
             ? "bg-ink text-canvas"

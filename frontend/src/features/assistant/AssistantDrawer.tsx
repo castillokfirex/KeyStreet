@@ -1,4 +1,4 @@
-import { ArrowUpRight, Layers, Leaf, RefreshCw, Ruler, Send, Trash2 } from "lucide-react";
+import { ArrowUpRight, Gift, Leaf, Ruler, Send, Sparkles, Trash2 } from "lucide-react";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { EucalyptusBranch } from "@/components/brand/EucalyptusBranch";
 import {
@@ -12,7 +12,7 @@ import { useAssistantStore } from "@/stores/assistant";
 import { ChatMessage } from "./ChatMessage";
 import { useAssistant } from "./useAssistant";
 
-const SUGGESTION_ICONS = [Ruler, RefreshCw, Layers];
+const SUGGESTION_ICONS = [Gift, Sparkles, Ruler];
 
 /** Tras este tiempo sin actividad con el chat abierto, Kast vuelve a dormir. */
 const DOZE_AFTER_MS = 60_000;
@@ -74,9 +74,8 @@ export function AssistantDrawer() {
         `¿Cómo cuidar los materiales de ${productName}?`,
       ]
     : [
-        "¿El Adidas Samba OG tiene horma estrecha o normal?",
-        "¿Cuántos días hay para cambios por talla?",
-        "¿Qué materiales tiene el Nike Air Force 1?",
+        "¿Qué zapatos podría regalarle a mi hermana que es joven y le gusta el blanco?",
+        "¿Qué le debería regalar a mi papá para el Día del Padre? Es un señor con mucho estilo",
       ];
 
   const handleSubmit = (e: FormEvent) => {
@@ -98,7 +97,7 @@ export function AssistantDrawer() {
         subtitle={
           productName
             ? `Contexto activo: ${productName}`
-            : "Guías de tallas, horma y materiales"
+            : "Recomendaciones, tallas, hormas y materiales"
         }
       >
       <div
@@ -137,8 +136,8 @@ export function AssistantDrawer() {
                   <span className="text-forest">te ayudo hoy?</span>
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted">
-                  Pregúntame por hormas, tallas EU, materiales o envíos. Respondo con las guías
-                  verificadas de la tienda.
+                  Pregúntame qué regalar, por hormas, tallas EU, materiales o envíos. Respondo con
+                  las guías verificadas de la tienda.
                 </p>
               </div>
 
