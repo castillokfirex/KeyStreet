@@ -29,7 +29,7 @@ export function useWhatsappCheckout() {
         targetUrl = res.whatsappUrl;
       } catch {
         targetUrl = buildFallbackWhatsappUrl(
-          tenant?.whatsappPhone || "573000000000",
+          tenant?.whatsappPhone || "573176576059",
           tenant?.name || "Key Street",
           items.map((i) => i.fallback),
         );

@@ -1,5 +1,5 @@
 {
-  "$comment": "Fuente única del catálogo de 15 modelos. build-catalog.mjs genera desde aquí la migración SQL, docs/catalogo-fuentes.md y los datos de verificación. Precios en COP: 'VERIFICADO' = precio de lista vigente en la tienda oficial en Colombia (URL y fecha en 'price'); 'PRUEBA' = sin precio verificable, NO es un precio real.",
+  "$comment": "Fuente única del catálogo de 14 modelos activos (todos con fotos verificadas). build-catalog.mjs genera desde aquí la migración SQL, docs/catalogo-fuentes.md y los datos de verificación. Precios en COP: 'VERIFICADO' = precio de lista vigente en la tienda oficial en Colombia (URL y fecha en 'price'); 'PRUEBA' = sin precio verificable, NO es un precio real.",
   "tenantId": "00000000-0000-4000-8000-000000000001",
   "checkedAt": "2026-11-20",
   "brands": [
@@ -55,6 +55,10 @@
     {
       "slug": "adidas-campus-00s-gris-negro",
       "reason": "Colorway sin fotos con licencia; sustituido por adidas-campus-00s (café)."
+    },
+    {
+      "slug": "nike-court-vision-low",
+      "reason": "Retirado del catálogo activo: no cuenta con imágenes de producto disponibles."
     }
   ],
   "discountRule": "Exactamente 4 modelos activos con descuento automático entre 10% y 15%.",
@@ -647,48 +651,6 @@
         "retro",
         "premium",
         "cuero"
-      ]
-    },
-    {
-      "slug": "nike-court-vision-low",
-      "name": "Nike Court Vision Low (Blanco / Negro)",
-      "brand": "NIK",
-      "modelCode": "CVL",
-      "silhouette": "LOW",
-      "colorway": "Blanco / Negro",
-      "badge": "CLÁSICO",
-      "shortDescription": "Inspiración de cancha de los 80 en un perfil bajo y limpio, con materiales que incluyen contenido reciclado.",
-      "description": "Capellada sintética con perforaciones, swoosh en contraste y suela de caucho con círculo de pivote. Un básico blanco de precio accesible.",
-      "originalPriceCop": 459950,
-      "discountPercent": 0,
-      "price": {
-        "status": "VERIFICADO",
-        "store": "Nike Colombia (nike.com.co)",
-        "reference": "DH2987-101",
-        "listPriceCop": 459950,
-        "currentPriceCop": 459950,
-        "url": "https://www.nike.com.co/nike-court-vision-low-next-nature-dh2987-101/p",
-        "checkedAt": "2026-11-20"
-      },
-      "specs": {
-        "upper": "Sintético con perforaciones",
-        "lining": "Textil",
-        "midsole": "Espuma ligera",
-        "outsole": "Caucho con círculo de pivote",
-        "closure": "Cordones planos",
-        "fit": "TRUE_TO_SIZE",
-        "weightGrams": 420
-      },
-      "palette": {
-        "upper": "#FFFFFF",
-        "accent": "#111111",
-        "sole": "#F1F1EF"
-      },
-      "styleTags": [
-        "clasico",
-        "basquet",
-        "urbano",
-        "blanco"
       ]
     }
   ]

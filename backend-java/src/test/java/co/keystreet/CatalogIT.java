@@ -16,11 +16,11 @@ import org.springframework.test.web.servlet.MvcResult;
 class CatalogIT extends AbstractIT {
 
   @Test
-  void catalogReturns15ProductsAnd4DiscountedSortedByPrice() throws Exception {
+  void catalogReturns14ProductsAnd4DiscountedSortedByPrice() throws Exception {
     mockMvc
         .perform(get("/api/v1/public/products").header("X-Tenant-Slug", "key-street"))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.totalItems").value(15));
+        .andExpect(jsonPath("$.totalItems").value(14));
 
     mockMvc
         .perform(
@@ -90,6 +90,6 @@ class CatalogIT extends AbstractIT {
         .contains("Talla 41")
         .contains("KS-NIK-AF1-41")
         .contains("$526.400 COP");
-    assertThat(wa.get("whatsappUrl").asText()).startsWith("https://wa.me/573000000000?text=");
+    assertThat(wa.get("whatsappUrl").asText()).startsWith("https://wa.me/573176576059?text=");
   }
 }

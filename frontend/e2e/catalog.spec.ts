@@ -1,13 +1,13 @@
 import { expect, test } from "@playwright/test";
 
 test.describe("Catálogo editorial y descuentos COP", () => {
-  test("muestra 15 productos, 4 descuentos exactos, filtros y orden sincronizados", async ({
+  test("muestra 14 productos, 4 descuentos exactos, filtros y orden sincronizados", async ({
     page,
   }) => {
     await page.goto("/catalogo");
 
     const cards = page.locator('[data-testid^="product-card-"]');
-    await expect(cards).toHaveCount(15);
+    await expect(cards).toHaveCount(14);
 
     // Exactamente 4 modelos con badge -X% OFF
     const discountBadges = page.getByText(/^-\d+% OFF$/);

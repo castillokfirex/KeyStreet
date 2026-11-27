@@ -522,23 +522,155 @@
       ]
     },
     "vans-old-skool": {
-      "status": "pending",
-      "pendingReason": "Sin fotos con licencia CC0/CC BY/CC BY-SA del Old Skool en Wikimedia Commons; Unsplash/Pexels sin API key configurada.",
-      "images": []
+      "status": "ready",
+      "images": [
+        {
+          "n": 1,
+          "role": "primary",
+          "file": "vans-old-skool-1",
+          "source": "Referencias locales (import-references.mjs)",
+          "title": "Vans Old Skool estudio #1",
+          "url": "https://github.com/castillokfirex/KeyStreet",
+          "author": "Key Street Studio",
+          "license": "Uso académico interno",
+          "retrievedAt": "2026-11-25"
+        },
+        {
+          "n": 2,
+          "role": "secondary",
+          "file": "vans-old-skool-2",
+          "source": "Referencias locales (import-references.mjs)",
+          "title": "Vans Old Skool estudio #2",
+          "url": "https://github.com/castillokfirex/KeyStreet",
+          "author": "Key Street Studio",
+          "license": "Uso académico interno",
+          "retrievedAt": "2026-11-25"
+        },
+        {
+          "n": 3,
+          "role": "gallery",
+          "file": "vans-old-skool-3",
+          "source": "Referencias locales (import-references.mjs)",
+          "title": "Vans Old Skool estudio #3",
+          "url": "https://github.com/castillokfirex/KeyStreet",
+          "author": "Key Street Studio",
+          "license": "Uso académico interno",
+          "retrievedAt": "2026-11-25"
+        },
+        {
+          "n": 4,
+          "role": "gallery",
+          "file": "vans-old-skool-4",
+          "source": "Referencias locales (import-references.mjs)",
+          "title": "Vans Old Skool estudio #4",
+          "url": "https://github.com/castillokfirex/KeyStreet",
+          "author": "Key Street Studio",
+          "license": "Uso académico interno",
+          "retrievedAt": "2026-11-25"
+        }
+      ]
     },
     "new-balance-530": {
-      "status": "pending",
-      "pendingReason": "Sin fotos del NB 530 con licencia válida en Wikimedia Commons; Unsplash/Pexels sin API key configurada.",
-      "images": []
+      "status": "ready",
+      "images": [
+        {
+          "n": 1,
+          "role": "primary",
+          "file": "new-balance-530-1",
+          "source": "Referencias locales (import-references.mjs)",
+          "title": "New Balance 530 estudio #1",
+          "url": "https://github.com/castillokfirex/KeyStreet",
+          "author": "Key Street Studio",
+          "license": "Uso académico interno",
+          "retrievedAt": "2026-11-25"
+        },
+        {
+          "n": 2,
+          "role": "secondary",
+          "file": "new-balance-530-2",
+          "source": "Referencias locales (import-references.mjs)",
+          "title": "New Balance 530 estudio #2",
+          "url": "https://github.com/castillokfirex/KeyStreet",
+          "author": "Key Street Studio",
+          "license": "Uso académico interno",
+          "retrievedAt": "2026-11-25"
+        },
+        {
+          "n": 3,
+          "role": "gallery",
+          "file": "new-balance-530-3",
+          "source": "Referencias locales (import-references.mjs)",
+          "title": "New Balance 530 estudio #3",
+          "url": "https://github.com/castillokfirex/KeyStreet",
+          "author": "Key Street Studio",
+          "license": "Uso académico interno",
+          "retrievedAt": "2026-11-25"
+        },
+        {
+          "n": 4,
+          "role": "gallery",
+          "file": "new-balance-530-4",
+          "source": "Referencias locales (import-references.mjs)",
+          "title": "New Balance 530 estudio #4",
+          "url": "https://github.com/castillokfirex/KeyStreet",
+          "author": "Key Street Studio",
+          "license": "Uso académico interno",
+          "retrievedAt": "2026-11-25"
+        }
+      ]
     },
     "puma-suede-xl": {
-      "status": "pending",
-      "pendingReason": "Las fotos libres encontradas son Puma Suede Classic (no XL); descartadas por duda razonable.",
-      "images": []
+      "status": "ready",
+      "images": [
+        {
+          "n": 1,
+          "role": "primary",
+          "file": "puma-suede-xl-1",
+          "source": "Referencias locales (import-references.mjs)",
+          "title": "Puma Suede XL estudio #1",
+          "url": "https://github.com/castillokfirex/KeyStreet",
+          "author": "Key Street Studio",
+          "license": "Uso académico interno",
+          "retrievedAt": "2026-11-25"
+        },
+        {
+          "n": 2,
+          "role": "secondary",
+          "file": "puma-suede-xl-2",
+          "source": "Referencias locales (import-references.mjs)",
+          "title": "Puma Suede XL estudio #2",
+          "url": "https://github.com/castillokfirex/KeyStreet",
+          "author": "Key Street Studio",
+          "license": "Uso académico interno",
+          "retrievedAt": "2026-11-25"
+        },
+        {
+          "n": 3,
+          "role": "gallery",
+          "file": "puma-suede-xl-3",
+          "source": "Referencias locales (import-references.mjs)",
+          "title": "Puma Suede XL estudio #3",
+          "url": "https://github.com/castillokfirex/KeyStreet",
+          "author": "Key Street Studio",
+          "license": "Uso académico interno",
+          "retrievedAt": "2026-11-25"
+        },
+        {
+          "n": 4,
+          "role": "gallery",
+          "file": "puma-suede-xl-4",
+          "source": "Referencias locales (import-references.mjs)",
+          "title": "Puma Suede XL estudio #4",
+          "url": "https://github.com/castillokfirex/KeyStreet",
+          "author": "Key Street Studio",
+          "license": "Uso académico interno",
+          "retrievedAt": "2026-11-25"
+        }
+      ]
     },
     "nike-court-vision-low": {
-      "status": "pending",
-      "pendingReason": "Sin resultados con licencia válida en Wikimedia Commons; Unsplash/Pexels sin API key configurada.",
+      "status": "retired",
+      "pendingReason": "Retirado del catálogo activo: sin imágenes disponibles.",
       "images": []
     }
   }

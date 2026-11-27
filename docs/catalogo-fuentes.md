@@ -1,4 +1,4 @@
-# Catálogo de 15 modelos: fuentes de precio
+# Catálogo de 14 modelos: fuentes de precio
 
 Generado por `scripts/catalog/build-catalog.mjs` a partir de [`scripts/catalog/catalog.json`](../scripts/catalog/catalog.json). Fecha de consulta: 2026-11-20.
 
@@ -22,7 +22,6 @@ Generado por `scripts/catalog/build-catalog.mjs` a partir de [`scripts/catalog/c
 | Puma Suede XL | `puma-suede-xl` | $449.900 | -12% → $395.900 | **PRUEBA** | Sin tienda oficial de Puma en Colombia accesible el 2026-11-20 (co.puma.com no responde; puma.com/co redirige al sitio corporativo). | — | 2026-11-20 |
 | Adidas Handball Spezial (Negro / Goma) | `adidas-handball-spezial` | $549.950 | — | **VERIFICADO** | [adidas Colombia (adidas.co)](https://www.adidas.co/tenis-handball-spezial/KZ6705.html) | KZ6705 (Handball Spezial hombre, precio de lista) | 2026-11-20 |
 | Air Jordan 4 Retro (White Cement) | `air-jordan-4` | $1.219.950 | — | **VERIFICADO** | [Nike Colombia (nike.com.co)](https://www.nike.com.co/air-jordan-4-retro-calzado-para-hombre-fq8138-600-tu6/p) | FQ8138-600 (Air Jordan 4 Retro hombre, precio de lista del modelo) | 2026-11-20 |
-| Nike Court Vision Low (Blanco / Negro) | `nike-court-vision-low` | $459.950 | — | **VERIFICADO** | [Nike Colombia (nike.com.co)](https://www.nike.com.co/nike-court-vision-low-next-nature-dh2987-101/p) | DH2987-101 | 2026-11-20 |
 
 ## Notas por modelo
 
@@ -43,3 +42,4 @@ Generado por `scripts/catalog/build-catalog.mjs` a partir de [`scripts/catalog/c
 - `new-balance-574`: Fuera de la lista de 15 modelos (sustituido por New Balance 530).
 - `nike-air-jordan-1-retro-high-og`: La lista pide Air Jordan 1 Low o Mid (sustituido por air-jordan-1-low).
 - `adidas-campus-00s-gris-negro`: Colorway sin fotos con licencia; sustituido por adidas-campus-00s (café).
+- `nike-court-vision-low`: Retirado del catálogo activo: no cuenta con imágenes de producto disponibles.

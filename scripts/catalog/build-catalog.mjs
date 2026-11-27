@@ -46,10 +46,16 @@ function hotspots(specs) {
 }
 
 // ---------- validaciones previas ----------
+const ACTIVE_COUNT = catalog.products.length;
+const VARIANT_COUNT = ACTIVE_COUNT * 9;
 const discounted = catalog.products.filter((p) => p.discountPercent > 0);
-if (catalog.products.length !== 15) throw new Error(`Se esperaban 15 productos, hay ${catalog.products.length}`);
+if (ACTIVE_COUNT < 1) throw new Error("El catálogo debe tener al menos un producto activo");
 if (discounted.length !== 4 || discounted.some((p) => p.discountPercent < 10 || p.discountPercent > 15)) {
   throw new Error("Regla de descuentos: exactamente 4 productos entre 10% y 15%");
+}
+const missingImgs = catalog.products.filter((p) => !(processed[p.slug]?.ready && processed[p.slug]?.files?.length > 0));
+if (missingImgs.length > 0) {
+  throw new Error(`Productos sin imágenes activas: ${missingImgs.map((p) => p.slug).join(", ")}`);
 }
 
 const rows = catalog.products.map((p) => {
@@ -95,7 +101,7 @@ const expectedFinal = discounted
   .join(", ");
 
 const sql = `-- =====================================================================
--- V002 — Catálogo de 15 modelos (Key Street)
+-- V002 — Catálogo de ${ACTIVE_COUNT} modelos activos (Key Street)
 -- Generado por scripts/catalog/build-catalog.mjs — NO editar a mano.
 --
 -- Idempotente: se puede ejecutar varias veces sin duplicar filas.
@@ -113,7 +119,7 @@ INSERT INTO brands (tenant_id, name, slug, code) VALUES
 ${catalog.brands.map((b) => `  (${q(T)}, ${q(b.name)}, ${q(b.slug)}, ${q(b.code)})`).join(",\n")}
 ON CONFLICT (tenant_id, code) DO UPDATE SET name = EXCLUDED.name, slug = EXCLUDED.slug;
 
--- ---------- 15 productos ----------
+-- ---------- ${ACTIVE_COUNT} productos ----------
 INSERT INTO products (tenant_id, brand_id, name, slug, model_code, category, silhouette, colorway,
                       short_description, description, badge, original_price_cop, discount_percent,
                       model_3d_url, model_3d_ready, image_placeholder_paths, material_specs, style_tags,
@@ -172,7 +178,7 @@ DO $$
 DECLARE n int;
 BEGIN
   SELECT count(*) INTO n FROM products WHERE tenant_id = ${q(T)} AND is_active;
-  IF n <> 15 THEN RAISE EXCEPTION 'V002: se esperaban 15 productos activos, hay %', n; END IF;
+  IF n <> ${ACTIVE_COUNT} THEN RAISE EXCEPTION 'V002: se esperaban ${ACTIVE_COUNT} productos activos, hay %', n; END IF;
 
   SELECT count(*) INTO n FROM products WHERE tenant_id = ${q(T)} AND is_active AND has_discount;
   IF n <> 4 THEN RAISE EXCEPTION 'V002: se esperaban 4 descuentos activos, hay %', n; END IF;
@@ -184,7 +190,11 @@ BEGIN
 
   SELECT count(*) INTO n FROM product_variants v JOIN products p ON p.id = v.product_id
   WHERE p.tenant_id = ${q(T)} AND p.is_active AND v.is_active;
-  IF n <> 135 THEN RAISE EXCEPTION 'V002: se esperaban 135 variantes activas (15 x 9), hay %', n; END IF;
+  IF n <> ${VARIANT_COUNT} THEN RAISE EXCEPTION 'V002: se esperaban ${VARIANT_COUNT} variantes activas (${ACTIVE_COUNT} x 9), hay %', n; END IF;
+
+  IF EXISTS (SELECT 1 FROM products WHERE tenant_id = ${q(T)} AND is_active
+             AND NOT COALESCE((image_placeholder_paths->>'ready')::boolean, false)) THEN
+    RAISE EXCEPTION 'V002: hay producto activo sin imágenes'; END IF;
 
   IF EXISTS (SELECT 1 FROM products WHERE tenant_id = ${q(T)} AND is_active
              AND (image_placeholder_paths->>'ready')::boolean
@@ -207,7 +217,7 @@ const priceRows = catalog.products.map((p) => {
   const source = pr.url ? `[${pr.store}](${pr.url})` : pr.store;
   return `| ${p.name} | \`${p.slug}\` | ${cop(p.originalPriceCop)} | ${p.discountPercent ? `-${p.discountPercent}% → ${cop(fin)}` : "—"} | **${pr.status}** | ${source} | ${pr.reference ?? "—"} | ${pr.checkedAt} |`;
 });
-const fuentes = `# Catálogo de 15 modelos: fuentes de precio
+const fuentes = `# Catálogo de ${ACTIVE_COUNT} modelos: fuentes de precio
 
 Generado por \`scripts/catalog/build-catalog.mjs\` a partir de [\`scripts/catalog/catalog.json\`](../scripts/catalog/catalog.json). Fecha de consulta: ${catalog.checkedAt}.
 
@@ -274,11 +284,11 @@ ${creditRows.join("\n")}
 
 ## Productos sin imágenes válidas (placeholder, \`images.ready = false\`)
 
-${pendingRows.join("\n")}
+${pendingRows.length ? pendingRows.join("\n") : "_Ninguno: el 100% de los modelos activos cuenta con imágenes de estudio listas._"}
 
 Unsplash y Pexels no se consultaron: no hay \`UNSPLASH_ACCESS_KEY\` ni \`PEXELS_API_KEY\` en \`.env\`.
 `;
 await writeFile(path.join(REPO, "docs", "creditos-imagenes.md"), creditos);
 
 console.log("Generados: db/migrations/V002__catalogo_15_modelos.sql, docs/catalogo-fuentes.md, docs/creditos-imagenes.md");
-console.log(`Productos con imágenes: ${catalog.products.filter((p) => processed[p.slug]?.ready).length}/15 · 3D validados: ${catalog.products.filter((p) => models[p.slug]?.status === "validado").length}/15`);
+console.log(`Productos con imágenes: ${catalog.products.filter((p) => processed[p.slug]?.ready).length}/${ACTIVE_COUNT} · 3D validados: ${catalog.products.filter((p) => models[p.slug]?.status === "validado").length}/${ACTIVE_COUNT}`);

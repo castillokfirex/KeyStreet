@@ -6,7 +6,7 @@ BEGIN;
 -- ---------- Tenant por defecto ----------
 INSERT INTO tenants (id, slug, name, legal_name, whatsapp_phone, branding, settings)
 VALUES (
-  '00000000-0000-4000-8000-000000000001', 'key-street', 'Key Street', 'Key Street Colombia S.A.S.', '573000000000',
+  '00000000-0000-4000-8000-000000000001', 'key-street', 'Key Street', 'Key Street Colombia S.A.S.', '573176576059',
   '{"primary":"#16302B","navy":"#0F172A","surface":"#F5F6F8","fontDisplay":"Space Grotesk","fontBody":"Plus Jakarta Sans",
     "promoBar":"Envíos express gratis a toda Colombia por compras superiores a $300.000 COP"}'::jsonb,
   '{"freeShippingFromCop":300000,"ragTopK":6}'::jsonb);

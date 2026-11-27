@@ -18,7 +18,7 @@ export function Footer() {
   const pushToast = useToastStore((s) => s.push);
   const [email, setEmail] = useState("");
 
-  const phone = (tenant?.whatsappPhone || "573000000000").replace(/\D/g, "");
+  const phone = (tenant?.whatsappPhone || "573176576059").replace(/\D/g, "");
 
   const handleDropSubmit = (e: FormEvent) => {
     e.preventDefault();

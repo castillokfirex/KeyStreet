@@ -131,7 +131,7 @@ export function HeroShowcase({
               style={{ animationDelay: "600ms" }}
             >
               {[
-                ["15", "Siluetas"],
+                ["14", "Siluetas"],
                 ["7", "Marcas"],
                 ["360°", "Probador 3D"],
               ].map(([value, label]) => (

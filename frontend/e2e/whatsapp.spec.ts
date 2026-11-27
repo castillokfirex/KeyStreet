@@ -27,11 +27,11 @@ test.describe("Flujo de pedido por WhatsApp", () => {
     ]);
 
     const body = (await intentRes.json()) as { whatsappUrl: string };
-    expect(body.whatsappUrl).toMatch(/^https:\/\/wa\.me\/573000000000\?text=/);
+    expect(body.whatsappUrl).toMatch(/^https:\/\/wa\.me\/573176576059\?text=/);
 
     const popupUrl = popup.url();
     expect(popupUrl).toMatch(
-      /^https:\/\/(wa\.me\/573000000000|api\.whatsapp\.com\/send\/\?phone=573000000000)/,
+      /^https:\/\/(wa\.me\/573176576059|api\.whatsapp\.com\/send\/\?phone=573176576059)/,
     );
     const decodedText =
       new URL(popupUrl).searchParams.get("text") ||

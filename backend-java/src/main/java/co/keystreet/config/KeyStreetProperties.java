@@ -17,7 +17,7 @@ public class KeyStreetProperties {
   private String defaultTenantSlug = "key-street";
 
   @NotBlank
-  private String whatsappPhone = "573000000000";
+  private String whatsappPhone = "573176576059";
 
   @Valid
   private Security security = new Security();

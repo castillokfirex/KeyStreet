@@ -62,7 +62,7 @@ export function HomePage() {
             to="/catalogo"
             className="inline-flex items-center gap-1 font-display text-[10px] font-semibold uppercase tracking-nav text-ink underline underline-offset-4 hover:opacity-60"
           >
-            <span>Ver los 15 pares</span>
+            <span>Ver los 14 pares</span>
             <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.5} aria-hidden="true" />
           </Link>
         </div>

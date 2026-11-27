@@ -22,7 +22,7 @@ test.describe("Lazy loading de módulos 3D y MediaPipe", () => {
     expect(heavyRequests).toEqual([]);
 
     await page.goto("/catalogo");
-    await expect(page.locator('[data-testid^="product-card-"]')).toHaveCount(15);
+    await expect(page.locator('[data-testid^="product-card-"]')).toHaveCount(14);
     expect(heavyRequests).toEqual([]);
 
     await page.goto("/producto/nike-air-force-1-low-07-blanco");

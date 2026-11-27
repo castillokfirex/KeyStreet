@@ -47,7 +47,7 @@ springdoc:
 
 keystreet:
   default-tenant-slug: ${DEFAULT_TENANT_SLUG:key-street}
-  whatsapp-phone: ${WHATSAPP_PHONE:573000000000}
+  whatsapp-phone: ${WHATSAPP_PHONE:573176576059}
   security:
     jwt-secret: ${JWT_SECRET}
     jwt-issuer: keystreet

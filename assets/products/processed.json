@@ -1,23 +1,30 @@
 {
   "vans-old-skool": {
-    "ready": false,
-    "files": [],
-    "reason": "Sin fotos con licencia CC0/CC BY/CC BY-SA del Old Skool en Wikimedia Commons; Unsplash/Pexels sin API key configurada."
+    "ready": true,
+    "files": [
+      "vans-old-skool-1.960.webp",
+      "vans-old-skool-2.960.webp",
+      "vans-old-skool-3.960.webp",
+      "vans-old-skool-4.960.webp"
+    ]
   },
   "new-balance-530": {
-    "ready": false,
-    "files": [],
-    "reason": "Sin fotos del NB 530 con licencia válida en Wikimedia Commons; Unsplash/Pexels sin API key configurada."
+    "ready": true,
+    "files": [
+      "new-balance-530-1.960.webp",
+      "new-balance-530-2.960.webp",
+      "new-balance-530-3.960.webp",
+      "new-balance-530-4.960.webp"
+    ]
   },
   "puma-suede-xl": {
-    "ready": false,
-    "files": [],
-    "reason": "Las fotos libres encontradas son Puma Suede Classic (no XL); descartadas por duda razonable."
-  },
-  "nike-court-vision-low": {
-    "ready": false,
-    "files": [],
-    "reason": "Sin resultados con licencia válida en Wikimedia Commons; Unsplash/Pexels sin API key configurada."
+    "ready": true,
+    "files": [
+      "puma-suede-xl-1.960.webp",
+      "puma-suede-xl-2.960.webp",
+      "puma-suede-xl-3.960.webp",
+      "puma-suede-xl-4.960.webp"
+    ]
   },
   "nike-air-force-1-low-07-blanco": {
     "ready": true,
@@ -32,14 +39,18 @@
     "ready": true,
     "files": [
       "adidas-superstar-1.960.webp",
-      "adidas-superstar-2.960.webp"
+      "adidas-superstar-2.960.webp",
+      "adidas-superstar-3.960.webp",
+      "adidas-superstar-4.960.webp"
     ]
   },
   "nike-dunk-low-retro-panda": {
     "ready": true,
     "files": [
       "nike-dunk-low-retro-panda-1.960.webp",
-      "nike-dunk-low-retro-panda-2.960.webp"
+      "nike-dunk-low-retro-panda-2.960.webp",
+      "nike-dunk-low-retro-panda-3.960.webp",
+      "nike-dunk-low-retro-panda-4.960.webp"
     ]
   },
   "air-jordan-1-low": {
@@ -51,14 +62,19 @@
   "adidas-samba-og-blanco-negro": {
     "ready": true,
     "files": [
-      "adidas-samba-og-blanco-negro-1.960.webp"
+      "adidas-samba-og-blanco-negro-1.960.webp",
+      "adidas-samba-og-blanco-negro-2.960.webp",
+      "adidas-samba-og-blanco-negro-3.960.webp",
+      "adidas-samba-og-blanco-negro-4.960.webp"
     ]
   },
   "converse-chuck-taylor-all-star-clasico": {
     "ready": true,
     "files": [
       "converse-chuck-taylor-all-star-clasico-1.960.webp",
-      "converse-chuck-taylor-all-star-clasico-2.960.webp"
+      "converse-chuck-taylor-all-star-clasico-2.960.webp",
+      "converse-chuck-taylor-all-star-clasico-3.960.webp",
+      "converse-chuck-taylor-all-star-clasico-4.960.webp"
     ]
   },
   "adidas-stan-smith": {
@@ -66,19 +82,26 @@
     "files": [
       "adidas-stan-smith-1.960.webp",
       "adidas-stan-smith-2.960.webp",
-      "adidas-stan-smith-3.960.webp"
+      "adidas-stan-smith-3.960.webp",
+      "adidas-stan-smith-4.960.webp"
     ]
   },
   "new-balance-550": {
     "ready": true,
     "files": [
-      "new-balance-550-1.960.webp"
+      "new-balance-550-1.960.webp",
+      "new-balance-550-2.960.webp",
+      "new-balance-550-3.960.webp",
+      "new-balance-550-4.960.webp"
     ]
   },
   "adidas-campus-00s": {
     "ready": true,
     "files": [
-      "adidas-campus-00s-1.960.webp"
+      "adidas-campus-00s-1.960.webp",
+      "adidas-campus-00s-2.960.webp",
+      "adidas-campus-00s-3.960.webp",
+      "adidas-campus-00s-4.960.webp"
     ]
   },
   "adidas-handball-spezial": {
@@ -91,7 +114,9 @@
     "ready": true,
     "files": [
       "air-jordan-4-1.960.webp",
-      "air-jordan-4-2.960.webp"
+      "air-jordan-4-2.960.webp",
+      "air-jordan-4-3.960.webp",
+      "air-jordan-4-4.960.webp"
     ]
   }
 }

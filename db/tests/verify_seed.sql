@@ -21,10 +21,10 @@ BEGIN
 
   IF (SELECT count(*) FROM tenants WHERE name = 'Key Street') <> 1 THEN RAISE EXCEPTION 'Tenant Key Street'; END IF;
 
-  -- Catálogo: exactamente 15 modelos activos (los retirados quedan inactivos, no se borran)
-  IF (SELECT count(*) FROM products WHERE tenant_id = '00000000-0000-4000-8000-000000000001' AND is_active) <> 15 THEN RAISE EXCEPTION 'Se esperaban 15 productos activos'; END IF;
+  -- Catálogo: exactamente 14 modelos activos (los retirados quedan inactivos, no se borran)
+  IF (SELECT count(*) FROM products WHERE tenant_id = '00000000-0000-4000-8000-000000000001' AND is_active) <> 14 THEN RAISE EXCEPTION 'Se esperaban 14 productos activos'; END IF;
   IF EXISTS (SELECT 1 FROM products WHERE tenant_id = '00000000-0000-4000-8000-000000000001' AND is_active AND slug IN
-      ('adidas-forum-low','new-balance-574','nike-air-jordan-1-retro-high-og','adidas-campus-00s-gris-negro')) THEN
+      ('adidas-forum-low','new-balance-574','nike-air-jordan-1-retro-high-og','adidas-campus-00s-gris-negro','nike-court-vision-low')) THEN
     RAISE EXCEPTION 'Modelo retirado sigue activo'; END IF;
 
   -- Regla de descuentos: 4 modelos activos con 10%-15%
@@ -43,10 +43,12 @@ BEGIN
        ('adidas-samba-og-blanco-negro',499950),('converse-chuck-taylor-all-star-clasico',299900),
        ('adidas-stan-smith',549950),('new-balance-550',649900),('new-balance-530',529900),
        ('adidas-campus-00s',499950),('puma-suede-xl',449900),('adidas-handball-spezial',549950),
-       ('air-jordan-4',1219950),('nike-court-vision-low',459950))) <> 15 THEN
+       ('air-jordan-4',1219950))) <> 14 THEN
     RAISE EXCEPTION 'Precios base incorrectos'; END IF;
 
-  -- Imágenes: ready=true exige archivos; ready=false no referencia ningún archivo (cero 404)
+  -- Imágenes: todos los activos tienen ready=true y archivos reales
+  IF EXISTS (SELECT 1 FROM products WHERE tenant_id = '00000000-0000-4000-8000-000000000001' AND is_active AND NOT COALESCE((image_placeholder_paths->>'ready')::boolean, false)) THEN
+    RAISE EXCEPTION 'Producto activo sin imagenes listas'; END IF;
   IF EXISTS (SELECT 1 FROM products WHERE tenant_id = '00000000-0000-4000-8000-000000000001' AND is_active AND (image_placeholder_paths->>'ready')::boolean
              AND jsonb_array_length(image_placeholder_paths->'files') = 0) THEN
     RAISE EXCEPTION 'ready=true sin archivos'; END IF;
@@ -58,9 +60,9 @@ BEGIN
   IF EXISTS (SELECT 1 FROM products WHERE tenant_id = '00000000-0000-4000-8000-000000000001' AND is_active AND (model_3d_url IS NULL OR model_3d_url NOT LIKE '/assets/models/%.glb')) THEN
     RAISE EXCEPTION 'Modelo 3D sin URL'; END IF;
 
-  -- Variantes: 15 x 9 tallas activas, SKUs únicos, tallas 36-44
+  -- Variantes: 14 x 9 tallas activas, SKUs únicos, tallas 36-44
   IF (SELECT count(*) FROM product_variants v JOIN products p ON p.id = v.product_id
-      WHERE p.tenant_id = '00000000-0000-4000-8000-000000000001' AND p.is_active AND v.is_active) <> 135 THEN RAISE EXCEPTION 'Se esperaban 135 variantes activas'; END IF;
+      WHERE p.tenant_id = '00000000-0000-4000-8000-000000000001' AND p.is_active AND v.is_active) <> 126 THEN RAISE EXCEPTION 'Se esperaban 126 variantes activas'; END IF;
   IF (SELECT count(DISTINCT sku) FROM product_variants) <> (SELECT count(*) FROM product_variants) THEN
     RAISE EXCEPTION 'SKUs duplicados'; END IF;
   IF EXISTS (SELECT 1 FROM product_variants WHERE size_eu NOT BETWEEN 36 AND 44) THEN RAISE EXCEPTION 'Talla fuera de 36-44'; END IF;
@@ -68,5 +70,5 @@ BEGIN
   IF (SELECT count(*) FROM users WHERE role IN ('ADMIN_TENANT','CUSTOMER')) <> 2 THEN RAISE EXCEPTION 'Usuarios dev'; END IF;
   IF EXISTS (SELECT 1 FROM users WHERE password_hash NOT LIKE '$2%') THEN RAISE EXCEPTION 'Hash no BCrypt'; END IF;
 
-  RAISE NOTICE 'verify_seed OK: 15 productos activos, 4 descuentos, 135 variantes activas, indices e extensiones';
+  RAISE NOTICE 'verify_seed OK: 14 productos activos, 4 descuentos, 126 variantes activas, indices e extensiones';
 END $$;
