@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     database_url: str = "postgresql://keystreet_rag:dev@postgres:5432/keystreet"
     ai_provider: Literal["gemini", "fake"] = "gemini"
     gemini_api_key: str = ""
-    gemini_chat_model: str = "gemini-2.5-flash"
+    gemini_chat_model: str = "gemini-3.6-flash"
     gemini_embedding_model: str = "models/gemini-embedding-001"
     embedding_dim: int = 768
     internal_api_token: str = ""
